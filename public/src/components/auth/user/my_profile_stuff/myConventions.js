@@ -29,9 +29,8 @@ class MyConventions extends Component {
             <thead>
               <tr>
                 <th>Convention Name</th>
-                <th>State</th>
+                <th>Price Details</th>
                 <th>Address</th>
-                <th>Rating</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -39,8 +38,9 @@ class MyConventions extends Component {
               {this.state.conventions.map(function(result) {
                 return (
                   <tr key={result._id} className='table-row'>
-                    <td onClick={this.handleClick.bind(result)}>{result.title}</td>
-                    <td onClick={this.handleClick.bind(result)}>{result.rating === 0 ? 'Not Rated' : result.rating}</td>
+                    <td onClick={this.handleClick.bind(result)}>{result.name}</td>
+                    <td>{result.price}</td>
+                    <td>{result.location}</td>
                     <td onClick={this.deleteClickHandle.bind([this.props, result, this])}>
                       <button type="button" className="btn btn-default">
                          Remove <span

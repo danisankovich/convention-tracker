@@ -46,6 +46,8 @@ exports.editConvention = (req, res) => {
 exports.newConvention = (req, res) => {
   var data = {
     name: req.body.name,
+    location: req.body.location,
+    price: req.body.price,
     startdate: req.body.startdate,
     enddate: req.body.enddate,
     description: req.body.description,

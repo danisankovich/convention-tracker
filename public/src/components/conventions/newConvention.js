@@ -16,7 +16,6 @@ class NewConvention extends Component {
   }
   handleFormSubmit(e) {
     e.preventDefault();
-    console.log(this.state)
     this.state.user = this.props.userInfo._id;
     this.state.username = this.props.userInfo.username;
     this.state.email = this.props.userInfo.email;
@@ -42,6 +41,22 @@ class NewConvention extends Component {
                     className="form-control"
                     type="text"
                     onChange={this.handleChange.bind(this, 'name')}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <label>Event Location: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    onChange={this.handleChange.bind(this, 'location')}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <label>Price Details: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    onChange={this.handleChange.bind(this, 'price')}
                   />
                 </fieldset>
                 <fieldset className="form-group">
