@@ -7,7 +7,7 @@ var bodyParser = require('body-parser');
 var mongoose = require('mongoose');
 var ejs = require('ejs');
 var routes = require('./routes/index');
-var listings = require('./routes/listings');
+var conventions = require('./routes/conventions');
 var messages = require('./routes/messages');
 
 var app = express();
@@ -28,7 +28,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
-app.use('/api/listings', listings);
+app.use('/api/conventions', conventions);
 app.use('/api/messages', messages);
 
 // app.set('view engine', 'ejs');

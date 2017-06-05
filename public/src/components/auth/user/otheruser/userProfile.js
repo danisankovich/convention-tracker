@@ -2,12 +2,12 @@ import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../../actions';
 import PhotoBook from './photobook';
-import ProfileListings from './profilelistings';
+import ProfileConventions from './profileconventions';
 import $ from 'jquery';
 
 class UserProfile extends Component {
   componentWillMount() {
-    this.setState({showPhotos: false, showListings: false})
+    this.setState({showPhotos: false, showConventions: false})
   }
   componentDidMount() {
     this.props.fetchInfo();
@@ -33,12 +33,12 @@ class UserProfile extends Component {
     });
   }
   showAlbums() {
-    this.state.showListings = false
+    this.state.showConventions = false
     this.state.showPhotos ? this.setState({showPhotos: false}) : this.setState({showPhotos: true})
   }
-  showListings() {
+  showConventions() {
     this.state.showPhotos = false
-    this.state.showListings ? this.setState({showListings: false}) : this.setState({showListings: true})
+    this.state.showConventions ? this.setState({showConventions: false}) : this.setState({showConventions: true})
   }
 
   render() {
@@ -62,11 +62,11 @@ class UserProfile extends Component {
           <div className='row'>
             <div className="col-sm-10 col-sm-offset-1">
               <button onClick={this.showAlbums.bind(this)}>Show Albums</button>
-              <button onClick={this.showListings.bind(this)}>Show Listings</button>
+              <button onClick={this.showConventions.bind(this)}>Show Conventions</button>
             </div>
             <div className="col-sm-10 col-sm-offset-1">
               {this.state.showPhotos && <PhotoBook userProfile={this.props.userProfile}></PhotoBook>}
-              {this.state.showListings && <ProfileListings userProfile={this.props.userProfile} userInfo={this.props.userInfo}></ProfileListings>}
+              {this.state.showConventions && <ProfileConventions userProfile={this.props.userProfile} userInfo={this.props.userInfo}></ProfileConventions>}
             </div>
           </div>
         </div>

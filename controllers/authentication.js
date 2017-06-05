@@ -87,7 +87,6 @@ exports.uploadMyPhoto = (req, res) => {
     user.myPhotos.push({
       image: req.body.image,
       tagline: req.body.tagline,
-      location: req.body.location,
       showcased: false,
       _id
     })

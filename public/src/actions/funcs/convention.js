@@ -1,58 +1,62 @@
 import $ from 'jquery';
 import { browserHistory } from 'react-router'; // commits info about url to react router, and to make changes to url
 import {
-  FETCH_LISTINGS,
-  FETCH_MY_LISTINGS,
-  NEW_LISTING,
-  FETCH_SINGLE_LISTING,
-  EDIT_LISTING,
+  FETCH_CONVENTIONS,
+  FETCH_MY_CONVENTIONS,
+  NEW_CONVENTION,
+  FETCH_SINGLE_CONVENTION,
+  EDIT_CONVENTION,
 } from '../types';
 // const ROOT_URL = 'http://localhost:3000/api';
 
-exports.getListing = function(id, dispatch) {
+exports.getConvention = function(id, dispatch) {
   var token = localStorage.getItem('token')
 
   $.ajax({
-     url: `/api/listings/${id}`,
+     url: `/api/conventions/${id}`,
      type: "GET",
      headers: {
         "authorization": token
      }
   }).done((response) => {
     dispatch({
-      type: FETCH_SINGLE_LISTING,
+      type: FETCH_SINGLE_CONVENTION,
       payload: response
     })
   });
 }
-exports.getAllListings = function(term, otherParams, dispatch) {
-  $.ajax({
-     url: `/api/listings/location/${term}`,
-     type: "GET",
-     data: otherParams
-  }).done((response) => {
-    dispatch({
-      type: FETCH_LISTINGS,
-      payload: response
-    })
-  });
+exports.getAllConventions = function(term, otherParams, dispatch) {
+  // $.ajax({
+  //    url: `/api/conventions/location/${term}`,
+  //    type: "GET",
+  //    data: otherParams
+  // }).done((response) => {
+  //   dispatch({
+  //     type: FETCH_CONVENTIONS,
+  //     payload: response
+  //   })
+  // });
+  dispatch({
+    type: FETCH_CONVENTIONS,
+    payload: []
+  })
 }
-exports.getMyListings = function(array, dispatch) {
+exports.getMyConventions = function(array, dispatch) {
   $.ajax({
-     url: '/api/listings/mylistings',
+     url: '/api/conventions/myconventions',
      type: "POST",
      data: {data: JSON.stringify(array)}
   }).done((response) => {
     dispatch({
-      type: FETCH_MY_LISTINGS,
+      type: FETCH_MY_CONVENTIONS,
       payload: response
     })
   });
 }
-exports.createListing = function(data, dispatch) {
+exports.createConvention = function(data, dispatch) {
   var token = localStorage.getItem('token')
   $.ajax({
-     url: `/api/listings/new`,
+     url: `/api/conventions/new`,
      type: "POST",
      headers: {
         "authorization": token
@@ -60,16 +64,16 @@ exports.createListing = function(data, dispatch) {
      data: data
   }).done((response) => {
     dispatch({
-      type: NEW_LISTING,
+      type: NEW_CONVENTION,
       payload: response
     })
   })
 }
-exports.edit = function(listing, userId, dispatch) {
+exports.edit = function(convention, userId, dispatch) {
   var token = localStorage.getItem('token')
-  let data = JSON.stringify(listing)
+  let data = JSON.stringify(convention)
   $.ajax({
-     url: `/api/listings/editListing`,
+     url: `/api/conventions/editConvention`,
      type: "POST",
      headers: {
         "authorization": token
@@ -77,7 +81,7 @@ exports.edit = function(listing, userId, dispatch) {
      data: {data}
   }).done((response) => {
     dispatch({
-      type: EDIT_LISTING,
+      type: EDIT_CONVENTION,
       payload: response
     })
   })

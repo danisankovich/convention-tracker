@@ -127,10 +127,10 @@ export function authError(error) {
   }
 }
 
-exports.deleteListing = function(id, dispatch) {
+exports.deleteConvention = function(id, dispatch) {
   var token = localStorage.getItem('token')
   $.ajax({
-     url: `/api/listings/deleteListing/${id}`,
+     url: `/api/conventions/deleteConvention/${id}`,
      type: "DELETE",
      headers: {
        "authorization": token

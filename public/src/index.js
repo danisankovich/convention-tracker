@@ -19,10 +19,10 @@ import UserProfile from './components/auth/user/otheruser/userProfile';
 import Settings from './components/auth/user/settings';
 import Welcome_Container from './components/welcome_container';
 
-// Listings Routes
-import Listings_Container from './components/listings/listings_container';
-import Listing from './components/listings/listing';
-import NewListing from './components/listings/newListing';
+// Conventions Routes
+import Conventions_Container from './components/conventions/conventions_container';
+import Convention from './components/conventions/convention';
+import NewConvention from './components/conventions/newConvention';
 
 
 import Message_Container from './components/messages/message_container';
@@ -54,10 +54,10 @@ ReactDOM.render(
           <Route path='settings' component={RequireAuth(Settings)}></Route>
           <Route path='userprofile/:id' component={UserProfile}></Route>
         </Route>
-        <Route path='/listings' component={App}>
-          <IndexRoute component={Listings_Container} />
-          <Route path=':id' component={Listing}></Route>
-          <Route path='/new' component={RequireAuth(NewListing)}></Route>
+        <Route path='/conventions' component={App}>
+          <IndexRoute component={Conventions_Container} />
+          <Route path=':id' component={Convention}></Route>
+          <Route path='/new' component={RequireAuth(NewConvention)}></Route>
         </Route>
         <Route path ='/messages' component={App}>
           <IndexRoute component={Message_Container} />

@@ -1,5 +1,5 @@
-import {signIn, signUp, userEdit, avatarUpload, myPhotoUpload, getUser, getUserProfile, deleteListing} from './funcs/user';
-import {getListing, getAllListings, getMyListings, createListing, edit} from './funcs/listing';
+import {signIn, signUp, userEdit, avatarUpload, myPhotoUpload, getUser, getUserProfile, deleteConvention} from './funcs/user';
+import {getConvention, getAllConventions, getMyConventions, createConvention, edit} from './funcs/convention';
 import {
   AUTH_USER,
   UNAUTH_USER,
@@ -20,10 +20,10 @@ export function editUser({phoneNumber, email, lang, aboutMe}, user) {
     userEdit(dispatch, {phoneNumber, email, lang, aboutMe}, user)
   }
 }
-export function removeListing(id) {
+export function removeConvention(id) {
   console.log(id)
   return function(dispatch) {
-    deleteListing(id, dispatch)
+    deleteConvention(id, dispatch)
   }
 }
 
@@ -58,32 +58,32 @@ export function fetchProfileInfo(userId) {
     getUserProfile(dispatch, userId);
   }
 }
-//Listing FUNCTIONS
-export function fetchListings(term, otherParams) {
+//Convention FUNCTIONS
+export function fetchConventions(term, otherParams) {
   if (term) {
     return function(dispatch) {
-      getAllListings(term, otherParams, dispatch)
+      getAllConventions(term, otherParams, dispatch)
     }
   }
 }
-export function fetchMyListings(array) {
+export function fetchMyConventions(array) {
   return function(dispatch) {
-    getMyListings(array, dispatch);
+    getMyConventions(array, dispatch);
   }
 }
-export function newListing(data) {
+export function newConvention(data) {
   return function(dispatch) {
-    createListing(data, dispatch);
+    createConvention(data, dispatch);
   }
 }
 
-export function fetchSingleListing(id) {
+export function fetchSingleConvention(id) {
   return function(dispatch) {
-    getListing(id, dispatch)
+    getConvention(id, dispatch)
   }
 }
-export function editListing({listing}, userId) {
+export function editConvention({convention}, userId) {
   return function(dispatch) {
-    edit({listing}, userId, dispatch)
+    edit({convention}, userId, dispatch)
   }
 }
