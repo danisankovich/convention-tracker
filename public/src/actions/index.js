@@ -3,7 +3,19 @@ import {getConvention, getAllConventions, getMyConventions, createConvention, ed
 import {
   AUTH_USER,
   UNAUTH_USER,
+  AUTH_ERROR,
+  FETCH_INFO,
+  fetch_profile,
+  FETCH_CONVENTIONS,
+  FETCH_MY_CONVENTIONS,
+  NEW_CONVENTION,
+  FETCH_SINGLE_CONVENTION,
+  EDIT_CONVENTION,
+  EDIT_USER,
+  UPLOAD_PHOTO,
+  UPLOAD_AVATAR
 } from './types';
+
 //USER FUNCTIONS
 export function signinUser({email, password}) {
   return function(dispatch) {
@@ -60,10 +72,8 @@ export function fetchProfileInfo(userId) {
 }
 //Convention FUNCTIONS
 export function fetchConventions(term, otherParams) {
-  if (term) {
-    return function(dispatch) {
-      getAllConventions(term, otherParams, dispatch)
-    }
+  return function(dispatch) {
+    getAllConventions(term, otherParams, dispatch)
   }
 }
 export function fetchMyConventions(array) {

@@ -44,11 +44,51 @@ class NewConvention extends Component {
                   />
                 </fieldset>
                 <fieldset className="form-group">
-                  <label>Event Location: </label>
+                  <label>Location Name: </label>
                   <input
                     className="form-control"
                     type="text"
-                    onChange={this.handleChange.bind(this, 'location')}
+                    onChange={this.handleChange.bind(this, 'locationName')}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <label>Address: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    onChange={this.handleChange.bind(this, 'address')}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <label>City: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    onChange={this.handleChange.bind(this, 'city')}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <label>State: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    onChange={this.handleChange.bind(this, 'state')}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <label>Zip Code: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    onChange={this.handleChange.bind(this, 'zipcode')}
+                  />
+                </fieldset>
+                <fieldset className="form-group">
+                  <label>Country: </label>
+                  <input
+                    className="form-control"
+                    type="text"
+                    onChange={this.handleChange.bind(this, 'country')}
                   />
                 </fieldset>
                 <fieldset className="form-group">

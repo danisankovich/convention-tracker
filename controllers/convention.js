@@ -15,6 +15,14 @@ exports.findOneConvention = (req, res) => {
   })
 }
 
+exports.findAllConventions = (req, res) => {
+  Convention.find({}, (err, conventions) => {
+    if (err) res.send(err);
+    console.log(conventions)
+    res.send(conventions)
+  })
+}
+
 exports.findMyConventions = (req, res) => {
   const data = JSON.parse(req.body.data);
   Convention.find({'_id': { $in: data}}, (err, conventions) => {
@@ -46,7 +54,14 @@ exports.editConvention = (req, res) => {
 exports.newConvention = (req, res) => {
   var data = {
     name: req.body.name,
-    location: req.body.location,
+    location: {
+      locationName: req.body.locationName,
+      address: req.body.address,
+      state: req.body.state,
+      city: req.body.city,
+      zipcode: req.body.zipcode,
+      country: req.body.country,
+    },
     price: req.body.price,
     startdate: req.body.startdate,
     enddate: req.body.enddate,

@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../../actions';
 import { browserHistory } from 'react-router'
+import utils from '../../../../utils.js';
+import _ from 'lodash'
 class MyConventions extends Component {
   componentWillMount() {
     let conventions = this.props.userInfo.myConventions
@@ -36,11 +38,19 @@ class MyConventions extends Component {
             </thead>
             <tbody>
               {this.state.conventions.map(function(result) {
+                const location = utils.locationFormatter(result.location);
+
                 return (
                   <tr key={result._id} className='table-row'>
                     <td onClick={this.handleClick.bind(result)}>{result.name}</td>
-                    <td>{result.price}</td>
-                    <td>{result.location}</td>
+                    <td onClick={this.handleClick.bind(result)}>${result.price}</td>
+                    <td onClick={this.handleClick.bind(result)}>
+                      <ul className='removeListBullet'>
+                        <li>Convention Site: {location.locationName}</li>
+                        <li>{location.address}</li>
+                        <li>{location.city}, {location.state.toUpperCase()}, {location.zipcode}</li>
+                      </ul>
+                    </td>
                     <td onClick={this.deleteClickHandle.bind([this.props, result, this])}>
                       <button type="button" className="btn btn-default">
                          Remove <span

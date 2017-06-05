@@ -14,6 +14,7 @@ class Profile extends Component {
   }
   componentDidMount() {
     this.props.fetchInfo();
+    console.log(this.props)
   }
   show() {
     const self = this[0];

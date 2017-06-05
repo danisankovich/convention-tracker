@@ -13,7 +13,7 @@ exports.getConvention = function(id, dispatch) {
   var token = localStorage.getItem('token')
 
   $.ajax({
-     url: `/api/conventions/${id}`,
+     url: `/api/conventions/convention/${id}`,
      type: "GET",
      headers: {
         "authorization": token
@@ -26,20 +26,16 @@ exports.getConvention = function(id, dispatch) {
   });
 }
 exports.getAllConventions = function(term, otherParams, dispatch) {
-  // $.ajax({
-  //    url: `/api/conventions/location/${term}`,
-  //    type: "GET",
-  //    data: otherParams
-  // }).done((response) => {
-  //   dispatch({
-  //     type: FETCH_CONVENTIONS,
-  //     payload: response
-  //   })
-  // });
-  dispatch({
-    type: FETCH_CONVENTIONS,
-    payload: []
-  })
+  $.ajax({
+     url: `/api/conventions/all/${term ? term : ''}`,
+     type: "GET",
+     data: otherParams
+  }).done((response) => {
+    dispatch({
+      type: FETCH_CONVENTIONS,
+      payload: response
+    })
+  });
 }
 exports.getMyConventions = function(array, dispatch) {
   $.ajax({

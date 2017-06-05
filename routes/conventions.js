@@ -10,7 +10,8 @@ const User = require('../models/user');
 
 const ConventionController = require('../controllers/convention');
 
-router.get('/:id', ConventionController.findOneConvention);
+router.get('/convention/:id', ConventionController.findOneConvention);
+router.get('/all', ConventionController.findAllConventions);
 router.post('/myconventions', ConventionController.findMyConventions);
 router.post('/new', ConventionController.newConvention);
 router.post('/editConvention', ConventionController.editConvention);
