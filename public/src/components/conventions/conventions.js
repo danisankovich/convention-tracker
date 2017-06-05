@@ -17,11 +17,32 @@ class Convention extends Component {
     let clickResult = this._id;
     browserHistory.push(`/conventions/${clickResult}`);
   }
+  filterConventions() {
+    let filterParams = this;
+    console.log(filterParams);
+    this.setState({filter: this})
+  }
+
+
+  onDropdownSelected(e) {
+    this.setState({filter: e.target.value})
+  }
   render() {
     const { conventions } = this.props;
+
     return (
       <div>
-        <h1>MAKE THIS A TABLE. ONLY STATE AND CITY AND NAME AND TAGS</h1>
+        <div>
+          <label>Filter By State: &nbsp;
+            <select onChange={this.onDropdownSelected.bind(this)}>
+              <option value=''></option>
+              {
+                utils.usStates.map((a, i) => (<option key={i} value={a.abbreviation}>{a.name}</option>))
+              }
+            </select>
+          </label>
+
+        </div>
         {conventions && <div>
           <table className="table table-hover table-bordered">
             <thead>
@@ -36,16 +57,17 @@ class Convention extends Component {
               {
                 conventions.map((convention) => {
                   const location = utils.locationFormatter(convention.location);
-
-                  return (
-                    <tr className='table-row' key={convention._id} onClick={this.handleClick.bind(convention)}>
-                      <td>{convention.name.toUpperCase()}</td>
-                      <td>{convention.startdate} -- {convention.enddate}</td>
-                      <td>{location.city}, {location.state}</td>
-                      <td>{convention.tags}</td>
-                    </tr>
-                  )
-                })
+                  if (!this.state.filter || convention.location.state.toLowerCase() === this.state.filter.toLowerCase()) {
+                    return (
+                      <tr className='table-row' key={convention._id} onClick={this.handleClick.bind(convention)}>
+                        <td>{convention.name.toUpperCase()}</td>
+                        <td>{convention.startdate} -- {convention.enddate}</td>
+                        <td>{location.city}, {location.state.toUpperCase()}</td>
+                        <td>{convention.tags}</td>
+                      </tr>
+                    )
+                  }
+                }).filter(Boolean)
               }
             </tbody>
           </table>
