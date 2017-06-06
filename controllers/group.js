@@ -52,3 +52,19 @@ exports.findById = (req, res) => {
     res.send(group);
   })
 }
+
+exports.joinGroup = (req, res) => {
+  Group.findById(req.params.id, (err, group) => {
+    if (err) res.send(err)
+    User.findById(req.body.user._id, (err, user) => {
+      if (!user.groups[group._id]) {
+        user.groups.push(group);
+        user.save();
+      } if (!group.memberList[user._id]) {
+        group.memberList.push(user);
+        group.save();
+      }
+      res.send(group);
+    })
+  })
+}
