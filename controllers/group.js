@@ -43,3 +43,13 @@ exports.createGroup = (req, res) => {
 
   groupCreatorController(req, res, data);
 }
+
+exports.findByShareId = (req, res) => {
+  Group.findOne({shareId: req.params.id}, (err, group) => {
+    if (err) res.send(err)
+    if (!group) {
+      res.send(`No Group Found With Id ${shareId}`)
+    }
+    res.send(group);
+  })
+}
