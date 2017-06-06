@@ -5,8 +5,8 @@ var groupSchema = new Schema({
   name: {type: String, lowercase: true, required: true},
   shareId: {type: String, lowercase: true, required: true},
   creatorId: {type: String, required: true},
-  participant_list: Array,
+  memberList: Array,
 });
 
-var Group = mongoose.model('convention', Group);
+var Group = mongoose.model('group', groupSchema);
 module.exports = Group;

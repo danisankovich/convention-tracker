@@ -22,7 +22,8 @@ var conventionSchema = new Schema({
   username: String,
   email: String,
   creator: {},
-  price: String
+  price: String,
+  attendees: []
 });
 
 var CONVENTION = mongoose.model('convention', conventionSchema);

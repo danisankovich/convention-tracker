@@ -72,7 +72,8 @@ exports.newConvention = (req, res) => {
     username: req.body.username,
     creator: {
       id: req.body.user
-    }
+    },
+    attendees: [req.body.user]
   }
 
   Convention.create(data, (err, convention) => {

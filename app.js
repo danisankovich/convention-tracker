@@ -9,6 +9,7 @@ var ejs = require('ejs');
 var routes = require('./routes/index');
 var conventions = require('./routes/conventions');
 var messages = require('./routes/messages');
+var groups = require('./routes/groups');
 
 var app = express();
 
@@ -30,6 +31,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 app.use('/api/conventions', conventions);
 app.use('/api/messages', messages);
+app.use('/api/groups', groups);
 
 // app.set('view engine', 'ejs');
 app.get('*', (req, res) => {

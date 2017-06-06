@@ -7,18 +7,12 @@ var userSchema = new Schema({
   username: {type: String, lowercase: true, require: true},
   password: String,
   phoneNumber: String,
-  aboutMe: String,
+  groups: [],
   myConventions: {type: Array, default: []},
   avatar: String,
-  savedConventions: Array,
-  reviewsOfMe: Array,
-  myReviews: Array,
-  followers: Array,
-  following: {type: Array},
-  confirmedStays: [],
   messagesChainIds: [],
   newMessages: Boolean,
-  aboutMe: String
+  friends: []
 });
 
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
