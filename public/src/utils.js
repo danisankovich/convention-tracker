@@ -69,4 +69,12 @@ module.exports = {
     { name: 'WISCONSIN', abbreviation: 'WI'},
     { name: 'WYOMING', abbreviation: 'WY' }
   ],
+  randomKeyGen: (limit) => {
+    var text = "";
+    var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    for( var i=0; i < limit; i++ ) {
+      text += possible.charAt(Math.floor(Math.random() * possible.length));
+    }
+    return text;
+  }
 }

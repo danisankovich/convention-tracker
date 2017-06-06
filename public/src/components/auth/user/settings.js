@@ -68,18 +68,11 @@ class Settings extends Component {
   onChangeTextArea(e) {
     console.log('asdfasdf')
   }
-  uploadAvatar() {
-    let avatar = this.state.file;
-    this.props.uploadAvatar(avatar, this.props.userInfo._id)
-    this.props.fetchInfo();
-    this.setState({file: ''})
-  }
   render() {
     let self = this;
     const { handleSubmit, fields: {phoneNumber, email, aboutMe }} = this.props;
 
     let {userInfo} = this.props;
-    let avatar = this.state.file
     if (userInfo) {
       this.state.aboutMe = this.props.userInfo.aboutMe
     }
@@ -139,16 +132,6 @@ class Settings extends Component {
                 <button onClick={handleSubmit(this.handleFormSubmitEmail.bind(this))} className="btn btn-primary">Save</button>
               </form>
             </li>
-            <li>
-              <form onSubmit={handleSubmit(this.uploadAvatar.bind(this))}>
-                <fieldset className="form-group">
-                  <img src={userInfo.avatar} height="200px"/>
-                  <br />
-                  <label>Upload/Change Avatar: <input type="file" onChange={this.previewFile.bind(this)}/> </label>
-                </fieldset>
-                <button action="submit" className={this.state.file ? '' : 'hidden'}>Change Avatar</button>
-              </form>
-            </li>
             <li
               className={this.state.editAboutMe ? 'hidden' : ''}
               onClick={function(){
@@ -190,5 +173,5 @@ function mapStateToProps(state) {
 
 export default reduxForm({
   form: 'Settings',
-  fields: ['email', 'phoneNumber', 'avatar', 'aboutMe'],
+  fields: ['email', 'phoneNumber', 'aboutMe'],
 }, mapStateToProps, actions)(Settings);

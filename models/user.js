@@ -9,9 +9,6 @@ var userSchema = new Schema({
   phoneNumber: String,
   groups: [],
   myConventions: {type: Array, default: []},
-  avatar: String,
-  messagesChainIds: [],
-  newMessages: Boolean,
   friends: []
 });
 

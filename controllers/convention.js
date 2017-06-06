@@ -6,7 +6,7 @@ var jwt = require('jwt-simple');
 
 var Convention = require('../models/convention');
 var User = require('../models/user');
-var randomKeyGen = require('../services/randomkeygen');
+
 exports.findOneConvention = (req, res) => {
   Convention.findById(req.params.id, (err, convention) => {
     if (err) res.send(err);

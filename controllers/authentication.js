@@ -81,27 +81,6 @@ exports.editInfo = function(req, res, next) {
     res.send(user);
   })
 }
-exports.uploadMyPhoto = (req, res) => {
-  User.findById(req.body.user, (err, user) => {
-    var _id = user.myPhotos.length;
-    user.myPhotos.push({
-      image: req.body.image,
-      tagline: req.body.tagline,
-      showcased: false,
-      _id
-    })
-    user.save();
-    res.send(user);
-  })
-}
-exports.uploadAvatar = (req, res) => {
-  User.findById(req.body.user, (err, user) => {
-    var _id = user.myPhotos.length;
-    user.avatar = req.body.image
-    user.save();
-    res.send(user);
-  })
-}
 
 exports.addFollower = (req, res) => {
   var token = req.headers.authorization;

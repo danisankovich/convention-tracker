@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../../actions';
-import PhotoBook from './photobook';
 import ProfileConventions from './profileconventions';
 import $ from 'jquery';
 
 class UserProfile extends Component {
   componentWillMount() {
-    this.setState({showPhotos: false, showConventions: false})
+    this.setState({showConventions: false})
   }
   componentDidMount() {
     this.props.fetchInfo();
@@ -34,17 +33,14 @@ class UserProfile extends Component {
   }
   showAlbums() {
     this.state.showConventions = false
-    this.state.showPhotos ? this.setState({showPhotos: false}) : this.setState({showPhotos: true})
   }
   showConventions() {
-    this.state.showPhotos = false
     this.state.showConventions ? this.setState({showConventions: false}) : this.setState({showConventions: true})
   }
 
   render() {
     let {userProfile, userInfo} = this.props;
     if(userProfile) {
-      let photos = userProfile.myPhotos;
       return (
         <div className="toppush container">
           <div className='row'>
@@ -56,7 +52,6 @@ class UserProfile extends Component {
                 <button className='btn btn-danger' onClick={this.unfollowOrFollowUser.bind([this, '/api/removefollower'])}>Unfollow -</button></h3>}
               <h3>Email: {userProfile.email}</h3>
               <h3>Phone Number: {userProfile.phoneNumber}</h3>
-              <img src={this.props.userProfile.avatar} height='200px'/>
             </div>
           </div>
           <div className='row'>
@@ -65,7 +60,6 @@ class UserProfile extends Component {
               <button onClick={this.showConventions.bind(this)}>Show Conventions</button>
             </div>
             <div className="col-sm-10 col-sm-offset-1">
-              {this.state.showPhotos && <PhotoBook userProfile={this.props.userProfile}></PhotoBook>}
               {this.state.showConventions && <ProfileConventions userProfile={this.props.userProfile} userInfo={this.props.userInfo}></ProfileConventions>}
             </div>
           </div>

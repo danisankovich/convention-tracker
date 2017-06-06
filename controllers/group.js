@@ -2,17 +2,10 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Group = require('../models/group');
+const randomKeyGen = require('../services/randomkeygen')
 
-const generateShareId = () => {
-  var text = "";
-  var possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  for( var i=0; i < 6; i++ ) {
-    text += possible.charAt(Math.floor(Math.random() * possible.length));
-  }
-  return text;
-}
 const groupCreatorController = (req, res, data) => {
-  const shareId = generateShareId();
+  const shareId = randomKeyGen(6);
 
   Group.findOne({shareId: shareId}, (error, checkGroup) => {
     if (error) res.send(error)
@@ -31,7 +24,6 @@ const groupCreatorController = (req, res, data) => {
     } else {
       groupCreatorController(req, res, data)
     }
-
   })
 }
 exports.createGroup = (req, res) => {
@@ -50,6 +42,13 @@ exports.findByShareId = (req, res) => {
     if (!group) {
       res.send(`No Group Found With Id ${shareId}`)
     }
+    res.send(group);
+  })
+}
+
+exports.findById = (req, res) => {
+  Group.findById(req.params.id, (err, group) => {
+    if (err) res.send(err)
     res.send(group);
   })
 }

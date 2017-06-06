@@ -14,8 +14,6 @@ var conventionSchema = new Schema({
   startdate: {type: String, default: false},
   enddate: {type: String, default: false},
   tags: {type: Array, default: []},
-  image: String,
-  photos: [],
   description: String,
   notes: String,
   user: String,

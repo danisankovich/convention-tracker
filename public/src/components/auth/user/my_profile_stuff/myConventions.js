@@ -46,9 +46,9 @@ class MyConventions extends Component {
                     <td onClick={this.handleClick.bind(result)}>${result.price}</td>
                     <td onClick={this.handleClick.bind(result)}>
                       <ul className='removeListBullet'>
-                        <li>Convention Site: {location.locationName}</li>
+                        <li>{location.locationName}</li>
                         <li>{location.address}</li>
-                        <li>{location.city}, {location.state.toUpperCase()}, {location.zipcode}</li>
+                        <li>{location.city}, {location.state.toUpperCase()} {location.zipcode}</li>
                       </ul>
                     </td>
                     <td onClick={this.deleteClickHandle.bind([this.props, result, this])}>

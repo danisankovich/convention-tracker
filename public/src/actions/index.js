@@ -1,4 +1,4 @@
-import {signIn, signUp, userEdit, avatarUpload, myPhotoUpload, getUser, getUserProfile, deleteConvention} from './funcs/user';
+import {signIn, signUp, userEdit, getUser, getUserProfile, deleteConvention} from './funcs/user';
 import {getConvention, getAllConventions, getMyConventions, createConvention, edit} from './funcs/convention';
 import {
   AUTH_USER,
@@ -12,8 +12,6 @@ import {
   FETCH_SINGLE_CONVENTION,
   EDIT_CONVENTION,
   EDIT_USER,
-  UPLOAD_PHOTO,
-  UPLOAD_AVATAR
 } from './types';
 
 //USER FUNCTIONS
@@ -39,16 +37,6 @@ export function removeConvention(id) {
   }
 }
 
-export function uploadMyPhoto(photo, user) {
-  return function(dispatch) {
-    myPhotoUpload(dispatch, photo, user);
-  }
-}
-export function uploadAvatar(photo, user) {
-  return function(dispatch) {
-    avatarUpload(photo, user, dispatch)
-  }
-}
 export function signoutUser() {
   localStorage.removeItem('token');
   return { type: UNAUTH_USER};

@@ -9,5 +9,3 @@ export const NEW_CONVENTION = 'new_convention';
 export const FETCH_SINGLE_CONVENTION = 'fetch_single_convention';
 export const EDIT_CONVENTION = 'edit_convention';
 export const EDIT_USER = 'edit_user';
-export const UPLOAD_PHOTO = 'upload_photo';
-export const UPLOAD_AVATAR = 'upload_avatar';

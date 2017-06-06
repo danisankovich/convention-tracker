@@ -14,7 +14,6 @@ import Signin from './components/auth/signin';
 import Signup from './components/auth/signup';
 import Signout from './components/auth/signout';
 import Profile from './components/auth/user/profile';
-import MySinglePhoto from './components/auth/user/my_profile_stuff/mysinglephoto';
 import UserProfile from './components/auth/user/otheruser/userProfile';
 import Settings from './components/auth/user/settings';
 import Welcome_Container from './components/welcome_container';
@@ -23,9 +22,6 @@ import Welcome_Container from './components/welcome_container';
 import Conventions_Container from './components/conventions/conventions_container';
 import Convention from './components/conventions/convention';
 import NewConvention from './components/conventions/newConvention';
-
-
-import Message_Container from './components/messages/message_container';
 
 import RequireAuth from './components/auth/require_auth';
 
@@ -58,9 +54,6 @@ ReactDOM.render(
           <IndexRoute component={Conventions_Container} />
           <Route path=':id' component={Convention}></Route>
           <Route path='/new' component={RequireAuth(NewConvention)}></Route>
-        </Route>
-        <Route path ='/messages' component={App}>
-          <IndexRoute component={Message_Container} />
         </Route>
     </Router>
   </Provider>

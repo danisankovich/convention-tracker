@@ -4,8 +4,6 @@ import {
   AUTH_USER,
   AUTH_ERROR,
   EDIT_USER,
-  UPLOAD_PHOTO,
-  UPLOAD_AVATAR,
   UNAUTH_USER,
   FETCH_INFO,
   FETCH_PROFILE
@@ -60,36 +58,7 @@ exports.userEdit = function(dispatch, {phoneNumber, email, lang, aboutMe}, user)
       dispatch(authError(error.response.error));
     });
 }
-exports.avatarUpload = function(photo, user, dispatch) {
-  dispatch({type: UPLOAD_AVATAR});
 
-  $.ajax({
-    url: `/api/uploadavatar`,
-    type: "POST",
-    data: {image: photo, user},
-  })
-    .done(response => {
-      dispatch({type: FETCH_INFO});
-    }).fail((error) => {
-      console.log(error)
-      dispatch(authError(error.response.error));
-    });
-}
-exports.myPhotoUpload = function(dispatch, photo, user) {
-  dispatch({type: UPLOAD_PHOTO});
-
-  $.ajax({
-    url: `/api/uploadmyphoto`,
-    type: "POST",
-    data: {image: photo.image, location: photo.location, tagline: photo.tagline, user},
-  })
-    .done(response => {
-      dispatch({type: FETCH_INFO});
-    }).fail((error) => {
-      console.log(error)
-      dispatch(authError(error.response.error));
-    });
-}
 exports.getUser = function(dispatch) {
   var token = localStorage.getItem('token')
   $.ajax({
