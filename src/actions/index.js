@@ -1,4 +1,4 @@
-import {signIn, signUp, userEdit, getUser, getUserProfile, deleteConvention} from './funcs/user';
+import {signIn, signUp, userEdit, getUser, getUserProfile, deleteConvention, joinConvention} from './funcs/user';
 import {getConvention, getAllConventions, getMyConventions, createConvention, edit} from './funcs/convention';
 import {
   AUTH_USER,
@@ -34,6 +34,13 @@ export function removeConvention(id) {
   console.log(id)
   return function(dispatch) {
     deleteConvention(id, dispatch)
+  }
+}
+
+export function addConventionToMyList(id) {
+  console.log(id, 'pppp')
+  return function(dispatch) {
+    joinConvention(id, dispatch)
   }
 }
 

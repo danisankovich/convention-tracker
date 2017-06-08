@@ -31,7 +31,15 @@ class SingleConvention extends Component {
       inputValue: evt.target.value
     });
   }
-
+  goingToConvention() {
+    console.log(this.props.convention._id)
+    const user = this.props.userInfo;
+    const con = this.props.convention;
+    if (user.myConventions.indexOf(con._id) === -1) {
+      this.props.userInfo.myConventions.push(con._id);
+      this.props.addConventionToMyList(con._id);
+    }
+  }
   render() {
     let {convention, userInfo} = this.props;
     let usCities = []
@@ -41,6 +49,7 @@ class SingleConvention extends Component {
       this.state.convention = convention
       return (
           <div className="col-sm-10 col-sm-offset-1">
+            <button onClick={this.goingToConvention.bind(this)}>Going?</button>
               <hr />
               <div className="row">
                 <div className="col-sm-12">

@@ -10,6 +10,7 @@ import {
 // const ROOT_URL = 'http://localhost:3000/api';
 
 exports.getConvention = function(id, dispatch) {
+  console.log(id)
   var token = localStorage.getItem('token')
 
   $.ajax({

@@ -113,3 +113,21 @@ exports.deleteConvention = function(id, dispatch) {
     console.log('error', err)
   });
 }
+
+exports.joinConvention = function(id, dispatch) {
+  var token = localStorage.getItem('token')
+  $.ajax({
+     url: `/api/conventions/joinConvention/${id}`,
+     type: "POST",
+     headers: {
+       "authorization": token
+     }
+  }).done((response) => {
+    dispatch({
+      type: FETCH_INFO,
+      payload: response
+    })
+  }).fail((err) => {
+    console.log('error', err)
+  });
+}

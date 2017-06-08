@@ -97,7 +97,7 @@ exports.newConvention = async (req, res) => {
   }
 };
 
-exports.deleteConvention = async (req, res) => {
+exports.removeConventionFromMyList = async (req, res) => {
   const convention = req.params.id;
   const token = req.headers.authorization;
   const decoded = jwt.decode(token, config.secret);
@@ -107,11 +107,37 @@ exports.deleteConvention = async (req, res) => {
 
     const index = user.myConventions.indexOf(convention);
 
-    const conventionToRemove = await Convention.findByIdAndRemoveAsync(convention);
+    const conventionToRemove = await Convention.findByIdAsync(convention);
     if (!convention) return res.send('Can\'t find convention');
 
     if (index > -1) {
       user.myConventions.splice(index, 1);
+      user.save(user)
+
+      res.send(user);
+    } else {
+      res.send('Convention not Found')
+    }
+  } catch (e) {
+    res.send(e);
+  }
+}
+
+exports.joinConvention = async (req, res) => {
+  const convention = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt.decode(token, config.secret);
+  try {
+    const user = await User.findByIdAsync(decoded.sub);
+    if (!user) return res.send('No User');
+
+    const index = user.myConventions.indexOf(convention);
+
+    const conventionToAdd = await Convention.findByIdAsync(convention);
+    if (!convention) return res.send('Can\'t find convention');
+
+    if (index === -1) {
+      user.myConventions.push(convention);
       user.save(user)
 
       res.send(user);

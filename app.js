@@ -1,28 +1,74 @@
-import express from 'express';
-import path from 'path';
-import favicon from 'serve-favicon';
-import logger from 'morgan';
-import cookieParser from 'cookie-parser';
-import bodyParser from 'body-parser';
-import mongoose from 'mongoose';
-import ejs from 'ejs';
-import http from 'http';
-import bluebird from 'bluebird';
-import debug from 'debug'
-debug('homeway:server');
+'use strict';
 
-import routes from './dist/routes/index';
-import conventions from './dist/routes/conventions';
-import groups from './dist/routes/groups';
+var _express = require('express');
 
-import "babel-core/register";
-import "babel-polyfill";
+var _express2 = _interopRequireDefault(_express);
 
-bluebird.promisifyAll(mongoose);
+var _path = require('path');
 
-const app = express();
+var _path2 = _interopRequireDefault(_path);
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:auth/conventionTracker');
+var _serveFavicon = require('serve-favicon');
+
+var _serveFavicon2 = _interopRequireDefault(_serveFavicon);
+
+var _morgan = require('morgan');
+
+var _morgan2 = _interopRequireDefault(_morgan);
+
+var _cookieParser = require('cookie-parser');
+
+var _cookieParser2 = _interopRequireDefault(_cookieParser);
+
+var _bodyParser = require('body-parser');
+
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
+
+var _mongoose = require('mongoose');
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _ejs = require('ejs');
+
+var _ejs2 = _interopRequireDefault(_ejs);
+
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
+var _bluebird = require('bluebird');
+
+var _bluebird2 = _interopRequireDefault(_bluebird);
+
+var _debug = require('debug');
+
+var _debug2 = _interopRequireDefault(_debug);
+
+var _index = require('./dist/routes/index');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _conventions = require('./dist/routes/conventions');
+
+var _conventions2 = _interopRequireDefault(_conventions);
+
+var _groups = require('./dist/routes/groups');
+
+var _groups2 = _interopRequireDefault(_groups);
+
+require('babel-core/register');
+
+require('babel-polyfill');
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+(0, _debug2.default)('homeway:server');
+
+_bluebird2.default.promisifyAll(_mongoose2.default);
+
+var app = (0, _express2.default)();
+
+_mongoose2.default.connect(process.env.MONGODB_URI || 'mongodb://localhost:auth/conventionTracker');
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -30,25 +76,25 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use((0, _morgan2.default)('dev'));
+app.use(_bodyParser2.default.json({ limit: '50mb' }));
+app.use(_bodyParser2.default.urlencoded({ limit: '50mb', extended: false }));
+app.use((0, _cookieParser2.default)());
+app.use(_express2.default.static(_path2.default.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/api/conventions', conventions);
-app.use('/api/groups', groups);
+app.use('/', _index2.default);
+app.use('/api/conventions', _conventions2.default);
+app.use('/api/groups', _groups2.default);
 
 // app.set('view engine', 'ejs');
-app.get('*', (req, res) => {
-  const indexPath = './views/index.html';
-  res.sendFile(indexPath, {root: './'});
+app.get('*', function (req, res) {
+  var indexPath = './views/index.html';
+  res.sendFile(indexPath, { root: './' });
 });
 
 // catch 404 and forward to error handler
-app.use((req, res, next) => {
-  const err = new Error('Not Found');
+app.use(function (req, res, next) {
+  var err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -58,9 +104,9 @@ app.use((req, res, next) => {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use((err, req, res, next) => {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-      res.render('./error.ejs', {
+    res.render('./error.ejs', {
       message: err.message,
       error: err
     });
@@ -69,7 +115,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use((err, req, res, next) => {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('./error.ejs', {
     message: err.message,
@@ -81,8 +127,8 @@ app.use((err, req, res, next) => {
  * Normalize a port into a number, string, or false.
  */
 
-const normalizePort = (val) => {
-  const port = parseInt(val, 10);
+var normalizePort = function normalizePort(val) {
+  var port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -95,20 +141,18 @@ const normalizePort = (val) => {
   }
 
   return false;
-}
+};
 
 /**
  * Event listener for HTTP server "error" event.
  */
 
-const onError = (error) => {
+var onError = function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
-  const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -123,32 +167,30 @@ const onError = (error) => {
     default:
       throw error;
   }
-}
+};
 
 /**
  * Event listener for HTTP server "listening" event.
  */
 
-const onListening = () => {
-  const addr = server.address();
-  const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
+var onListening = function onListening() {
+  var addr = server.address();
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+  (0, _debug2.default)('Listening on ' + bind);
+};
 
 /**
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-const server = http.createServer(app);
+var server = _http2.default.createServer(app);
 
 /**
  * Listen on provided port, on all network interfaces.
