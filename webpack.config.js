@@ -1,6 +1,6 @@
-module.exports = {
+module.exports = [{
   entry: [
-    './public/src/index.js'
+    './src/index.js'
   ],
   output: {
     path: './public/dist/',
@@ -32,4 +32,4 @@ module.exports = {
     historyApiFallback: true,
     contentBase: './'
   }
-};
+}];

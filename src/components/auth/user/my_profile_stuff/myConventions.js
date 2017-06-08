@@ -18,9 +18,13 @@ class MyConventions extends Component {
     e.preventDefault();
     let clickResult = this[1]._id;
     let array = this[2].state.conventions;
-    let index = this[2].state.conventions.indexOf(clickResult)
-    this[2].state.conventions.splice(index, 1)
-    this[0].removeConvention(clickResult);
+    let index;
+    this[2].state.conventions.forEach((con, i) => {
+      if (clickResult === con._id) {
+        this[2].state.conventions.splice(i, 1)
+        this[0].removeConvention(clickResult);
+      }
+    });
   }
   render() {
     this.state.conventions = this.props.myconventions || []

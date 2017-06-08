@@ -1,3 +1,11 @@
+'use strict';
+
+var _bluebird = require('bluebird');
+
+var _bluebird2 = _interopRequireDefault(_bluebird);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -11,8 +19,8 @@ var conventions = require('./routes/conventions');
 var groups = require('./routes/groups');
 require("babel-core/register");
 require("babel-polyfill");
-import bluebird from 'bluebird';
-bluebird.promisifyAll(mongoose);
+
+_bluebird2.default.promisifyAll(mongoose);
 
 var app = express();
 
@@ -25,7 +33,7 @@ app.set('view engine', 'ejs');
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(logger('dev'));
-app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
@@ -35,13 +43,13 @@ app.use('/api/conventions', conventions);
 app.use('/api/groups', groups);
 
 // app.set('view engine', 'ejs');
-app.get('*', (req, res) => {
+app.get('*', function (req, res) {
   var indexPath = './views/index.html';
-  res.sendFile(indexPath, {root: './'});
+  res.sendFile(indexPath, { root: './' });
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
@@ -52,9 +60,9 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-      res.render('./error.ejs', {
+    res.render('./error.ejs', {
       message: err.message,
       error: err
     });
@@ -63,7 +71,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('./error.ejs', {
     message: err.message,
@@ -124,9 +132,7 @@ function onError(error) {
     throw error;
   }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  var bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -149,9 +155,7 @@ function onError(error) {
 
 function onListening() {
   var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
+  var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
 
