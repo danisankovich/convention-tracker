@@ -1,6 +1,6 @@
 import passport from 'passport';
 import User from '../models/user';
-import config from '../config';
+import config from '../../config';
 
 import {Strategy as JwtStrategy, ExtractJwt} from 'passport-jwt';
 

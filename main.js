@@ -44,15 +44,15 @@ var _debug = require('debug');
 
 var _debug2 = _interopRequireDefault(_debug);
 
-var _index = require('./routes/index');
+var _index = require('./dist/routes/index');
 
 var _index2 = _interopRequireDefault(_index);
 
-var _conventions = require('./routes/conventions');
+var _conventions = require('./dist/routes/conventions');
 
 var _conventions2 = _interopRequireDefault(_conventions);
 
-var _groups = require('./routes/groups');
+var _groups = require('./dist/routes/groups');
 
 var _groups2 = _interopRequireDefault(_groups);
 

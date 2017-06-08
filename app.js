@@ -11,9 +11,9 @@ import bluebird from 'bluebird';
 import debug from 'debug'
 debug('homeway:server');
 
-import routes from './routes/index';
-import conventions from './routes/conventions';
-import groups from './routes/groups';
+import routes from './dist/routes/index';
+import conventions from './dist/routes/conventions';
+import groups from './dist/routes/groups';
 
 import "babel-core/register";
 import "babel-polyfill";

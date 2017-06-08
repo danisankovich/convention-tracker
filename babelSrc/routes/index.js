@@ -1,7 +1,7 @@
 import express from 'express';
 const router = express.Router();
 import expressJwt from 'express-jwt';
-import config from '../config';
+import config from '../../config';
 import jwt from 'jwt-simple';
 
 import Authentication from '../controllers/authentication';

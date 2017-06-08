@@ -1,6 +1,6 @@
 import User from '../models/user';
 import jwt from 'jwt-simple';
-import config from '../config';
+import config from '../../config';
 import bcrypt from 'bcrypt-nodejs';
 
 const tokenForUser = (user) => {
