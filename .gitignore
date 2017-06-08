@@ -2,7 +2,3 @@ node_modules
 dist
 ./main.js
 ./main.js.map
-./services
-./routes
-./models
-./controllers
