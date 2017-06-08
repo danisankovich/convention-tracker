@@ -32,7 +32,6 @@ class SingleConvention extends Component {
     });
   }
   goingToConvention() {
-    console.log(this.props.convention._id)
     const user = this.props.userInfo;
     const con = this.props.convention;
     if (user.myConventions.indexOf(con._id) === -1) {

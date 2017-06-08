@@ -25,20 +25,18 @@ export function signupUser({email, password, username}) {
     signUp(dispatch, {email, password, username})
   }
 }
-export function editUser({phoneNumber, email, lang, aboutMe}, user) {
+export function editUser({phoneNumber, email}, user) {
   return function(dispatch) {
-    userEdit(dispatch, {phoneNumber, email, lang, aboutMe}, user)
+    userEdit(dispatch, {phoneNumber, email}, user)
   }
 }
 export function removeConvention(id) {
-  console.log(id)
   return function(dispatch) {
     deleteConvention(id, dispatch)
   }
 }
 
 export function addConventionToMyList(id) {
-  console.log(id, 'pppp')
   return function(dispatch) {
     joinConvention(id, dispatch)
   }
