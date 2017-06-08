@@ -1,5 +1,6 @@
 import {signIn, signUp, userEdit, getUser, getUserProfile, deleteConvention, joinConvention} from './funcs/user';
 import {getConvention, getAllConventions, getMyConventions, createConvention, edit} from './funcs/convention';
+import {getGroup, getAllGroups, createGroup, editGroup, leaveGroup, joinGroup} from './funcs/group';
 import {
   AUTH_USER,
   UNAUTH_USER,
@@ -12,6 +13,12 @@ import {
   FETCH_SINGLE_CONVENTION,
   EDIT_CONVENTION,
   EDIT_USER,
+  NEW_GROUP,
+  EDIT_GROUP,
+  FETCH_GROUPS,
+  FETCH_SINGLE_GROUP,
+  JOIN_GROUP,
+  LEAVE_GROUP
 } from './types';
 
 //USER FUNCTIONS
@@ -89,4 +96,34 @@ export function editConvention({convention}, userId) {
   return function(dispatch) {
     edit({convention}, userId, dispatch)
   }
+}
+
+//GROUP FUNCTIONS
+export function newGroup(data) {
+  console.log(data)
+  return function(dispatch) {
+    createGroup(data, dispatch);
+  }
+}
+
+export function editingGroup(data) {
+  return 'edit my group'
+}
+
+export function fetchGroups() {
+  return function(dispatch) {
+    getAllGroups(dispatch)
+  }
+}
+
+export function fetchGroup(data) {
+  return 'getting a group'
+}
+
+export function leavingGroup(data) {
+  return 'leaving group now'
+}
+
+export function joiningGroup(data) {
+  return 'joinging gorup now'
 }

@@ -43,7 +43,7 @@ exports.signin = function(req, res, next) {
 
 exports.getUser = async (req, res) => {
   const token = req.headers.authorization;
-  let user;
+
   if(token) {
     try {
       const decoded = jwt.decode(token, config.secret);

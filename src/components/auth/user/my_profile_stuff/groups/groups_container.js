@@ -9,7 +9,7 @@ class Groups_Container extends Component {
   render() {
       return (
         <div className='row'>
-          <Link to="/new"><button className="btn btn-success">Create Group</button></Link>
+          <Link to="/group/new"><button className="btn btn-success">Create Group</button></Link>
 
           <Groups />
         </div>

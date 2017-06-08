@@ -9,22 +9,20 @@ import $ from 'jquery';
 import _ from 'lodash';
 
 
-class NewConvention extends Component {
+class NewGroup extends Component {
   constructor(props) {
     super(props)
-    this.state = {groupUsers: {}, groupUsersCollection: []}
+    this.state = {groupUsers: {} }
   }
   componentWillMount() {
     this.props.fetchInfo();
   }
   handleFormSubmit(e) {
     e.preventDefault();
-    this.state.user = this.props.userInfo._id;
+    this.state.userId = this.props.userInfo._id;
     this.state.username = this.props.userInfo.username;
-    this.state.email = this.props.userInfo.email;
-
-    console.log(this.state)
-    // this.props.newConvention(this.state)
+    this.state.groupUsers = JSON.stringify(this.state.groupUsers)
+    this.props.newGroup(this.state)
   }
   handleChange(type, e) {
     this.state[type] = e.target.value;
@@ -32,6 +30,7 @@ class NewConvention extends Component {
   handleChangeDate(type, e) {
     this.state[type] = e._d;
   }
+
   addUser(e) {
     e.preventDefault();
     const groupUsers = this.state.groupUsers;
@@ -50,6 +49,7 @@ class NewConvention extends Component {
       }
     });
   }
+
   render() {
     const {userInfo} = this.props
     const groupUsers = this.state.groupUsers || {};
@@ -135,4 +135,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, actions)(NewConvention);
+export default connect(mapStateToProps, actions)(NewGroup);

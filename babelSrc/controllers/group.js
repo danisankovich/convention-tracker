@@ -2,6 +2,12 @@ var express = require('express');
 var router = express.Router();
 var User = require('../models/user');
 var Group = require('../models/group');
+var Convention = require('../models/convention');
+import config from '../../config';
+import jwt from 'jwt-simple';
+
+import _ from 'lodash';
+
 const randomKeyGen = require('../services/randomkeygen')
 
 const groupCreatorController = (req, res, data) => {
@@ -11,15 +17,22 @@ const groupCreatorController = (req, res, data) => {
     if (error) res.send(error)
     if (!checkGroup) {
       data.shareId = shareId;
-      Group.create(data, (err, group) => {
+      Group.create(data, async (err, group) => {
         if (err) res.send(err);
-        User.findById(data.creatorId, (e, user) => {
-          if (e) res.send(e)
-          user.groups.push(group._id)
-          user.save();
-          group.save();
-          res.json(group);
+
+        const users = await User.findAsync({'_id': { $in: data.memberList}});
+        users.forEach((u) => {
+          User.update(
+             { "_id": u._id},
+             { "$push": { "groups": group._id } },
+             (err, raw) => {
+                if (err) return res.send(err);
+                console.log('updated');
+             }
+          );
         })
+        group.save();
+        res.json(group);
       })
     } else {
       groupCreatorController(req, res, data)
@@ -29,9 +42,13 @@ const groupCreatorController = (req, res, data) => {
 exports.createGroup = (req, res) => {
   var data = {
     name: req.body.name,
-    creatorId: req.body.user._id,
-    memberList: [req.body.user]
+    affiliation: req.body.affiliation,
+    notes: req.body.notes,
+    creatorId: req.body.userId,
+    memberList: JSON.parse(req.body.groupUsers)
   }
+  data.memberList = _.map(data.memberList, (user, key) => key);
+
 
   groupCreatorController(req, res, data);
 }
@@ -67,4 +84,28 @@ exports.joinGroup = (req, res) => {
       res.send(group);
     })
   })
+}
+
+exports.findMyGroups = async (req, res) => {
+  const token = req.headers.authorization;
+  if(token) {
+    try {
+      const decoded = jwt.decode(token, config.secret);
+
+      const user = await User.findByIdAsync(decoded.sub);
+
+      const groupIds = user.groups;
+
+      const groups = await Group.findAsync({'_id': { $in: groupIds}});
+
+      if (!user) return res.send('No User')
+
+      res.send(groups);
+    } catch (e) {
+      return res.status(401).send('authorization required');
+    }
+  }
+  else {
+    res.send({user: "NO_USER"})
+  }
 }
