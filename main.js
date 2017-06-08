@@ -1,30 +1,74 @@
 'use strict';
 
+var _express = require('express');
+
+var _express2 = _interopRequireDefault(_express);
+
+var _path = require('path');
+
+var _path2 = _interopRequireDefault(_path);
+
+var _serveFavicon = require('serve-favicon');
+
+var _serveFavicon2 = _interopRequireDefault(_serveFavicon);
+
+var _morgan = require('morgan');
+
+var _morgan2 = _interopRequireDefault(_morgan);
+
+var _cookieParser = require('cookie-parser');
+
+var _cookieParser2 = _interopRequireDefault(_cookieParser);
+
+var _bodyParser = require('body-parser');
+
+var _bodyParser2 = _interopRequireDefault(_bodyParser);
+
+var _mongoose = require('mongoose');
+
+var _mongoose2 = _interopRequireDefault(_mongoose);
+
+var _ejs = require('ejs');
+
+var _ejs2 = _interopRequireDefault(_ejs);
+
+var _http = require('http');
+
+var _http2 = _interopRequireDefault(_http);
+
 var _bluebird = require('bluebird');
 
 var _bluebird2 = _interopRequireDefault(_bluebird);
 
+var _debug = require('debug');
+
+var _debug2 = _interopRequireDefault(_debug);
+
+var _index = require('./routes/index');
+
+var _index2 = _interopRequireDefault(_index);
+
+var _conventions = require('./routes/conventions');
+
+var _conventions2 = _interopRequireDefault(_conventions);
+
+var _groups = require('./routes/groups');
+
+var _groups2 = _interopRequireDefault(_groups);
+
+require('babel-core/register');
+
+require('babel-polyfill');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var ejs = require('ejs');
-var routes = require('./routes/index');
-var conventions = require('./routes/conventions');
-var groups = require('./routes/groups');
-require("babel-core/register");
-require("babel-polyfill");
+(0, _debug2.default)('homeway:server');
 
-_bluebird2.default.promisifyAll(mongoose);
+_bluebird2.default.promisifyAll(_mongoose2.default);
 
-var app = express();
+var app = (0, _express2.default)();
 
-mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:auth/conventionTracker');
+_mongoose2.default.connect(process.env.MONGODB_URI || 'mongodb://localhost:auth/conventionTracker');
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
@@ -32,15 +76,15 @@ app.set('view engine', 'ejs');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
-app.use(bodyParser.json({ limit: '50mb' }));
-app.use(bodyParser.urlencoded({ limit: '50mb', extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use((0, _morgan2.default)('dev'));
+app.use(_bodyParser2.default.json({ limit: '50mb' }));
+app.use(_bodyParser2.default.urlencoded({ limit: '50mb', extended: false }));
+app.use((0, _cookieParser2.default)());
+app.use(_express2.default.static(_path2.default.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/api/conventions', conventions);
-app.use('/api/groups', groups);
+app.use('/', _index2.default);
+app.use('/api/conventions', _conventions2.default);
+app.use('/api/groups', _groups2.default);
 
 // app.set('view engine', 'ejs');
 app.get('*', function (req, res) {
@@ -79,35 +123,11 @@ app.use(function (err, req, res, next) {
   });
 });
 
-var debug = require('debug')('homeway:server');
-var http = require('http');
-
-/**
- * Get port from environment and store in Express.
- */
-
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
 /**
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+var normalizePort = function normalizePort(val) {
   var port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -121,13 +141,13 @@ function normalizePort(val) {
   }
 
   return false;
-}
+};
 
 /**
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+var onError = function onError(error) {
   if (error.syscall !== 'listen') {
     throw error;
   }
@@ -147,16 +167,37 @@ function onError(error) {
     default:
       throw error;
   }
-}
+};
 
 /**
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
+var onListening = function onListening() {
   var addr = server.address();
   var bind = typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
-  debug('Listening on ' + bind);
-}
+  (0, _debug2.default)('Listening on ' + bind);
+};
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+var port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+var server = _http2.default.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
 module.exports = app;

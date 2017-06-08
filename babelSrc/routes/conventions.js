@@ -1,14 +1,9 @@
-var express = require('express');
-var router = express.Router();
-var expressJwt = require('express-jwt');
-var config = require('../config');
-var jwt = require('jwt-simple');
+import express from 'express';
+const router = express.Router();
 
-
-const Convention = require('../models/convention');
-const User = require('../models/user');
-
-const ConventionController = require('../controllers/convention');
+import Convention from '../models/convention';
+import User from '../models/user';
+import ConventionController from '../controllers/convention';
 
 router.get('/convention/:id', ConventionController.findOneConvention);
 router.get('/all', ConventionController.findAllConventions);

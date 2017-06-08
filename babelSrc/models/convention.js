@@ -1,7 +1,7 @@
-var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+import mongoose from 'mongoose';
+const Schema = mongoose.Schema;
 
-var conventionSchema = new Schema({
+const conventionSchema = new Schema({
   name: {type: String, lowercase: true, required: true},
   location: {
     locationName: {type: String, lowercase: true},
@@ -24,5 +24,5 @@ var conventionSchema = new Schema({
   attendees: []
 });
 
-var CONVENTION = mongoose.model('convention', conventionSchema);
+const CONVENTION = mongoose.model('convention', conventionSchema);
 module.exports = CONVENTION;

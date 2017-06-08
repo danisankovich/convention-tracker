@@ -1,12 +1,13 @@
-var passport = require('passport');
-var User = require('../models/user');
-var config = require('../config');
-var JwtStrategy = require('passport-jwt').Strategy;
-var ExtractJwt = require('passport-jwt').ExtractJwt;
-var LocalStrategy = require('passport-local');
+import passport from 'passport';
+import User from '../models/user';
+import config from '../config';
 
-var localOptions = {usernameField: 'email'};
-var localLogin = new LocalStrategy(localOptions, (email, password, done) => {
+import {Strategy as JwtStrategy, ExtractJwt} from 'passport-jwt';
+
+import LocalStrategy from 'passport-local';
+
+const localOptions = {usernameField: 'email'};
+const localLogin = new LocalStrategy(localOptions, (email, password, done) => {
   User.findOne({ email: email }, (err, user) => {
     if (err) { return done(err); }
     if(!user) { return done(null, false); }
@@ -19,14 +20,13 @@ var localLogin = new LocalStrategy(localOptions, (email, password, done) => {
 });
 
 // JWT Strategy Options
-var jwtOptions = {
+const jwtOptions = {
   jwtFromRequest: ExtractJwt.fromHeader('authorization'), //looks at request header for a token
   secretOrKey: config.secret
 };
 
 // Create jwt strategy and see if user Id from payload exists in database.
-var jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
-  console.log('here', payload)
+const jwtLogin = new JwtStrategy(jwtOptions, (payload, done) => {
   User.findById(payload.sub, (err, user) => {
     //if err, call done with eror and no user
     if (err) { return done(err, false); }

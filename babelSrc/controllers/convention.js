@@ -1,17 +1,15 @@
-var express = require('express');
-var router = express.Router();
-var expressJwt = require('express-jwt');
-var config = require('../config');
-var jwt = require('jwt-simple');
+import express from 'express';
+const router = express.Router();
+import expressJwt from 'express-jwt';
+import config from '../config';
+import jwt from 'jwt-simple';
 
-var Convention = require('../models/convention');
-var User = require('../models/user');
+import Convention from '../models/convention';
+import User from '../models/user';
 
 exports.findOneConvention = async (req, res) => {
-  let convention;
-
   try {
-    convention = await Convention.findByIdAsync(req.params.id);
+    const convention = await Convention.findByIdAsync(req.params.id);
     res.send(convention)
   } catch (e) {
     res.send(e)
@@ -39,10 +37,10 @@ exports.findMyConventions = async (req, res) => {
 }
 
 exports.editConvention = async (req, res) => {
-  var updatedConvention =JSON.parse(req.body.data).convention;
-  var token = req.headers.authorization;
+  const updatedConvention =JSON.parse(req.body.data).convention;
+  const token = req.headers.authorization;
 
-  var decoded = jwt.decode(token, config.secret);
+  const decoded = jwt.decode(token, config.secret);
 
   try {
     const user = await User.findByIdAsync(decoded.sub);
@@ -60,7 +58,7 @@ exports.editConvention = async (req, res) => {
 }
 
 exports.newConvention = async (req, res) => {
-  var data = {
+  const data = {
     name: req.body.name,
     location: {
       locationName: req.body.locationName,
@@ -100,9 +98,9 @@ exports.newConvention = async (req, res) => {
 };
 
 exports.deleteConvention = async (req, res) => {
-  var convention = req.params.id;
-  var token = req.headers.authorization;
-  var decoded = jwt.decode(token, config.secret);
+  const convention = req.params.id;
+  const token = req.headers.authorization;
+  const decoded = jwt.decode(token, config.secret);
   try {
     const user = await User.findByIdAsync(decoded.sub);
     if (!user) return res.send('No User');
@@ -115,7 +113,7 @@ exports.deleteConvention = async (req, res) => {
     if (index > -1) {
       user.myConventions.splice(index, 1);
       user.save(user)
-      console.log(user.myConventions)
+
       res.send(user);
     } else {
       res.send('Convention not Found')

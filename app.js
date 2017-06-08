@@ -1,20 +1,26 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var mongoose = require('mongoose');
-var ejs = require('ejs');
-var routes = require('./routes/index');
-var conventions = require('./routes/conventions');
-var groups = require('./routes/groups');
-require("babel-core/register");
-require("babel-polyfill");
+import express from 'express';
+import path from 'path';
+import favicon from 'serve-favicon';
+import logger from 'morgan';
+import cookieParser from 'cookie-parser';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import ejs from 'ejs';
+import http from 'http';
 import bluebird from 'bluebird';
+import debug from 'debug'
+debug('homeway:server');
+
+import routes from './routes/index';
+import conventions from './routes/conventions';
+import groups from './routes/groups';
+
+import "babel-core/register";
+import "babel-polyfill";
+
 bluebird.promisifyAll(mongoose);
 
-var app = express();
+const app = express();
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:auth/conventionTracker');
 
@@ -36,13 +42,13 @@ app.use('/api/groups', groups);
 
 // app.set('view engine', 'ejs');
 app.get('*', (req, res) => {
-  var indexPath = './views/index.html';
+  const indexPath = './views/index.html';
   res.sendFile(indexPath, {root: './'});
 });
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
+app.use((req, res, next) => {
+  const err = new Error('Not Found');
   err.status = 404;
   next(err);
 });
@@ -52,7 +58,7 @@ app.use(function(req, res, next) {
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
-  app.use(function(err, req, res, next) {
+  app.use((err, req, res, next) => {
     res.status(err.status || 500);
       res.render('./error.ejs', {
       message: err.message,
@@ -63,7 +69,7 @@ if (app.get('env') === 'development') {
 
 // production error handler
 // no stacktraces leaked to user
-app.use(function(err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('./error.ejs', {
     message: err.message,
@@ -71,36 +77,12 @@ app.use(function(err, req, res, next) {
   });
 });
 
-var debug = require('debug')('homeway:server');
-var http = require('http');
-
-/**
- * Get port from environment and store in Express.
- */
-
-var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
-/**
- * Create HTTP server.
- */
-
-var server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
-
-server.listen(port);
-server.on('error', onError);
-server.on('listening', onListening);
-
 /**
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
-  var port = parseInt(val, 10);
+const normalizePort = (val) => {
+  const port = parseInt(val, 10);
 
   if (isNaN(port)) {
     // named pipe
@@ -119,12 +101,12 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+const onError = (error) => {
   if (error.syscall !== 'listen') {
     throw error;
   }
 
-  var bind = typeof port === 'string'
+  const bind = typeof port === 'string'
     ? 'Pipe ' + port
     : 'Port ' + port;
 
@@ -147,12 +129,33 @@ function onError(error) {
  * Event listener for HTTP server "listening" event.
  */
 
-function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
+const onListening = () => {
+  const addr = server.address();
+  const bind = typeof addr === 'string'
     ? 'pipe ' + addr
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+
+/**
+ * Get port from environment and store in Express.
+ */
+
+const port = normalizePort(process.env.PORT || '3000');
+app.set('port', port);
+
+/**
+ * Create HTTP server.
+ */
+
+const server = http.createServer(app);
+
+/**
+ * Listen on provided port, on all network interfaces.
+ */
+
+server.listen(port);
+server.on('error', onError);
+server.on('listening', onListening);
 
 module.exports = app;

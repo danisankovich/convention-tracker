@@ -1,17 +1,16 @@
-var User = require('../models/user');
-var jwt = require('jwt-simple');
-var config = require('../config');
-var bcrypt = require('bcrypt-nodejs');
+import User from '../models/user';
+import jwt from 'jwt-simple';
+import config from '../config';
+import bcrypt from 'bcrypt-nodejs';
 
 const tokenForUser = (user) => {
-  var timestamp = new Date().getTime();
+  const timestamp = new Date().getTime();
   return jwt.encode({ sub: user.id, iat: timestamp }, config.secret);
 }
 
 exports.signup = async function(req, res, next) {
-  var email = req.body.email;
-  var username = req.body.username;
-  var password = req.body.password;
+  const { email, username, password } = req.body;
+
   if (!email || !password) {
     return res.status(422).send({error: 'Email and Password Must Be Provided'});
   }
@@ -89,10 +88,10 @@ exports.editInfo = async (req, res, next) => {
 }
 
 exports.addFollower = (req, res) => {
-  var token = req.headers.authorization;
+  const token = req.headers.authorization;
   if(token) {
     try {
-      var decoded = jwt.decode(token, config.secret);
+      const decoded = jwt.decode(token, config.secret);
       User.findByIdAndUpdate(
         decoded.sub, {$addToSet: {"following": req.body.user}}, {safe: true, upsert: true},
         function(err, user) {
@@ -110,10 +109,10 @@ exports.addFollower = (req, res) => {
   }
 }
 exports.removeFollower = (req, res) => {
-  var token = req.headers.authorization;
+  const token = req.headers.authorization;
   if(token) {
     try {
-      var decoded = jwt.decode(token, config.secret);
+      const decoded = jwt.decode(token, config.secret);
       User.findByIdAndUpdate(
         decoded.sub, {$pull: {"following": req.body.user}}, { multi: true },
         function(err, user) {
