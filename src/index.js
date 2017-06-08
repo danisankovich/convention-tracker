@@ -23,6 +23,9 @@ import Conventions_Container from './components/conventions/conventions_containe
 import Convention from './components/conventions/convention';
 import NewConvention from './components/conventions/newConvention';
 
+// Group Routes
+import NewGroup from './components/auth/user/my_profile_stuff/groups/newGroup';
+
 import RequireAuth from './components/auth/require_auth';
 
 import reducers from './reducers';
@@ -49,6 +52,7 @@ ReactDOM.render(
           <Route path='profile' component={RequireAuth(Profile)}></Route>
           <Route path='settings' component={RequireAuth(Settings)}></Route>
           <Route path='userprofile/:id' component={UserProfile}></Route>
+          <Route path='group/new' component={NewGroup}></Route>
         </Route>
         <Route path='/conventions' component={App}>
           <IndexRoute component={Conventions_Container} />

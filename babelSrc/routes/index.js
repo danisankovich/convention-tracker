@@ -14,6 +14,7 @@ const requireSignin = passport.authenticate('local', {session: false});
 const authenticate = expressJwt({secret : config.secret});
 
 router.get('/api', requireAuth, Authentication.getUser);
+router.get('/api/checkUser', Authentication.checkUser);
 router.put('/api/addfollower', requireAuth, Authentication.addFollower);
 router.put('/api/removefollower', requireAuth, Authentication.removeFollower);
 router.get('/api/user/:id', Authentication.getUserProfile);

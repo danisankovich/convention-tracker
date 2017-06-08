@@ -63,6 +63,20 @@ exports.getUserProfile = async (req, res) => {
   try {
     const user = await User.findByIdAsync(req.params.id);
     if (!user) return res.send('no user');
+    res.send(user)
+  } catch (e) {
+    res.send(e);
+  }
+}
+exports.checkUser = async (req, res) => {
+  console.log(req.query)
+  try {
+    const user = await User.findOneAsync({$or: [
+      {email: req.query.user},
+      {username: req.query.user}
+    ]});
+    if (!user) return res.send(false);
+    res.send({id: user._id, user: user.username})
   } catch (e) {
     res.send(e);
   }
