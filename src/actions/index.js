@@ -1,6 +1,6 @@
 import {signIn, signUp, userEdit, getUser, getUserProfile, deleteConvention, joinConvention} from './funcs/user';
 import {getConvention, getAllConventions, getMyConventions, createConvention, edit} from './funcs/convention';
-import {getGroup, getAllGroups, createGroup, editGroup, leaveGroup, joinGroup} from './funcs/group';
+import {getGroup, getAllGroups, createGroup, editGroup, leaveGroup, joinGroup, getGroupMembers} from './funcs/group';
 import {
   AUTH_USER,
   UNAUTH_USER,
@@ -18,7 +18,7 @@ import {
   FETCH_GROUPS,
   FETCH_SINGLE_GROUP,
   JOIN_GROUP,
-  LEAVE_GROUP
+  LEAVE_GROUP,
 } from './types';
 
 //USER FUNCTIONS

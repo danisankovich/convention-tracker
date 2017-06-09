@@ -6,7 +6,7 @@ export default function(state = {}, action) {
     case FETCH_GROUPS:
       return {...state, groups: action.payload};
     case FETCH_SINGLE_GROUP:
-      return {...state, group: action.payload};
+      return {...state, response: action.payload};
     case NEW_GROUP:
       return {...state, group: action.payload};
     case EDIT_GROUP:

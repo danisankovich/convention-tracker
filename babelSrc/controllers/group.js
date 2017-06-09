@@ -113,9 +113,27 @@ exports.findMyGroups = async (req, res) => {
 
 exports.findOneGroup = async (req, res) => {
   try {
+    const conventionIds = [];
+    const conMemberTracker = {};
     const group = await Group.findByIdAsync(req.params.id);
+    const members = await Promise.all(group.memberList.map(async (memberId) => {
+      const member = await User.findByIdAsync(memberId);
+      member.myConventions.forEach((con) => {
+        if (conventionIds.indexOf(con.toString()) === -1) {
+          conMemberTracker[con.toString()] = [member.username];
+          conventionIds.push(con.toString());
+        } else {
+          conMemberTracker[con.toString()].push(member.username);
+        }
+      });
+      return member;
+    }));
 
-    res.send(group)
+    const conventions = await Promise.all(conventionIds.map(async (conId) => {
+      return await Convention.findByIdAsync(conId);
+    }))
+
+    res.send({group, members: members.filter(Boolean), conventions, conMemberTracker})
   } catch (e) {
     res.send(e)
   }

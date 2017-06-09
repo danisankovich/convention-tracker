@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../../../actions';
+import utils from '../../../../../utils'
 import { browserHistory } from 'react-router'
 import $ from 'jquery';
 
@@ -12,9 +13,10 @@ class SingleGroup extends Component {
     let id = this.props.location.pathname.split('groups/')[1]
 
     this.props.fetchGroup(id);
+
   }
   handleClick(type) {
-    if(this.props.userInfo._id = this.props.group.creatorId) {
+    if(this.props.userInfo._id = this.props.data.group.creatorId) {
       this.setState(type);
     }
   }
@@ -32,9 +34,13 @@ class SingleGroup extends Component {
       inputValue: evt.target.value
     });
   }
-  leaveGroup() {
+  handleClick() {
+    let clickResult = this._id;
+    browserHistory.push(`/conventions/${clickResult}`);
+  }
+  joinGroup() {
     const user = this.props.userInfo;
-    const group = this.props.group;
+    const group = this.props.data.group;
     if (user.groups.indexOf(group._id) === -1) {
       this.props.userInfo.groups.push(group._id);
       this.props.joiningGroup(group._id);
@@ -46,7 +52,7 @@ class SingleGroup extends Component {
   }
   inviteUser(e) {
     e.preventDefault();
-    console.log(this.state.invitedUser)
+
     const group = this.state.group;
     $.ajax({
        url: `/api/checkUser`,
@@ -55,7 +61,7 @@ class SingleGroup extends Component {
     }).done((response) => {
       if (response && group.memberList.indexOf(response.id) === -1) {
         $.ajax({
-          url: `/api/groups/joinGroup/${this.props.group._id}`,
+          url: `/api/groups/joinGroup/${this.props.data.group._id}`,
           type: 'POST',
           data: {_id: response.id}
         }).done((res) => {
@@ -69,14 +75,15 @@ class SingleGroup extends Component {
     });
   }
   render() {
-    let {group = {}, userInfo} = this.props;
-    console.log(group)
+    let {userInfo, data = {}} = this.props;
+    let { group, members, conventions, conMemberTracker } = data
+
     let incrementKey = 0
-    if(group && userInfo) {
+    if(group && userInfo && members) {
       this.state.group = group
       return (
         <div className="col-sm-10 col-sm-offset-1">
-          <button onClick={this.leaveGroup.bind(this)}>Going</button>
+          <button onClick={this.joinGroup.bind(this)}>Join Group</button>
           <form onSubmit={this.inviteUser.bind(this)}>
             <fieldset>
               <input type='text' onChange={this.inputChange.bind(this)} />
@@ -89,9 +96,51 @@ class SingleGroup extends Component {
                 <h3>Group Details: </h3>
                 <ul>
                   <li>Name: {group.name}</li>
+                  <li>Affiliation: {group.affiliation}</li>
+                  <li>Group Creator: {group.creatorName}</li>
                 </ul>
-                <h3>Description: </h3>
+                <h3>Notes: </h3>
                 <p>{group.notes} </p>
+                <h3>Members:</h3>
+                <ul>
+                  {members.map(member => (<li key={member._id}>{member.username}</li>))}
+                </ul>
+                <h3>Conventions:</h3>
+                  <table className="table table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Convention Name</th>
+                        <th>Price Details</th>
+                        <th>Address</th>
+                        <th>Attendees</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {conventions.map(function(result) {
+                        const location = utils.locationFormatter(result.location);
+
+                        return (
+                          <tr key={result._id} className='table-row'>
+                            <td onClick={this.handleClick.bind(result)}>{result.name}</td>
+                            <td onClick={this.handleClick.bind(result)}>${result.price}</td>
+                            <td onClick={this.handleClick.bind(result)}>
+                              <ul className='removeListBullet'>
+                                <li>{location.locationName}</li>
+                                <li>{location.address}</li>
+                                <li>{location.city}, {location.state.toUpperCase()} {location.zipcode}</li>
+                              </ul>
+                            </td>
+                            <td>
+                              <ul>
+                                {conMemberTracker[result._id].map(mem => <li key={mem}>{mem}</li>)}
+                              </ul>
+                            </td>
+                          </tr>
+                        )
+                      }.bind(this))}
+                    </tbody>
+                  </table>
+
               </div>
             </div>
           </div>
@@ -104,6 +153,6 @@ class SingleGroup extends Component {
   };
 }
 function mapStateToProps(state) {
-  return {userInfo: state.auth.userInfo, group: state.group.group};
+  return {userInfo: state.auth.userInfo, data: state.group.response};
 }
 export default connect(mapStateToProps, actions)(SingleGroup);

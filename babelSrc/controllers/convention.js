@@ -137,7 +137,7 @@ exports.joinConvention = async (req, res) => {
     if (!convention) return res.send('Can\'t find convention');
 
     if (index === -1) {
-      user.myConventions.push(convention);
+      user.myConventions.push(conventionToAdd._id);
       user.save(user)
 
       res.send(user);

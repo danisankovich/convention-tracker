@@ -46,7 +46,7 @@ class Profile extends Component {
             <div className="col-sm-2 col-sm-offset-1">
               <button className='btn btn-primary' onClick={this.show.bind([this, 'showInfo'])}>Show Info</button>
               <button className='btn btn-primary' onClick={this.show.bind([this, 'showConventions'])}>Show Conventions ({this.props.userInfo.myConventions.length})</button>
-              <button className='btn btn-primary' onClick={this.show.bind([this, 'showGroups'])}>Show Groups ({this.props.userInfo.myConventions.length})</button>
+              <button className='btn btn-primary' onClick={this.show.bind([this, 'showGroups'])}>Show Groups ({this.props.userInfo.groups.length})</button>
             </div>
             <div className="col-sm-8 col-sm-offset-1">
               {this.state.showInfo && <div className="col-sm-offset-1">
