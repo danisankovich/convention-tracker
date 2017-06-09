@@ -25,6 +25,7 @@ import NewConvention from './components/conventions/newConvention';
 
 // Group Routes
 import NewGroup from './components/auth/user/my_profile_stuff/groups/newGroup';
+import Group from './components/auth/user/my_profile_stuff/groups/group';
 
 import RequireAuth from './components/auth/require_auth';
 
@@ -58,6 +59,11 @@ ReactDOM.render(
           <IndexRoute component={Conventions_Container} />
           <Route path=':id' component={Convention}></Route>
           <Route path='/new' component={RequireAuth(NewConvention)}></Route>
+        </Route>
+        <Route path='/groups' component={App}>
+          <IndexRoute component={NewGroup} />
+          <Route path=':id' component={Group}></Route>
+          <Route path='/new' component={RequireAuth(NewGroup)}></Route>
         </Route>
     </Router>
   </Provider>

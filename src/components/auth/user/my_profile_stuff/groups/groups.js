@@ -16,7 +16,7 @@ class Group extends Component {
   }
   handleClick() {
     let clickResult = this._id;
-    browserHistory.push(`/conventions/${clickResult}`);
+    browserHistory.push(`/groups/${clickResult}`);
   }
 
   render() {

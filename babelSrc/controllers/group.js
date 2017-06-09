@@ -13,27 +13,27 @@ const randomKeyGen = require('../services/randomkeygen')
 const groupCreatorController = (req, res, data) => {
   const shareId = randomKeyGen(6);
 
-  Group.findOne({shareId: shareId}, (error, checkGroup) => {
+  Group.findOne({shareId: shareId}, async (error, checkGroup) => {
     if (error) res.send(error)
     if (!checkGroup) {
       data.shareId = shareId;
-      Group.create(data, async (err, group) => {
-        if (err) res.send(err);
+
+      try {
+        const group = await Group.createAsync(data);
+        if (!group) res.send('No Group Found');
 
         const users = await User.findAsync({'_id': { $in: data.memberList}});
-        users.forEach((u) => {
-          User.update(
-             { "_id": u._id},
-             { "$push": { "groups": group._id } },
-             (err, raw) => {
-                if (err) return res.send(err);
-                console.log('updated');
-             }
-          );
-        })
+
+        await Promise.all(users.map(async (u) => {
+          const updated = await User.updateAsync({ "_id": u._id}, { "$push": { "groups": group._id } });
+          if (!updated) res.send('User Update Failed');
+        }))
+
         group.save();
         res.json(group);
-      })
+      } catch (err) {
+        res.send(err);
+      }
     } else {
       groupCreatorController(req, res, data)
     }
@@ -45,6 +45,7 @@ exports.createGroup = (req, res) => {
     affiliation: req.body.affiliation,
     notes: req.body.notes,
     creatorId: req.body.userId,
+    creatorName: req.body.username,
     memberList: JSON.parse(req.body.groupUsers)
   }
   data.memberList = _.map(data.memberList, (user, key) => key);
@@ -73,12 +74,12 @@ exports.findById = (req, res) => {
 exports.joinGroup = (req, res) => {
   Group.findById(req.params.id, (err, group) => {
     if (err) res.send(err)
-    User.findById(req.body.user._id, (err, user) => {
-      if (!user.groups[group._id]) {
-        user.groups.push(group);
+    User.findById(req.body._id, (err, user) => {
+      if (user.groups.indexOf(group._id) === -1) {
+        user.groups.push(group._id);
         user.save();
-      } if (!group.memberList[user._id]) {
-        group.memberList.push(user);
+      } if (group.memberList.indexOf(req.body._id) === -1) {
+        group.memberList.push(req.body._id);
         group.save();
       }
       res.send(group);
@@ -107,5 +108,15 @@ exports.findMyGroups = async (req, res) => {
   }
   else {
     res.send({user: "NO_USER"})
+  }
+}
+
+exports.findOneGroup = async (req, res) => {
+  try {
+    const group = await Group.findByIdAsync(req.params.id);
+
+    res.send(group)
+  } catch (e) {
+    res.send(e)
   }
 }

@@ -116,8 +116,10 @@ export function fetchGroups() {
   }
 }
 
-export function fetchGroup(data) {
-  return 'getting a group'
+export function fetchGroup(id) {
+  return function(dispatch) {
+    getGroup(id, dispatch)
+  }
 }
 
 export function leavingGroup(data) {

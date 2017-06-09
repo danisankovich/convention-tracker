@@ -42,3 +42,20 @@ exports.createGroup = (data, dispatch) => {
     })
   })
 }
+
+exports.getGroup = function(id, dispatch) {
+  const token = localStorage.getItem('token')
+
+  $.ajax({
+     url: `/api/groups/group/${id}`,
+     type: "GET",
+     headers: {
+        "authorization": token
+     }
+  }).done((response) => {
+    dispatch({
+      type: FETCH_SINGLE_GROUP,
+      payload: response
+    })
+  });
+}
