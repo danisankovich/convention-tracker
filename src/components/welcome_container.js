@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Link} from 'react-router';
 import * as actions from '../actions';
-import BasicInfo from './info/basic';
+import ConventionContainer from './dashboard/convention_container';
 
 class Welcome_Container extends Component {
   componentDidMount() {
@@ -11,15 +11,7 @@ class Welcome_Container extends Component {
   render() {
     return (
       <div>
-        <div id="headerImage">
-
-        </div>
-
-        <div className="container background-down">
-          <div className="row">
-            <BasicInfo />
-          </div>
-        </div>
+        <ConventionContainer userInfo={this.props.userInfo} pathInfo={this.props.location} />
       </div>
     )
   }

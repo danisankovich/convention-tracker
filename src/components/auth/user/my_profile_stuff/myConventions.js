@@ -5,10 +5,18 @@ import { browserHistory } from 'react-router'
 import utils from '../../../../utils.js';
 import _ from 'lodash'
 class MyConventions extends Component {
-  componentWillMount() {
-    let conventions = this.props.userInfo.myConventions
+  constructor(props) {
+    super(props)
+    this.state = {conventions: []};
+  }
+  componentDidMount() {
+    let conventions = [];
+
+    if (this.props.userInfo) {
+      conventions = this.props.userInfo.myConventions
+    }
+
     this.props.fetchMyConventions(conventions)
-    this.setState({conventions: []})
   }
   handleClick() {
     let clickResult = this._id;
@@ -27,17 +35,19 @@ class MyConventions extends Component {
     });
   }
   render() {
+    const isDashboard = this.props.pathInfo;
     this.state.conventions = this.props.myconventions || []
-    if(this.state.conventions) {
+    if(this.state.conventions && this.props.userInfo) {
       return (
         <div>
           {this.state.conventions && this.state.conventions.length > 0 && <table className="table table-hover table-bordered">
             <thead>
               <tr>
                 <th>Convention Name</th>
-                <th>Price Details</th>
+                {isDashboard && <th>Price Details</th>}
+                <th>Dates</th>
                 <th>Address</th>
-                <th>Delete</th>
+                {!isDashboard && <th>Delete</th>}
               </tr>
             </thead>
             <tbody>
@@ -47,7 +57,8 @@ class MyConventions extends Component {
                 return (
                   <tr key={result._id} className='table-row'>
                     <td onClick={this.handleClick.bind(result)}>{result.name}</td>
-                    <td onClick={this.handleClick.bind(result)}>${result.price}</td>
+                    {isDashboard && <td onClick={this.handleClick.bind(result)}>${result.price}</td>}
+                    <td>{result.startdate} -- {result.enddate}</td>
                     <td onClick={this.handleClick.bind(result)}>
                       <ul className='removeListBullet'>
                         <li>{location.locationName}</li>
@@ -55,14 +66,14 @@ class MyConventions extends Component {
                         <li>{location.city}, {location.state.toUpperCase()} {location.zipcode}</li>
                       </ul>
                     </td>
-                    <td onClick={this.deleteClickHandle.bind([this.props, result, this])}>
+                    {!isDashboard && <td onClick={this.deleteClickHandle.bind([this.props, result, this])}>
                       <button type="button" className="btn btn-default">
                          Remove <span
                           className="glyphicon glyphicon-remove-circle" aria-hidden="true"
                           onClick={this.deleteClickHandle.bind([this.props, result, this])}
                         ></span>
                       </button>
-                    </td>
+                    </td>}
                   </tr>
                 )
               }.bind(this))}

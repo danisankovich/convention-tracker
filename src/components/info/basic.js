@@ -13,7 +13,6 @@ class BasicInfo extends Component {
         <div className='row'>
           <div className="col-sm-12">
             <div className='mainContent'>
-              <h1>Welcome to the Charlotte Anime and Manga Society</h1>
               <div>
                 <GroupInfo />
               </div>

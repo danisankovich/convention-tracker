@@ -23,7 +23,6 @@ class Convention extends Component {
     this.setState({filter: this})
   }
 
-
   onDropdownSelected(e) {
     this.setState({filter: e.target.value})
   }
@@ -50,7 +49,6 @@ class Convention extends Component {
                 <th>Convention Name</th>
                 <th>Dates</th>
                 <th>Location</th>
-                <th>Tags</th>
               </tr>
             </thead>
             <tbody>
@@ -63,7 +61,6 @@ class Convention extends Component {
                         <td>{convention.name.toUpperCase()}</td>
                         <td>{convention.startdate} -- {convention.enddate}</td>
                         <td>{location.city}, {location.state.toUpperCase()}</td>
-                        <td>{convention.tags}</td>
                       </tr>
                     )
                   }

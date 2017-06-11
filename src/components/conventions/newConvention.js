@@ -26,7 +26,19 @@ class NewConvention extends Component {
     this.state[type] = e.target.value;
   }
   handleChangeDate(type, e) {
-    this.state[type] = e._d;
+    const todayDateUnformatted = e._d;
+    const month = todayDateUnformatted.getMonth() + 1;
+    const day = todayDateUnformatted.getDate();
+    const year = todayDateUnformatted.getFullYear();
+    let hours = todayDateUnformatted.getHours();
+    const period = hours < 12 ? 'AM' : 'PM';
+    if (hours === 0) hours = 12;
+    if (hours > 12) hours -= 12;
+    let minutes = todayDateUnformatted.getMinutes().toString();
+    minutes = minutes.length > 1 ? minutes : `0${minutes}`
+
+    const formattedDate = `${[month, day, year].join('/')} ${hours}:${minutes} ${period}`;
+    this.state[type] = formattedDate;
   }
   render() {
     const {userInfo} = this.props
