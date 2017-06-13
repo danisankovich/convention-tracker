@@ -7,9 +7,9 @@ const userSchema = new Schema({
   username: {type: String, lowercase: true, require: true},
   password: String,
   phoneNumber: String,
-  groups: [],
+  groups: Array,
+  invitedToGroups: Array,
   myConventions: {type: Array, default: []},
-  friends: []
 });
 
 userSchema.methods.comparePassword = function(candidatePassword, cb) {

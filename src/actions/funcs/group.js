@@ -9,7 +9,7 @@ import {
   EDIT_GROUP,
 } from '../types';
 
-exports.getAllGroups = function(dispatch) {
+exports.getAllGroups = function(dispatch, type) {
   var token = localStorage.getItem('token')
 
   $.ajax({
@@ -17,7 +17,8 @@ exports.getAllGroups = function(dispatch) {
      type: "GET",
      headers: {
         "authorization": token
-     }
+     },
+     data: {type}
   }).done((response) => {
     dispatch({
       type: FETCH_GROUPS,

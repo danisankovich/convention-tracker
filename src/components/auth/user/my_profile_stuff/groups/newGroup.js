@@ -12,7 +12,7 @@ import _ from 'lodash';
 class NewGroup extends Component {
   constructor(props) {
     super(props)
-    this.state = {groupUsers: {} }
+    this.state = {groupUsers: {}, invitedUsers: {} }
   }
   componentWillMount() {
     this.props.fetchInfo();
@@ -22,6 +22,7 @@ class NewGroup extends Component {
     this.state.userId = this.props.userInfo._id;
     this.state.username = this.props.userInfo.username;
     this.state.groupUsers = JSON.stringify(this.state.groupUsers)
+    this.state.invitedUsers = JSON.stringify(this.state.invitedUsers)
     this.props.newGroup(this.state)
   }
   handleChange(type, e) {
@@ -33,15 +34,15 @@ class NewGroup extends Component {
 
   addUser(e) {
     e.preventDefault();
-    const groupUsers = this.state.groupUsers;
+    const invitedUsers = this.state.invitedUsers;
     $.ajax({
        url: `/api/checkUser`,
        type: "GET",
        data: {user: this.state.newUser}
     }).done((response) => {
-      if (response && !groupUsers[response.id]) {
-        groupUsers[response.id] = response.user;
-        this.setState({groupUsers});
+      if (response && !invitedUsers[response.id]) {
+        invitedUsers[response.id] = response.user;
+        this.setState({invitedUsers});
       } else if (!response) {
         alert('No User Found with that Username/Email')
       } else {
@@ -53,6 +54,7 @@ class NewGroup extends Component {
   render() {
     const {userInfo} = this.props
     const groupUsers = this.state.groupUsers || {};
+    const invitedUsers = this.state.invitedUsers || {};
     if (userInfo) {
       groupUsers[userInfo._id] = userInfo.username;
     }
@@ -87,10 +89,10 @@ class NewGroup extends Component {
                 <div className='col-sm-12'>
                   <div className='col-sm-12'>
                     <ul>
-                      {_.map(groupUsers, (user, key) => <li key={key}>{user}</li>)}
+                      {_.map({...groupUsers, ...invitedUsers }, (user, key) => <li key={key}>{user}</li>)}
                     </ul>
                     <fieldset className="form-group">
-                      <label>Invite Users (separate with commas): </label>
+                      <label>Invite Users: </label>
                       <input
                         placeholder="Username or Email"
                         className="form-control"

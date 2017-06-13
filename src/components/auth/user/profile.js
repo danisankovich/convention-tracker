@@ -22,6 +22,7 @@ class Profile extends Component {
     const resetObj = {
       showConventions: false,
       showGroups: false,
+      showInvites: false,
       showInfo: false
     }
     if (!hide) {
@@ -46,6 +47,7 @@ class Profile extends Component {
               <button className='btn btn-primary' onClick={this.show.bind([this, 'showInfo'])}>Show Info</button>
               <button className='btn btn-primary' onClick={this.show.bind([this, 'showConventions'])}>Show Conventions ({this.props.userInfo.myConventions.length})</button>
               <button className='btn btn-primary' onClick={this.show.bind([this, 'showGroups'])}>Show Groups ({this.props.userInfo.groups.length})</button>
+              <button className='btn btn-primary' onClick={this.show.bind([this, 'showInvites'])}>Show Pending Invites ({this.props.userInfo.invitedToGroups.length})</button>
             </div>
             <div className="col-sm-8 col-sm-offset-1">
               {this.state.showInfo && <div className="col-sm-offset-1">
@@ -54,6 +56,7 @@ class Profile extends Component {
               </div>}
               {this.state.showConventions && <MyConventions userInfo={this.props.userInfo}></MyConventions>}
               {this.state.showGroups && <Groups userInfo={this.props.userInfo}></Groups>}
+              {this.state.showInvites && <Groups userInfo={this.props.userInfo} groupType='invites'></Groups>}
             </div>
           </div>
         </div>}

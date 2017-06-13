@@ -22,12 +22,16 @@ const groupCreatorController = (req, res, data) => {
         const group = await Group.createAsync(data);
         if (!group) res.send('No Group Found');
 
-        const users = await User.findAsync({'_id': { $in: data.memberList}});
+        const users = await User.findAsync({'_id': { $in: data.invitedList}});
 
         await Promise.all(users.map(async (u) => {
-          const updated = await User.updateAsync({ "_id": u._id}, { "$push": { "groups": group._id } });
+          const updated = await User.updateAsync({ "_id": u._id}, { "$push": { "invitedToGroups": group._id } });
           if (!updated) res.send('User Update Failed');
-        }))
+        }));
+        console.log(data.creatorId)
+        const creator = await User.findByIdAndUpdateAsync(data.creatorId, { "$push": { "groups": group._id } });
+        console.log(creator)
+        if (!creator) res.send('User Update Failed');
 
         group.save();
         res.json(group);
@@ -46,10 +50,10 @@ exports.createGroup = (req, res) => {
     notes: req.body.notes,
     creatorId: req.body.userId,
     creatorName: req.body.username,
-    memberList: JSON.parse(req.body.groupUsers)
+    invitedList: JSON.parse(req.body.invitedUsers),
+    memberList: [req.body.userId]
   }
-  data.memberList = _.map(data.memberList, (user, key) => key);
-
+  data.invitedList = _.map(data.invitedList, (user, key) => key);
 
   groupCreatorController(req, res, data);
 }
@@ -95,8 +99,8 @@ exports.findMyGroups = async (req, res) => {
 
       const user = await User.findByIdAsync(decoded.sub);
 
-      const groupIds = user.groups;
-
+      const groupIds = (req.query.type === 'invites') ? user.invitedToGroups : user.groups;
+      console.log(groupIds)
       const groups = await Group.findAsync({'_id': { $in: groupIds}});
 
       if (!user) return res.send('No User')

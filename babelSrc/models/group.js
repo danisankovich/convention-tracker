@@ -9,6 +9,7 @@ const groupSchema = new Schema({
   affiliation: {type: String},
   notes: {type: String},
   memberList: Array,
+  invitedList: Array,
 });
 
 const Group = mongoose.model('group', groupSchema);

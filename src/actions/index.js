@@ -110,9 +110,9 @@ export function editingGroup(data) {
   return 'edit my group'
 }
 
-export function fetchGroups() {
+export function fetchGroups(type) {
   return function(dispatch) {
-    getAllGroups(dispatch)
+    getAllGroups(dispatch, type)
   }
 }
 

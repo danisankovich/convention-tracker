@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../../../actions';
 import { browserHistory } from 'react-router';
+import {Link} from 'react-router';
+
 import _ from 'lodash';
 import utils from '../../../../../utils.js';
 
@@ -11,8 +13,7 @@ class Group extends Component {
     this.state = {};
   }
   componentDidMount() {
-    this.props.fetchConventions()
-    this.props.fetchGroups();
+    this.props.fetchGroups(this.props.groupType);
   }
   handleClick() {
     let clickResult = this._id;
@@ -24,6 +25,7 @@ class Group extends Component {
 
     return (
       <div>
+        {!this.props.groupType && <Link to="/group/new"><button className="btn btn-success">Create Group</button></Link>}
         {groups && <div>
           <table className="table table-hover table-bordered">
             <thead>
