@@ -45,7 +45,8 @@ class SingleConvention extends Component {
 
     let incrementKey = 0
     if(convention && userInfo) {
-      this.state.convention = convention
+      this.state.convention = convention;
+
       return (
           <div className="col-sm-10 col-sm-offset-1">
             <button onClick={this.goingToConvention.bind(this)}>Going?</button>
@@ -55,7 +56,8 @@ class SingleConvention extends Component {
                   <div className="col-sm-5 col-sm-offset-1">
                     <h3>Convention Details: </h3>
                     <ul>
-                      <li>Name: {convention.name}</li>
+                      <li>Convention Name: {convention.name}</li>
+                      <li>Convention Dates: {convention.startdate} -- {convention.enddate}</li>
                       <li
                         className={this.state.editPrice ? 'hidden' : ''}
                         onClick={function(){
@@ -64,9 +66,16 @@ class SingleConvention extends Component {
                           }
                         }.bind(this)}
                         >
-                        Price: ${convention.price} / night
+                        Price Details: ${convention.price}
                       </li>
-                      {this.props.userInfo._id === this.props.convention.creator.id && <li className={this.state.editPrice ? '' : 'hidden'}>
+                      <li>Address:
+                        <ul className='removeListBullet'>
+                          <li>Convention Center: {convention.location.locationName}</li>
+                          <li>{convention.location.address}</li>
+                          <li>{convention.location.city}, {convention.location.state.toUpperCase()} {convention.location.zipcode}</li>
+                        </ul>
+                      </li>
+                      {this.props.userInfo._id === convention.creator.id && <li className={this.state.editPrice ? '' : 'hidden'}>
                       <form onSubmit={this.handleFormSubmit.bind(this)}>
                         <fieldset className="form-group">
                           <label>New Price: </label>
@@ -79,7 +88,7 @@ class SingleConvention extends Component {
                           </fieldset>
                           <button type='button' className="btn btn-danger"
                             onClick={function(){
-                              if (this.props.userInfo._id === this.props.convention.creator.id) {
+                              if (this.props.userInfo._id === convention.creator.id) {
                                 this.handleClick({editPrice: false})
                               }
                             }.bind(this)}>
@@ -91,6 +100,13 @@ class SingleConvention extends Component {
                     </ul>
                     <h3>Description: </h3>
                     <p>{convention.description} </p>
+                    {
+                      convention.notes &&
+                      <div>
+                        <h3>Additional Notes: </h3>
+                        <p>{convention.notes} </p>
+                      </div>
+                    }
                   </div>
                 </div>
               </div>
