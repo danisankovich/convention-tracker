@@ -60,3 +60,21 @@ exports.getGroup = function(id, dispatch) {
     })
   });
 }
+
+exports.joinGroup = function(data, dispatch) {
+  const token = localStorage.getItem('token');
+
+  $.ajax({
+     url: `/api/groups/join/`,
+     type: "POST",
+     headers: {
+        "authorization": token
+     },
+     data: {groupId: data}
+  }).done((response) => {
+    dispatch({
+      type: FETCH_SINGLE_GROUP,
+      payload: response
+    })
+  });
+}

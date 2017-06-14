@@ -17,7 +17,6 @@ class MyConventions extends Component {
     let array = this[0].userProfile.myConventions;
     let index = this[0].userProfile.myConventions.indexOf(clickResult)
     array.splice(index, 1)
-    console.log('this will save convention to favorites')
   }
   render() {
     let conventions = this.props.myconventions || []
@@ -34,7 +33,6 @@ class MyConventions extends Component {
             </thead>
             <tbody>
               {conventions.map(function(result) {
-                console.log(result)
                 return (
                   <tr key={result._id} className='table-row'>
                     <td onClick={this.handleClick.bind(result)}>{result.title}</td>

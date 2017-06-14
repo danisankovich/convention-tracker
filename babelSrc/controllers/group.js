@@ -5,6 +5,7 @@ var Group = require('../models/group');
 var Convention = require('../models/convention');
 import config from '../../config';
 import jwt from 'jwt-simple';
+const ObjectID = require('mongodb').ObjectID;
 
 import _ from 'lodash';
 
@@ -75,15 +76,15 @@ exports.findById = (req, res) => {
   })
 }
 
-exports.joinGroup = (req, res) => {
+exports.inviteToGroup = (req, res) => {
   Group.findById(req.params.id, (err, group) => {
     if (err) res.send(err)
     User.findById(req.body._id, (err, user) => {
-      if (user.groups.indexOf(group._id) === -1) {
-        user.groups.push(group._id);
+      if (user.groups.indexOf(group._id) === -1 && user.invitedToGroups.indexOf(group._id) === -1) {
+        user.invitedToGroups.push(group._id);
         user.save();
-      } if (group.memberList.indexOf(req.body._id) === -1) {
-        group.memberList.push(req.body._id);
+      } if (group.memberList.indexOf(req.body._id) === -1 && group.invitedList.indexOf(req.body._id) === -1) {
+        group.invitedList.push(req.body._id);
         group.save();
       }
       res.send(group);
@@ -100,7 +101,7 @@ exports.findMyGroups = async (req, res) => {
       const user = await User.findByIdAsync(decoded.sub);
 
       const groupIds = (req.query.type === 'invites') ? user.invitedToGroups : user.groups;
-      console.log(groupIds)
+
       const groups = await Group.findAsync({'_id': { $in: groupIds}});
 
       if (!user) return res.send('No User')
@@ -115,30 +116,82 @@ exports.findMyGroups = async (req, res) => {
   }
 }
 
+
+const findOneGroupHelper = async (groupId) => {
+  const conventionIds = [];
+  const conMemberTracker = {};
+  const group = await Group.findByIdAsync(groupId);
+
+  const members = await Promise.all(group.memberList.map(async (memberId) => {
+    const member = await User.findByIdAsync(memberId);
+    member.myConventions.forEach((con) => {
+      if (conventionIds.indexOf(con.toString()) === -1) {
+        conMemberTracker[con.toString()] = [member.username];
+        conventionIds.push(con.toString());
+      } else {
+        conMemberTracker[con.toString()].push(member.username);
+      }
+    });
+    return member;
+  }));
+
+  const conventions = await Promise.all(conventionIds.map(async (conId) => {
+    return await Convention.findByIdAsync(conId);
+  }))
+
+  return {group, members, conventions, conMemberTracker}
+}
+
+
 exports.findOneGroup = async (req, res) => {
   try {
-    const conventionIds = [];
-    const conMemberTracker = {};
-    const group = await Group.findByIdAsync(req.params.id);
-    const members = await Promise.all(group.memberList.map(async (memberId) => {
-      const member = await User.findByIdAsync(memberId);
-      member.myConventions.forEach((con) => {
-        if (conventionIds.indexOf(con.toString()) === -1) {
-          conMemberTracker[con.toString()] = [member.username];
-          conventionIds.push(con.toString());
-        } else {
-          conMemberTracker[con.toString()].push(member.username);
-        }
-      });
-      return member;
-    }));
-
-    const conventions = await Promise.all(conventionIds.map(async (conId) => {
-      return await Convention.findByIdAsync(conId);
-    }))
-
+    const {group, members, conventions, conMemberTracker} = await findOneGroupHelper(req.params.id);
     res.send({group, members: members.filter(Boolean), conventions, conMemberTracker})
   } catch (e) {
     res.send(e)
+  }
+}
+
+exports.joinGroupTwo = async (req, res) => {
+  const groupId = req.body.groupId;
+
+  const token = req.headers.authorization;
+  console.log('asdasdf')
+  if(token) {
+    try {
+      let decoded = jwt.decode(token, config.secret);
+
+      const userToUpdate = await User.findByIdAsync(decoded.sub);
+      if (!userToUpdate) return res.send('No User')
+
+      const groupToUpdate = await Group.findByIdAsync(groupId);
+      if (!groupToUpdate) return res.send('No Group')
+
+      const groupIndex = userToUpdate.invitedToGroups.indexOf(groupToUpdate._id);
+      if (groupIndex > -1) {
+        userToUpdate.invitedToGroups.splice(groupIndex, 1)
+        userToUpdate.groups.push(groupToUpdate._id)
+      }
+
+      const userIndex = groupToUpdate.invitedList.indexOf(userToUpdate._id);
+
+      if (userIndex > -1) {
+        groupToUpdate.invitedList.splice(userIndex, 1)
+        groupToUpdate.memberList.push(userToUpdate._id)
+      }
+
+      userToUpdate.save();
+      groupToUpdate.save();
+
+      const {group, members, conventions, conMemberTracker} = await findOneGroupHelper(groupId);
+
+      res.send({group, members, conventions, conMemberTracker});
+
+    } catch (e) {
+      return res.status(401).send('authorization required');
+    }
+  }
+  else {
+    res.send({user: "NO_USER"})
   }
 }

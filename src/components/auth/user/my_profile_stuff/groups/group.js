@@ -38,9 +38,11 @@ class SingleGroup extends Component {
     let clickResult = this._id;
     browserHistory.push(`/conventions/${clickResult}`);
   }
-  joinGroup() {
+  joinGroup(e) {
+    e.preventDefault();
     const user = this.props.userInfo;
     const group = this.props.data.group;
+
     if (user.groups.indexOf(group._id) === -1) {
       this.props.userInfo.groups.push(group._id);
       this.props.joiningGroup(group._id);
@@ -48,7 +50,6 @@ class SingleGroup extends Component {
   }
   inputChange(e) {
     this.state.invitedUser = e.target.value;
-    console.log(e.target.value)
   }
   inviteUser(e) {
     e.preventDefault();
@@ -61,11 +62,12 @@ class SingleGroup extends Component {
     }).done((response) => {
       if (response && group.memberList.indexOf(response.id) === -1) {
         $.ajax({
-          url: `/api/groups/joinGroup/${this.props.data.group._id}`,
+          url: `/api/groups/inviteToGroup/${this.props.data.group._id}`,
           type: 'POST',
           data: {_id: response.id}
         }).done((res) => {
-          this.state.group.memberList.push(response.id);
+          console.log(res)
+          this.setState({group: res });
         })
       } else if (!response) {
         alert('No User Found with that Username/Email')
@@ -75,7 +77,8 @@ class SingleGroup extends Component {
     });
   }
   render() {
-    let {userInfo, data = {}} = this.props;
+    let {userInfo } = this.props;
+    let data = this.props.data || {}
     let { group, members, conventions, conMemberTracker } = data
 
     let incrementKey = 0

@@ -25,7 +25,7 @@ exports.signIn = function(dispatch, {email, password}) {
 }
 
 exports.signUp = function(dispatch, {email, password, username}) {
-  console.log(email)
+
   $.ajax({
     url: `/api/signup`,
     type: "POST",
@@ -38,7 +38,6 @@ exports.signUp = function(dispatch, {email, password, username}) {
 
       browserHistory.push('/'); // success pushes you to /information.
     }).fail((error) => {
-      console.log(error.responseText)
       dispatch(authError(error.responseText));
     });
 }
@@ -54,7 +53,6 @@ exports.userEdit = function(dispatch, {phoneNumber, email}, user) {
     .done(response => {
       dispatch({type: FETCH_INFO});
     }).fail((error) => {
-      console.log(error)
       dispatch(authError(error.response.error));
     });
 }

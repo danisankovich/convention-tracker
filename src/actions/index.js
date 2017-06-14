@@ -100,7 +100,6 @@ export function editConvention({convention}, userId) {
 
 //GROUP FUNCTIONS
 export function newGroup(data) {
-  console.log(data)
   return function(dispatch) {
     createGroup(data, dispatch);
   }
@@ -127,5 +126,7 @@ export function leavingGroup(data) {
 }
 
 export function joiningGroup(data) {
-  return 'joinging gorup now'
+  return function(dispatch) {
+    joinGroup(data, dispatch)
+  }
 }

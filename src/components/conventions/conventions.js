@@ -19,7 +19,7 @@ class Convention extends Component {
   }
   filterConventions() {
     let filterParams = this;
-    console.log(filterParams);
+
     this.setState({filter: this})
   }
 
