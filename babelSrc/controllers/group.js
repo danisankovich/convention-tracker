@@ -5,7 +5,6 @@ var Group = require('../models/group');
 var Convention = require('../models/convention');
 import config from '../../config';
 import jwt from 'jwt-simple';
-const ObjectID = require('mongodb').ObjectID;
 
 import _ from 'lodash';
 
