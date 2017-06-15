@@ -44,7 +44,7 @@ class SingleConvention extends Component {
     let usCities = []
 
     let incrementKey = 0
-    if(convention && userInfo) {
+    if(convention) {
       this.state.convention = convention;
 
       return (
@@ -58,7 +58,7 @@ class SingleConvention extends Component {
                     <ul>
                       <li>Convention Name: {convention.name}</li>
                       <li>Convention Dates: {convention.startdate} -- {convention.enddate}</li>
-                      <li
+                      {userInfo && <li
                         className={this.state.editPrice ? 'hidden' : ''}
                         onClick={function(){
                           if (this.props.userInfo._id === this.props.convention.creator.id) {
@@ -67,7 +67,7 @@ class SingleConvention extends Component {
                         }.bind(this)}
                         >
                         Price Details: ${convention.price}
-                      </li>
+                      </li>}
                       <li>Address:
                         <ul className='removeListBullet'>
                           <li>Convention Center: {convention.location.locationName}</li>
@@ -75,7 +75,7 @@ class SingleConvention extends Component {
                           <li>{convention.location.city}, {convention.location.state.toUpperCase()} {convention.location.zipcode}</li>
                         </ul>
                       </li>
-                      {this.props.userInfo._id === convention.creator.id && <li className={this.state.editPrice ? '' : 'hidden'}>
+                      {userInfo && userInfo._id === convention.creator.id && <li className={this.state.editPrice ? '' : 'hidden'}>
                       <form onSubmit={this.handleFormSubmit.bind(this)}>
                         <fieldset className="form-group">
                           <label>New Price: </label>

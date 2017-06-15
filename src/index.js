@@ -12,7 +12,7 @@ import App from './components/app';
 // Main Routes
 import Signin from './components/auth/signin';
 import Signup from './components/auth/signup';
-import Signout from './components/auth/signout';
+
 import Profile from './components/auth/user/profile';
 import UserProfile from './components/auth/user/otheruser/userProfile';
 import Settings from './components/auth/user/settings';
@@ -49,11 +49,10 @@ ReactDOM.render(
           <IndexRoute component={Welcome_Container} />
           <Route path='signin' component={Signin}></Route>
           <Route path='signup' component={Signup}></Route>
-          <Route path='signout' component={Signout}></Route>
           <Route path='profile' component={RequireAuth(Profile)}></Route>
           <Route path='settings' component={RequireAuth(Settings)}></Route>
-          <Route path='userprofile/:id' component={UserProfile}></Route>
-          <Route path='group/new' component={NewGroup}></Route>
+          <Route path='userprofile/:id' component={RequireAuth(UserProfile)}></Route>
+          <Route path='group/new' component={RequireAuth(NewGroup)}></Route>
         </Route>
         <Route path='/conventions' component={App}>
           <IndexRoute component={Conventions_Container} />
@@ -61,8 +60,8 @@ ReactDOM.render(
           <Route path='/new' component={RequireAuth(NewConvention)}></Route>
         </Route>
         <Route path='/groups' component={App}>
-          <IndexRoute component={NewGroup} />
-          <Route path=':id' component={Group}></Route>
+          <IndexRoute component={RequireAuth(NewGroup)} />
+          <Route path=':id' component={RequireAuth(Group)}></Route>
           <Route path='/new' component={RequireAuth(NewGroup)}></Route>
         </Route>
     </Router>
