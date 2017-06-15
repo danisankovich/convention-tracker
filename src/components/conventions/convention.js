@@ -42,14 +42,14 @@ class SingleConvention extends Component {
   render() {
     let {convention, userInfo} = this.props;
     let usCities = []
-
+    this.state.convention = convention;
     let incrementKey = 0
-    if(convention) {
-      this.state.convention = convention;
-
-      return (
-          <div className="col-sm-10 col-sm-offset-1">
-            <button onClick={this.goingToConvention.bind(this)}>Going?</button>
+    return (
+      <div>
+        {
+          convention &&
+            <div className="col-sm-10 col-sm-offset-1">
+              {userInfo && <button onClick={this.goingToConvention.bind(this)}>Going?</button>}
               <hr />
               <div className="row">
                 <div className="col-sm-12">
@@ -110,14 +110,13 @@ class SingleConvention extends Component {
                   </div>
                 </div>
               </div>
-          <br />
-        </div>
-    );
+              <br />
+            </div>
+        }
+        {!convention && <p>Loading</p>}
+      </div>
+    )
   }
-  return (
-    <div>Loading...... </div>
-  );
-};
 }
 function mapStateToProps(state) {
   return {userInfo: state.auth.userInfo, convention: state.convention.convention};

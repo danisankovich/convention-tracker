@@ -43,7 +43,7 @@ class Header extends Component {
                   <li><Link className="nav-link" to="/profile">Profile</Link></li>
                   <li><Link className="nav-link" to="/settings">Settings</Link></li>
                   <li role="separator" className="divider"></li>
-                  <li><Link className="nav-link" onClick={this.signout.bind(this)}>Sign Out</Link></li>
+                  <li onClick={this.signout.bind(this)}><a className="nav-link">Sign Out</a></li>
                 </ul>
              </li>}
             </ul>
