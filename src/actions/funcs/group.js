@@ -37,6 +37,7 @@ exports.createGroup = (data, dispatch) => {
      },
      data,
   }).done((response) => {
+    browserHistory.push(`/groups/${response._id}`)
     dispatch({
       type: NEW_GROUP,
       payload: response

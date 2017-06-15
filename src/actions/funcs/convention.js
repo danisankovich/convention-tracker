@@ -59,6 +59,7 @@ exports.createConvention = function(data, dispatch) {
      },
      data: data
   }).done((response) => {
+    browserHistory.push(`/conventions/${response._id}`)
     dispatch({
       type: NEW_CONVENTION,
       payload: response

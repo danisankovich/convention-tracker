@@ -162,7 +162,7 @@ class NewConvention extends Component {
                       />
                   </fieldset>
                 </div>
-                <button action="submit" className="btn btn-primary">Add Event</button>
+                <button action="submit" className="btn btn-primary">Add Convention</button>
               </form>
             </div>
           </div>

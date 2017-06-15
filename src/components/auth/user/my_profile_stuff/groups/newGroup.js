@@ -116,7 +116,7 @@ class NewGroup extends Component {
                     </fieldset>
                   </div>
                 </div>
-                <button action="submit" className="btn btn-primary">Add Event</button>
+                <button action="submit" className="btn btn-primary">Create Group</button>
               </form>
             </div>
           </div>

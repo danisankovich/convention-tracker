@@ -40384,6 +40384,7 @@
 	    },
 	    data: data
 	  }).done(function (response) {
+	    _reactRouter.browserHistory.push('/conventions/' + response._id);
 	    dispatch({
 	      type: _types.NEW_CONVENTION,
 	      payload: response
@@ -40458,6 +40459,7 @@
 	    },
 	    data: data
 	  }).done(function (response) {
+	    _reactRouter.browserHistory.push('/groups/' + response._id);
 	    dispatch({
 	      type: _types.NEW_GROUP,
 	      payload: response
@@ -58307,7 +58309,7 @@
 	        className: 'form-control',
 	        type: 'text',
 	        onChange: this.handleChange.bind(this, 'notes')
-	      }))), _react2.default.createElement('button', { action: 'submit', className: 'btn btn-primary' }, 'Add Event'))))), _react2.default.createElement('div', null, !userInfo && _react2.default.createElement('h1', null, 'Loading....')));
+	      }))), _react2.default.createElement('button', { action: 'submit', className: 'btn btn-primary' }, 'Add Convention'))))), _react2.default.createElement('div', null, !userInfo && _react2.default.createElement('h1', null, 'Loading....')));
 	    }
 	  }]);
 	
@@ -76831,7 +76833,7 @@
 	        className: 'form-control',
 	        type: 'text',
 	        onChange: this.handleChange.bind(this, 'notes')
-	      })))), _react2.default.createElement('button', { action: 'submit', className: 'btn btn-primary' }, 'Add Event'))))), _react2.default.createElement('div', null, !userInfo && _react2.default.createElement('h1', null, 'Loading....')));
+	      })))), _react2.default.createElement('button', { action: 'submit', className: 'btn btn-primary' }, 'Create Group'))))), _react2.default.createElement('div', null, !userInfo && _react2.default.createElement('h1', null, 'Loading....')));
 	    }
 	  }]);
 	
