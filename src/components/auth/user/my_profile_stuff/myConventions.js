@@ -37,10 +37,11 @@ class MyConventions extends Component {
   render() {
     const isDashboard = this.props.pathInfo;
     this.state.conventions = this.props.myconventions || []
-    if(this.state.conventions && this.props.userInfo) {
-      return (
-        <div>
-          {this.state.conventions && this.state.conventions.length > 0 && <table className="table table-hover table-bordered">
+    // if(this.state.conventions && this.props.userInfo) {
+    return (
+      <div>
+        {this.state.conventions && this.state.conventions.length > 0 &&
+          <table className="table table-hover table-bordered">
             <thead>
               <tr>
                 <th>Convention Name</th>
@@ -66,25 +67,24 @@ class MyConventions extends Component {
                         <li>{location.city}, {location.state.toUpperCase()} {location.zipcode}</li>
                       </ul>
                     </td>
-                    {!isDashboard && <td onClick={this.deleteClickHandle.bind([this.props, result, this])}>
-                      <button type="button" className="btn btn-default">
-                         Remove <span
+                    {!isDashboard &&
+                      <td onClick={this.deleteClickHandle.bind([this.props, result, this])}>
+                        <button type="button" className="btn btn-default">
+                          Remove <span
                           className="glyphicon glyphicon-remove-circle" aria-hidden="true"
                           onClick={this.deleteClickHandle.bind([this.props, result, this])}
-                        ></span>
+                          ></span>
                       </button>
                     </td>}
                   </tr>
                 )
               }.bind(this))}
             </tbody>
-          </table>}
-        </div>
-      )
-    } else {
-      return <div>No Conventions Found</div>
-    }
-
+          </table>
+        }
+        {this.state.conventions.length === 0 && <p>No Conventions Found</p>}
+      </div>
+    )
   }
 }
 

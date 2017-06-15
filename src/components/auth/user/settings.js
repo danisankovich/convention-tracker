@@ -22,10 +22,10 @@ class Settings extends Component {
   }
   // handle hide/show clicks
   handleClick(type) {
-     this.setState(type);
-     if (Object.keys(type)[0] === 'editUser') {
-       this.setState({username: this.props.userInfo.userName})
-     }
+    this.setState(type);
+    if (Object.keys(type)[0] === 'editUser') {
+      this.setState({username: this.props.userInfo.userName})
+    }
   }
   onEmailChange(event) {
     this.props.userInfo.username =+ event.target.value
@@ -51,68 +51,67 @@ class Settings extends Component {
 
     let {userInfo} = this.props;
 
-    if(userInfo) {
-      return (
-        <div className="toppush">
-          <h3>Settings</h3>
-          <p>Edit User Info: </p>
-          <ul>
-            <li>
-              Username: {this.props.userInfo.username}
-            </li>
-            <li>Click On the Properties Below to Edit</li>
-            <li
-              className={this.state.editPhone ? 'hidden' : ''}
-              onClick={function(){
-                this.handleClick({editPhone: true})
-              }.bind(this)}>
-              Phone Number: {this.props.userInfo.phoneNumber || 'Set Number'}
-            </li>
-            <li className={this.state.editPhone ? '' : 'hidden'}>
-              <form>
-                <fieldset className="form-group">
-                  <label>Phone Number: {this.props.userInfo.phoneNumber}</label>
-                  {phoneNumber.touched && phoneNumber.error && <div className="error">{phoneNumber.error}</div>}
-                  <input className="form-control" type="tel" {...phoneNumber}/>
-                </fieldset>
-                <button type='button' className="btn btn-danger"
-                  onClick={function(){
-                    this.handleClick({editPhone: false})
-                  }.bind(this)}>
-                  hide
-                </button>
-                <button onClick={handleSubmit(this.handleFormSubmitPhoneNumber.bind(this))} className="btn btn-primary">Save</button>
-              </form>
-            </li>
-            <li
-              className={this.state.editEmail ? 'hidden' : ''}
-              onClick={function(){
-                this.handleClick({editEmail: true})
-              }.bind(this)}>
-              Email: {this.props.userInfo.email}
-            </li>
-            <li className={this.state.editEmail ? '' : 'hidden'}>
-              <form>
-                <fieldset className="form-group">
-                  <label>Email: {this.props.userInfo.email}</label>
-                  {email.touched && email.error && <div className="error">{email.error}</div>}
-                  <input className="form-control" {...email}/>
-                </fieldset>
-                <button type='button' className="btn btn-danger"
-                  onClick={function(){
-                    this.handleClick({editEmail: false})
-                  }.bind(this)}>
-                  hide
-                </button>
-                <button onClick={handleSubmit(this.handleFormSubmitEmail.bind(this))} className="btn btn-primary">Save</button>
-              </form>
-            </li>
-          </ul>
-        </div>
-      );
-    }
     return (
-      <div>Loading........ </div>
+      <div>
+        {userInfo &&
+          <div className="toppush">
+            <h3>Settings</h3>
+            <p>Edit User Info: </p>
+            <ul>
+              <li>
+                Username: {this.props.userInfo.username}
+              </li>
+              <li>Click On the Properties Below to Edit</li>
+              <li
+                className={this.state.editPhone ? 'hidden' : ''}
+                onClick={function(){
+                  this.handleClick({editPhone: true})
+                }.bind(this)}>
+                Phone Number: {this.props.userInfo.phoneNumber || 'Set Number'}
+              </li>
+              <li className={this.state.editPhone ? '' : 'hidden'}>
+                <form>
+                  <fieldset className="form-group">
+                    <label>Phone Number: {this.props.userInfo.phoneNumber}</label>
+                    {phoneNumber.touched && phoneNumber.error && <div className="error">{phoneNumber.error}</div>}
+                    <input className="form-control" type="tel" {...phoneNumber}/>
+                  </fieldset>
+                  <button type='button' className="btn btn-danger"
+                    onClick={function(){
+                      this.handleClick({editPhone: false})
+                    }.bind(this)}>
+                    hide
+                  </button>
+                  <button onClick={handleSubmit(this.handleFormSubmitPhoneNumber.bind(this))} className="btn btn-primary">Save</button>
+                </form>
+              </li>
+              <li
+                className={this.state.editEmail ? 'hidden' : ''}
+                onClick={function(){
+                  this.handleClick({editEmail: true})
+                }.bind(this)}>
+                Email: {this.props.userInfo.email}
+              </li>
+              <li className={this.state.editEmail ? '' : 'hidden'}>
+                <form>
+                  <fieldset className="form-group">
+                    <label>Email: {this.props.userInfo.email}</label>
+                    {email.touched && email.error && <div className="error">{email.error}</div>}
+                    <input className="form-control" {...email}/>
+                  </fieldset>
+                  <button type='button' className="btn btn-danger"
+                    onClick={function(){
+                      this.handleClick({editEmail: false})
+                    }.bind(this)}>
+                    hide
+                  </button>
+                  <button onClick={handleSubmit(this.handleFormSubmitEmail.bind(this))} className="btn btn-primary">Save</button>
+                </form>
+              </li>
+            </ul>
+          </div>
+        }
+      </div>
     );
   };
 }

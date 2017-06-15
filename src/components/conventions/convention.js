@@ -49,7 +49,7 @@ class SingleConvention extends Component {
         {
           convention &&
             <div className="col-sm-10 col-sm-offset-1">
-              {userInfo && <button onClick={this.goingToConvention.bind(this)}>Going?</button>}
+              {userInfo && <button onClick={this.goingToConvention.bind(this)}>Going</button>}
               <hr />
               <div className="row">
                 <div className="col-sm-12">
@@ -113,7 +113,6 @@ class SingleConvention extends Component {
               <br />
             </div>
         }
-        {!convention && <p>Loading</p>}
       </div>
     )
   }

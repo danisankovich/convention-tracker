@@ -20,34 +20,36 @@ class MyConventions extends Component {
   }
   render() {
     let conventions = this.props.myconventions || []
-    if(conventions) {
-      return (
-        <div>
-          {conventions && conventions.length > 0 && <table className="table table-hover table-bordered">
-            <thead>
-              <tr>
-                <th>Convention Name</th>
-                <th>Rating</th>
-                <th>Save Convention</th>
-              </tr>
-            </thead>
-            <tbody>
-              {conventions.map(function(result) {
-                return (
-                  <tr key={result._id} className='table-row'>
-                    <td onClick={this.handleClick.bind(result)}>{result.title}</td>
-                    <td onClick={this.handleClick.bind(result)}>rating</td>
-                    <td onClick={this.saveClickHandle.bind([this.props, result])}><button>X</button></td>
-                  </tr>)
-              }.bind(this))}
-            </tbody>
-          </table>}
-        </div>
-      )
-    } else {
-      return <div>LOADING...</div>
-    }
-
+    return (
+      <div>
+        {conventions && conventions.length > 0 &&
+          <div>
+            <table className="table table-hover table-bordered">
+              <thead>
+                <tr>
+                  <th>Convention Name</th>
+                  <th>Rating</th>
+                  <th>Save Convention</th>
+                </tr>
+              </thead>
+              <tbody>
+                {conventions.map(function(result) {
+                  return (
+                    <tr key={result._id} className='table-row'>
+                      <td onClick={this.handleClick.bind(result)}>{result.title}</td>
+                      <td onClick={this.handleClick.bind(result)}>rating</td>
+                      <td onClick={this.saveClickHandle.bind([this.props, result])}><button>X</button></td>
+                    </tr>)
+                }.bind(this))}
+              </tbody>
+            </table>
+          </div>
+        }
+        {!conventions || conventions.length === 0 &&
+          <p>No Conventions</p>
+        }
+      </div>
+    )
   }
 }
 

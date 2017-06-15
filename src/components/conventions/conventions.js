@@ -34,7 +34,7 @@ class Convention extends Component {
         <div>
           <label>Filter By State: &nbsp;
             <select onChange={this.onDropdownSelected.bind(this)}>
-              <option value=''></option>
+              <option value=''>No Filter</option>
               {
                 utils.usStates.map((a, i) => (<option key={i} value={a.abbreviation}>{a.name}</option>))
               }

@@ -56,9 +56,9 @@ class SingleGroup extends Component {
 
     const group = this.state.group;
     $.ajax({
-       url: `/api/checkUser`,
-       type: "GET",
-       data: {user: this.state.invitedUser}
+      url: `/api/checkUser`,
+      type: "GET",
+      data: {user: this.state.invitedUser}
     }).done((response) => {
       if (response && group.memberList.indexOf(response.id) === -1) {
         $.ajax({
@@ -81,34 +81,36 @@ class SingleGroup extends Component {
     let data = this.props.data || {}
     let { group, members, conventions, conMemberTracker } = data
 
+    this.state.group = group
+
     let incrementKey = 0
-    if(group && userInfo && members) {
-      this.state.group = group
-      return (
-        <div className="col-sm-10 col-sm-offset-1">
-          <button onClick={this.joinGroup.bind(this)}>Join Group</button>
-          <form onSubmit={this.inviteUser.bind(this)}>
-            <fieldset>
-              <input type='text' onChange={this.inputChange.bind(this)} />
-              <button type='submit'>Invite User</button>
-            </fieldset>
-          </form>
-          <div className="row">
-            <div className="col-sm-12">
-              <div className="col-sm-5 col-sm-offset-1">
-                <h3>Group Details: </h3>
-                <ul>
-                  <li>Name: {group.name}</li>
-                  <li>Affiliation: {group.affiliation}</li>
-                  <li>Group Creator: {group.creatorName}</li>
-                </ul>
-                <h3>Notes: </h3>
-                <p>{group.notes} </p>
-                <h3>Members:</h3>
-                <ul>
-                  {members.map(member => (<li key={member._id}>{member.username}</li>))}
-                </ul>
-                <h3>Conventions:</h3>
+    return (
+      <div>
+        {group && userInfo && members &&
+          <div className="col-sm-10 col-sm-offset-1">
+            <button onClick={this.joinGroup.bind(this)}>Join Group</button>
+            <form onSubmit={this.inviteUser.bind(this)}>
+              <fieldset>
+                <input type='text' onChange={this.inputChange.bind(this)} />
+                <button type='submit'>Invite User</button>
+              </fieldset>
+            </form>
+            <div className="row">
+              <div className="col-sm-12">
+                <div className="col-sm-5 col-sm-offset-1">
+                  <h3>Group Details: </h3>
+                  <ul>
+                    <li>Name: {group.name}</li>
+                    <li>Affiliation: {group.affiliation}</li>
+                    <li>Group Creator: {group.creatorName}</li>
+                  </ul>
+                  <h3>Notes: </h3>
+                  <p>{group.notes} </p>
+                  <h3>Members:</h3>
+                  <ul>
+                    {members.map(member => (<li key={member._id}>{member.username}</li>))}
+                  </ul>
+                  <h3>Conventions:</h3>
                   <table className="table table-hover table-bordered">
                     <thead>
                       <tr>
@@ -144,15 +146,14 @@ class SingleGroup extends Component {
                     </tbody>
                   </table>
 
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      );
-    }
-    return (
-      <div>Loading...... </div>
-    );
+        }
+        {!group || !userInfo || !members && <p>Loading</p>}
+      </div>
+    )
   };
 }
 function mapStateToProps(state) {

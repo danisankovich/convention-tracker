@@ -60,7 +60,6 @@ class Profile extends Component {
             </div>
           </div>
         </div>}
-        {!userInfo && <div>No User Found</div>}
       </div>
     );
   };
