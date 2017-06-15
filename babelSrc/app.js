@@ -22,7 +22,7 @@ bluebird.promisifyAll(mongoose);
 
 const app = express();
 
-mongoose.connect('mongodb://heroku_xs07dgw1:n0t8bbbfg73sjnc7qvif6oedef@ds127962.mlab.com:27962/heroku_xs07dgw1');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:auth/conventionTracker');
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
