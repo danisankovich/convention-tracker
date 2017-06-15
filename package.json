@@ -7,8 +7,7 @@
   },
   "scripts": {
     "start": "node ./app.js",
-    "compile": "node ./babelRunner.js",
-    "postinstall": "node ./babelRunner.js"
+    "compile": "node ./babelRunner.js"
   },
   "dependencies": {
     "axios": "^0.14.0",
