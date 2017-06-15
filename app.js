@@ -68,7 +68,7 @@ _bluebird2.default.promisifyAll(_mongoose2.default);
 
 var app = (0, _express2.default)();
 
-_mongoose2.default.connect(process.env.MONGODB_URI || 'mongodb://localhost:auth/conventionTracker');
+_mongoose2.default.connect('mongodb://heroku_xs07dgw1:n0t8bbbfg73sjnc7qvif6oedef@ds127962.mlab.com:27962/heroku_xs07dgw1');
 
 // view engine setup
 // app.set('views', path.join(__dirname, 'views'));
