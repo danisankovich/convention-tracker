@@ -20,7 +20,8 @@ var userSchema = new Schema({
   phoneNumber: String,
   groups: Array,
   invitedToGroups: Array,
-  myConventions: { type: Array, default: [] }
+  myConventions: { type: Array, default: [] },
+  photo: { type: String, default: '' }
 });
 
 userSchema.methods.comparePassword = function (candidatePassword, cb) {

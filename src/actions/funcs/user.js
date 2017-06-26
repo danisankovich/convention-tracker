@@ -42,9 +42,9 @@ exports.signUp = function(dispatch, {email, password, username}) {
     });
 }
 
-exports.userEdit = function(dispatch, {phoneNumber, email}, user) {
+exports.userEdit = function(dispatch, {phoneNumber, email, photo}, user) {
   dispatch({type: EDIT_USER});
-  const data = JSON.stringify({phoneNumber, email, user});
+  const data = JSON.stringify({phoneNumber, email, photo, user});
   $.ajax({
     url: `/api/editInfo`,
     type: "POST",

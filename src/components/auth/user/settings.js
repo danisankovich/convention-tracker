@@ -10,6 +10,7 @@ class Settings extends Component {
       editEmail: false,
       editPhone: false,
       editUser: false,
+      editPhoto: false,
     };
   }
   componentWillMount() {
@@ -17,6 +18,7 @@ class Settings extends Component {
       editEmail: false,
       editPhone: false,
       editUser: false,
+      editPhoto: false,
     });
     this.props.fetchInfo();
   }
@@ -31,26 +33,23 @@ class Settings extends Component {
     this.props.userInfo.username =+ event.target.value
   }
 
-  handleFormSubmitPhoneNumber(formProps) { //called with props from submit form
+  handleFormSubmit(formProps) { //called with props from submit form
     this.props.editUser(formProps, this.props.userInfo._id);
+    this.setState({
+      editEmail: false,
+      editPhone: false,
+      editUser: false,
+      editPhoto: false,
+    });
     this.props.fetchInfo();
-    this.setState({editPhone: false})
-  }
-  handleFormSubmitEmail(formProps) { //called with props from submit form
-    this.props.editUser(formProps, this.props.userInfo._id);
-    this.props.fetchInfo();
-    this.setState({editEmail: false})
   }
 
-  onChangeTextArea(e) {
-    console.log('asdfasdf')
-  }
   render() {
     let self = this;
-    const { handleSubmit, fields: {phoneNumber, email }} = this.props;
+    const { handleSubmit, fields: {phoneNumber, email, photo }} = this.props;
 
-    let {userInfo} = this.props;
-
+    const { userInfo } = this.props;
+    console.log(userInfo)
     return (
       <div>
         {userInfo &&
@@ -59,7 +58,7 @@ class Settings extends Component {
             <p>Edit User Info: </p>
             <ul>
               <li>
-                Username: {this.props.userInfo.username}
+                Username: {userInfo.username}
               </li>
               <li>Click On the Properties Below to Edit</li>
               <li
@@ -67,12 +66,12 @@ class Settings extends Component {
                 onClick={function(){
                   this.handleClick({editPhone: true})
                 }.bind(this)}>
-                Phone Number: {this.props.userInfo.phoneNumber || 'Set Number'}
+                Phone Number: {userInfo.phoneNumber || 'Set Number'}
               </li>
               <li className={this.state.editPhone ? '' : 'hidden'}>
                 <form>
                   <fieldset className="form-group">
-                    <label>Phone Number: {this.props.userInfo.phoneNumber}</label>
+                    <label>Phone Number: {userInfo.phoneNumber}</label>
                     {phoneNumber.touched && phoneNumber.error && <div className="error">{phoneNumber.error}</div>}
                     <input className="form-control" type="tel" {...phoneNumber}/>
                   </fieldset>
@@ -82,7 +81,7 @@ class Settings extends Component {
                     }.bind(this)}>
                     hide
                   </button>
-                  <button onClick={handleSubmit(this.handleFormSubmitPhoneNumber.bind(this))} className="btn btn-primary">Save</button>
+                  <button onClick={handleSubmit(this.handleFormSubmit.bind(this))} className="btn btn-primary">Save</button>
                 </form>
               </li>
               <li
@@ -90,12 +89,12 @@ class Settings extends Component {
                 onClick={function(){
                   this.handleClick({editEmail: true})
                 }.bind(this)}>
-                Email: {this.props.userInfo.email}
+                Email: {userInfo.email}
               </li>
               <li className={this.state.editEmail ? '' : 'hidden'}>
                 <form>
                   <fieldset className="form-group">
-                    <label>Email: {this.props.userInfo.email}</label>
+                    <label>Email: {userInfo.email}</label>
                     {email.touched && email.error && <div className="error">{email.error}</div>}
                     <input className="form-control" {...email}/>
                   </fieldset>
@@ -105,12 +104,36 @@ class Settings extends Component {
                     }.bind(this)}>
                     hide
                   </button>
-                  <button onClick={handleSubmit(this.handleFormSubmitEmail.bind(this))} className="btn btn-primary">Save</button>
+                  <button onClick={handleSubmit(this.handleFormSubmit.bind(this))} className="btn btn-primary">Save</button>
+                </form>
+              </li>
+              <li
+                className={this.state.editPhoto ? 'hidden' : ''}
+                onClick={function(){
+                  this.handleClick({editPhoto: true})
+                }.bind(this)}>
+                Photo: {userInfo.photo}
+              </li>
+              <li className={this.state.editPhoto ? '' : 'hidden'}>
+                <form>
+                  <fieldset className="form-group">
+                    <label>Photo: {userInfo.photo}</label>
+                    {photo.touched && photo.error && <div className="error">{photo.error}</div>}
+                    <input className="form-control" {...photo}/>
+                  </fieldset>
+                  <button type='button' className="btn btn-danger"
+                    onClick={function(){
+                      this.handleClick({editPhoto: false})
+                    }.bind(this)}>
+                    hide
+                  </button>
+                  <button onClick={handleSubmit(this.handleFormSubmit.bind(this))} className="btn btn-primary">Save</button>
                 </form>
               </li>
             </ul>
           </div>
         }
+        {!userInfo && <div>adsfasfd</div>}
       </div>
     );
   };
@@ -124,5 +147,5 @@ function mapStateToProps(state) {
 
 export default reduxForm({
   form: 'Settings',
-  fields: ['email', 'phoneNumber'],
+  fields: ['email', 'phoneNumber', 'photo'],
 }, mapStateToProps, actions)(Settings);

@@ -84,15 +84,15 @@ exports.checkUser = async (req, res) => {
 
 exports.editInfo = async (req, res, next) => {
   const data = JSON.parse(req.body.data);
-  const { phoneNumber: newPhone, email: newEmail } = data;
+  const { phoneNumber: newPhone, email: newEmail, photo: newPhoto } = data;
 
   try {
     const user = await User.findByIdAsync(data.user);
-
     if (!user) return res.send('No User');
 
     user.phoneNumber = newPhone || user.phoneNumber;
     user.email = newEmail || user.email;
+    user.photo = newPhoto || user.photo;
 
     user.save();
     res.send(user);

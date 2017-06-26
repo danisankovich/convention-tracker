@@ -10,6 +10,7 @@ const userSchema = new Schema({
   groups: Array,
   invitedToGroups: Array,
   myConventions: {type: Array, default: []},
+  photo: {type: String, default: ''}
 });
 
 userSchema.methods.comparePassword = function(candidatePassword, cb) {
