@@ -30577,13 +30577,9 @@
 	    (0, _user.signUp)(dispatch, { email: email, password: password, username: username });
 	  };
 	}
-	function editUser(_ref3, user) {
-	  var phoneNumber = _ref3.phoneNumber,
-	      email = _ref3.email,
-	      photo = _ref3.photo;
-	
+	function editUser(value, type, user) {
 	  return function (dispatch) {
-	    (0, _user.userEdit)(dispatch, { phoneNumber: phoneNumber, email: email, photo: photo }, user);
+	    (0, _user.userEdit)(dispatch, value, type, user);
 	  };
 	}
 	function removeConvention(id) {
@@ -30641,8 +30637,8 @@
 	    (0, _convention.getConvention)(id, dispatch);
 	  };
 	}
-	function editConvention(_ref4, userId) {
-	  var convention = _ref4.convention;
+	function editConvention(_ref3, userId) {
+	  var convention = _ref3.convention;
 	
 	  return function (dispatch) {
 	    (0, _convention.edit)({ convention: convention }, userId, dispatch);
@@ -30745,13 +30741,9 @@
 	  });
 	};
 	
-	exports.userEdit = function (dispatch, _ref3, user) {
-	  var phoneNumber = _ref3.phoneNumber,
-	      email = _ref3.email,
-	      photo = _ref3.photo;
-	
+	exports.userEdit = function (dispatch, value, type, user) {
 	  dispatch({ type: _types.EDIT_USER });
-	  var data = JSON.stringify({ phoneNumber: phoneNumber, email: email, photo: photo, user: user });
+	  var data = JSON.stringify({ value: value, type: type, user: user });
 	  _jquery2.default.ajax({
 	    url: '/api/editInfo',
 	    type: "POST",
@@ -57327,16 +57319,6 @@
 	  value: true
 	});
 	
-	var _extends = Object.assign || function (target) {
-	  for (var i = 1; i < arguments.length; i++) {
-	    var source = arguments[i];for (var key in source) {
-	      if (Object.prototype.hasOwnProperty.call(source, key)) {
-	        target[key] = source[key];
-	      }
-	    }
-	  }return target;
-	};
-	
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -57356,8 +57338,6 @@
 	var _actions = __webpack_require__(/*! ../../../actions */ 278);
 	
 	var actions = _interopRequireWildcard(_actions);
-	
-	var _reduxForm = __webpack_require__(/*! redux-form */ 285);
 	
 	function _interopRequireWildcard(obj) {
 	  if (obj && obj.__esModule) {
@@ -57393,6 +57373,8 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
 	
+	// import { reduxForm } from 'redux-form';
+	
 	var Settings = function (_Component) {
 	  _inherits(Settings, _Component);
 	
@@ -57411,8 +57393,8 @@
 	  }
 	
 	  _createClass(Settings, [{
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
 	      this.setState({
 	        editEmail: false,
 	        editPhone: false,
@@ -57432,15 +57414,13 @@
 	      }
 	    }
 	  }, {
-	    key: 'onEmailChange',
-	    value: function onEmailChange(event) {
-	      this.props.userInfo.username = +event.target.value;
-	    }
-	  }, {
 	    key: 'handleFormSubmit',
-	    value: function handleFormSubmit(formProps) {
+	    value: function handleFormSubmit(a, e) {
 	      //called with props from submit form
-	      this.props.editUser(formProps, this.props.userInfo._id);
+	      e.preventDefault();
+	      console.log(a, this.props.userInfo._id);
+	
+	      this.props.editUser(this.state[a], a, this.props.userInfo._id);
 	      this.setState({
 	        editEmail: false,
 	        editPhone: false,
@@ -57450,40 +57430,54 @@
 	      this.props.fetchInfo();
 	    }
 	  }, {
+	    key: 'onPhoneInputChange',
+	    value: function onPhoneInputChange(e) {
+	      this.setState({ phoneNumber: e.target.value });
+	    }
+	  }, {
+	    key: 'onEmailInputChange',
+	    value: function onEmailInputChange(e) {
+	      this.setState({ email: e.target.value });
+	    }
+	  }, {
+	    key: 'onPhotoInputChange',
+	    value: function onPhotoInputChange(e) {
+	      this.setState({ photo: e.target.value });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var self = this;
-	      var _props = this.props,
-	          handleSubmit = _props.handleSubmit,
-	          _props$fields = _props.fields,
-	          phoneNumber = _props$fields.phoneNumber,
-	          email = _props$fields.email,
-	          photo = _props$fields.photo;
+	      // const { handleSubmit, fields: {phoneNumber, email, photo }, userInfo} = this.props;
 	      var userInfo = this.props.userInfo;
 	
-	      console.log(userInfo);
+	      if (userInfo) {
+	        if (!this.state.phoneNumber) this.state.phoneNumber = userInfo.phoneNumber;
+	        if (!this.state.email) this.state.email = userInfo.email;
+	        if (!this.state.photo) this.state.photo = userInfo.photo;
+	      }
+	
 	      return _react2.default.createElement('div', null, userInfo && _react2.default.createElement('div', { className: 'toppush' }, _react2.default.createElement('h3', null, 'Settings'), _react2.default.createElement('p', null, 'Edit User Info: '), _react2.default.createElement('ul', null, _react2.default.createElement('li', null, 'Username: ', userInfo.username), _react2.default.createElement('li', null, 'Click On the Properties Below to Edit'), _react2.default.createElement('li', {
 	        className: this.state.editPhone ? 'hidden' : '',
 	        onClick: function () {
 	          this.handleClick({ editPhone: true });
-	        }.bind(this) }, 'Phone Number: ', userInfo.phoneNumber || 'Set Number'), _react2.default.createElement('li', { className: this.state.editPhone ? '' : 'hidden' }, _react2.default.createElement('form', null, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Phone Number: ', userInfo.phoneNumber), phoneNumber.touched && phoneNumber.error && _react2.default.createElement('div', { className: 'error' }, phoneNumber.error), _react2.default.createElement('input', _extends({ className: 'form-control', type: 'tel' }, phoneNumber))), _react2.default.createElement('button', { type: 'button', className: 'btn btn-danger',
+	        }.bind(this) }, 'Phone Number: ', userInfo.phoneNumber || 'Set Number'), _react2.default.createElement('li', { className: this.state.editPhone ? '' : 'hidden' }, _react2.default.createElement('form', null, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Phone Number: ', userInfo.phoneNumber), _react2.default.createElement('input', { className: 'form-control', type: 'tel', value: this.state.phoneNumber, onChange: this.onPhoneInputChange.bind(this) })), _react2.default.createElement('button', { type: 'button', className: 'btn btn-danger',
 	        onClick: function () {
 	          this.handleClick({ editPhone: false });
-	        }.bind(this) }, 'hide'), _react2.default.createElement('button', { onClick: handleSubmit(this.handleFormSubmit.bind(this)), className: 'btn btn-primary' }, 'Save'))), _react2.default.createElement('li', {
+	        }.bind(this) }, 'hide'), _react2.default.createElement('button', { onClick: this.handleFormSubmit.bind(this, 'phoneNumber'), className: 'btn btn-primary' }, 'Save'))), _react2.default.createElement('li', {
 	        className: this.state.editEmail ? 'hidden' : '',
 	        onClick: function () {
 	          this.handleClick({ editEmail: true });
-	        }.bind(this) }, 'Email: ', userInfo.email), _react2.default.createElement('li', { className: this.state.editEmail ? '' : 'hidden' }, _react2.default.createElement('form', null, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Email: ', userInfo.email), email.touched && email.error && _react2.default.createElement('div', { className: 'error' }, email.error), _react2.default.createElement('input', _extends({ className: 'form-control' }, email))), _react2.default.createElement('button', { type: 'button', className: 'btn btn-danger',
+	        }.bind(this) }, 'Email: ', userInfo.email), _react2.default.createElement('li', { className: this.state.editEmail ? '' : 'hidden' }, _react2.default.createElement('form', null, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Email: ', userInfo.email), _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.email, onChange: this.onEmailInputChange.bind(this) })), _react2.default.createElement('button', { type: 'button', className: 'btn btn-danger',
 	        onClick: function () {
 	          this.handleClick({ editEmail: false });
-	        }.bind(this) }, 'hide'), _react2.default.createElement('button', { onClick: handleSubmit(this.handleFormSubmit.bind(this)), className: 'btn btn-primary' }, 'Save'))), _react2.default.createElement('li', {
+	        }.bind(this) }, 'hide'), _react2.default.createElement('button', { onClick: this.handleFormSubmit.bind(this, 'email'), className: 'btn btn-primary' }, 'Save'))), _react2.default.createElement('li', {
 	        className: this.state.editPhoto ? 'hidden' : '',
 	        onClick: function () {
 	          this.handleClick({ editPhoto: true });
-	        }.bind(this) }, 'Photo: ', _react2.default.createElement('img', { className: 'profilePhoto', src: userInfo.photo, alt: 'Profile Photo' })), _react2.default.createElement('li', { className: this.state.editPhoto ? '' : 'hidden' }, _react2.default.createElement('form', null, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Photo: ', userInfo.photo), photo.touched && photo.error && _react2.default.createElement('div', { className: 'error' }, photo.error), _react2.default.createElement('input', _extends({ className: 'form-control' }, photo))), _react2.default.createElement('button', { type: 'button', className: 'btn btn-danger',
+	        }.bind(this) }, 'Photo: ', _react2.default.createElement('img', { className: 'profilePhoto', src: userInfo.photo, alt: 'Profile Photo' })), _react2.default.createElement('li', { className: this.state.editPhoto ? '' : 'hidden' }, _react2.default.createElement('form', null, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Photo: ', userInfo.photo), _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.photo, onChange: this.onPhotoInputChange.bind(this) })), _react2.default.createElement('button', { type: 'button', className: 'btn btn-danger',
 	        onClick: function () {
 	          this.handleClick({ editPhoto: false });
-	        }.bind(this) }, 'hide'), _react2.default.createElement('button', { onClick: handleSubmit(this.handleFormSubmit.bind(this)), className: 'btn btn-primary' }, 'Save'))))), !userInfo && _react2.default.createElement('div', null, 'adsfasfd'));
+	        }.bind(this) }, 'hide'), _react2.default.createElement('button', { onClick: this.handleFormSubmit.bind(this, 'photo'), className: 'btn btn-primary' }, 'Save'))))), !userInfo && _react2.default.createElement('div', null, 'adsfasfd'));
 	    }
 	  }]);
 	
@@ -57496,10 +57490,11 @@
 	  };
 	}
 	
-	exports.default = (0, _reduxForm.reduxForm)({
-	  form: 'Settings',
-	  fields: ['email', 'phoneNumber', 'photo']
-	}, mapStateToProps, actions)(Settings);
+	// export default reduxForm({
+	//   form: 'Settings',
+	//   fields: ['email', 'phoneNumber', 'photo'],
+	// }, mapStateToProps, actions)(Settings);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, actions)(Settings);
 
 /***/ }),
 /* 342 */

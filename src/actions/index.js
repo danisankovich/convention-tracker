@@ -32,9 +32,9 @@ export function signupUser({email, password, username}) {
     signUp(dispatch, {email, password, username})
   }
 }
-export function editUser({phoneNumber, email, photo}, user) {
+export function editUser(value, type, user) {
   return function(dispatch) {
-    userEdit(dispatch, {phoneNumber, email, photo}, user)
+    userEdit(dispatch, value, type, user)
   }
 }
 export function removeConvention(id) {

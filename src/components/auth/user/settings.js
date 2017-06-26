@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../actions';
-import { reduxForm } from 'redux-form';
+// import { reduxForm } from 'redux-form';
 
 class Settings extends Component {
   constructor(props) {
@@ -13,7 +13,7 @@ class Settings extends Component {
       editPhoto: false,
     };
   }
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       editEmail: false,
       editPhone: false,
@@ -29,12 +29,12 @@ class Settings extends Component {
       this.setState({username: this.props.userInfo.userName})
     }
   }
-  onEmailChange(event) {
-    this.props.userInfo.username =+ event.target.value
-  }
 
-  handleFormSubmit(formProps) { //called with props from submit form
-    this.props.editUser(formProps, this.props.userInfo._id);
+  handleFormSubmit(a, e) { //called with props from submit form
+    e.preventDefault();
+    console.log(a, this.props.userInfo._id)
+
+    this.props.editUser(this.state[a], a, this.props.userInfo._id);
     this.setState({
       editEmail: false,
       editPhone: false,
@@ -44,12 +44,24 @@ class Settings extends Component {
     this.props.fetchInfo();
   }
 
+  onPhoneInputChange(e) {
+    this.setState({phoneNumber: e.target.value});
+  }
+  onEmailInputChange(e) {
+    this.setState({email: e.target.value});
+  }
+  onPhotoInputChange(e) {
+    this.setState({photo: e.target.value});
+  }
   render() {
-    let self = this;
-    const { handleSubmit, fields: {phoneNumber, email, photo }} = this.props;
+    // const { handleSubmit, fields: {phoneNumber, email, photo }, userInfo} = this.props;
+    const {userInfo} = this.props;
+    if (userInfo) {
+      if (!this.state.phoneNumber) this.state.phoneNumber = userInfo.phoneNumber;
+      if (!this.state.email) this.state.email = userInfo.email;
+      if (!this.state.photo) this.state.photo = userInfo.photo;
+    }
 
-    const { userInfo } = this.props;
-    console.log(userInfo)
     return (
       <div>
         {userInfo &&
@@ -72,8 +84,7 @@ class Settings extends Component {
                 <form>
                   <fieldset className="form-group">
                     <label>Phone Number: {userInfo.phoneNumber}</label>
-                    {phoneNumber.touched && phoneNumber.error && <div className="error">{phoneNumber.error}</div>}
-                    <input className="form-control" type="tel" {...phoneNumber}/>
+                    <input className="form-control" type="tel" value={this.state.phoneNumber} onChange={this.onPhoneInputChange.bind(this)} />
                   </fieldset>
                   <button type='button' className="btn btn-danger"
                     onClick={function(){
@@ -81,7 +92,7 @@ class Settings extends Component {
                     }.bind(this)}>
                     hide
                   </button>
-                  <button onClick={handleSubmit(this.handleFormSubmit.bind(this))} className="btn btn-primary">Save</button>
+                  <button onClick={this.handleFormSubmit.bind(this, 'phoneNumber')} className="btn btn-primary">Save</button>
                 </form>
               </li>
               <li
@@ -95,8 +106,7 @@ class Settings extends Component {
                 <form>
                   <fieldset className="form-group">
                     <label>Email: {userInfo.email}</label>
-                    {email.touched && email.error && <div className="error">{email.error}</div>}
-                    <input className="form-control" {...email}/>
+                    <input type="text" className="form-control" value={this.state.email} onChange={this.onEmailInputChange.bind(this)}/>
                   </fieldset>
                   <button type='button' className="btn btn-danger"
                     onClick={function(){
@@ -104,7 +114,7 @@ class Settings extends Component {
                     }.bind(this)}>
                     hide
                   </button>
-                  <button onClick={handleSubmit(this.handleFormSubmit.bind(this))} className="btn btn-primary">Save</button>
+                  <button onClick={this.handleFormSubmit.bind(this, 'email')} className="btn btn-primary">Save</button>
                 </form>
               </li>
               <li
@@ -118,8 +128,7 @@ class Settings extends Component {
                 <form>
                   <fieldset className="form-group">
                     <label>Photo: {userInfo.photo}</label>
-                    {photo.touched && photo.error && <div className="error">{photo.error}</div>}
-                    <input className="form-control" {...photo}/>
+                    <input type="text" className="form-control" value={this.state.photo} onChange={this.onPhotoInputChange.bind(this)}/>
                   </fieldset>
                   <button type='button' className="btn btn-danger"
                     onClick={function(){
@@ -127,7 +136,7 @@ class Settings extends Component {
                     }.bind(this)}>
                     hide
                   </button>
-                  <button onClick={handleSubmit(this.handleFormSubmit.bind(this))} className="btn btn-primary">Save</button>
+                  <button onClick={this.handleFormSubmit.bind(this, 'photo')} className="btn btn-primary">Save</button>
                 </form>
               </li>
             </ul>
@@ -145,7 +154,8 @@ function mapStateToProps(state) {
   };
 }
 
-export default reduxForm({
-  form: 'Settings',
-  fields: ['email', 'phoneNumber', 'photo'],
-}, mapStateToProps, actions)(Settings);
+// export default reduxForm({
+//   form: 'Settings',
+//   fields: ['email', 'phoneNumber', 'photo'],
+// }, mapStateToProps, actions)(Settings);
+export default connect(mapStateToProps, actions)(Settings);
