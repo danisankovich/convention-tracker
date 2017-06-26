@@ -57319,6 +57319,16 @@
 	  value: true
 	});
 	
+	var _extends = Object.assign || function (target) {
+	  for (var i = 1; i < arguments.length; i++) {
+	    var source = arguments[i];for (var key in source) {
+	      if (Object.prototype.hasOwnProperty.call(source, key)) {
+	        target[key] = source[key];
+	      }
+	    }
+	  }return target;
+	};
+	
 	var _createClass = function () {
 	  function defineProperties(target, props) {
 	    for (var i = 0; i < props.length; i++) {
@@ -57381,7 +57391,12 @@
 	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
 	}
 	
-	// import { reduxForm } from 'redux-form';
+	var defaultState = {
+	  editEmail: false,
+	  editPhone: false,
+	  editUser: false,
+	  editPhoto: false
+	};
 	
 	var Settings = function (_Component) {
 	  _inherits(Settings, _Component);
@@ -57391,24 +57406,14 @@
 	
 	    var _this = _possibleConstructorReturn(this, (Settings.__proto__ || Object.getPrototypeOf(Settings)).call(this, props));
 	
-	    _this.state = {
-	      editEmail: false,
-	      editPhone: false,
-	      editUser: false,
-	      editPhoto: false
-	    };
+	    _this.state = defaultState;
 	    return _this;
 	  }
 	
 	  _createClass(Settings, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.setState({
-	        editEmail: false,
-	        editPhone: false,
-	        editUser: false,
-	        editPhoto: false
-	      });
+	      this.setState(_extends({}, defaultState));
 	      this.props.fetchInfo();
 	    }
 	    // handle hide/show clicks
@@ -57424,17 +57429,10 @@
 	  }, {
 	    key: 'handleFormSubmit',
 	    value: function handleFormSubmit(type, e) {
-	      //called with props from submit form
 	      e.preventDefault();
-	      console.log(type, this.props.userInfo._id);
 	
 	      this.props.editUser(this.state[type], type, this.props.userInfo._id);
-	      this.setState({
-	        editEmail: false,
-	        editPhone: false,
-	        editUser: false,
-	        editPhoto: false
-	      });
+	      this.setState(_extends({}, defaultState, _defineProperty({}, type, this.state[type])));
 	      this.props.fetchInfo();
 	    }
 	  }, {
@@ -57475,7 +57473,7 @@
 	        }.bind(this) }, 'Photo: ', _react2.default.createElement('img', { className: 'profilePhoto', src: userInfo.photo, alt: 'Profile Photo' })), _react2.default.createElement('li', { className: this.state.editPhoto ? '' : 'hidden' }, _react2.default.createElement('form', null, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Photo: ', userInfo.photo), _react2.default.createElement('input', { type: 'text', className: 'form-control', value: this.state.photo, onChange: this.onInputChange.bind(this, 'photo') })), _react2.default.createElement('button', { type: 'button', className: 'btn btn-danger',
 	        onClick: function () {
 	          this.handleClick({ editPhoto: false });
-	        }.bind(this) }, 'hide'), _react2.default.createElement('button', { onClick: this.handleFormSubmit.bind(this, 'photo'), className: 'btn btn-primary' }, 'Save'))))), !userInfo && _react2.default.createElement('div', null, 'adsfasfd'));
+	        }.bind(this) }, 'hide'), _react2.default.createElement('button', { onClick: this.handleFormSubmit.bind(this, 'photo'), className: 'btn btn-primary' }, 'Save'))))));
 	    }
 	  }]);
 	
@@ -57488,10 +57486,6 @@
 	  };
 	}
 	
-	// export default reduxForm({
-	//   form: 'Settings',
-	//   fields: ['email', 'phoneNumber', 'photo'],
-	// }, mapStateToProps, actions)(Settings);
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, actions)(Settings);
 
 /***/ }),

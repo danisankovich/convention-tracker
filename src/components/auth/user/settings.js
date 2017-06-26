@@ -1,25 +1,21 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../actions';
-// import { reduxForm } from 'redux-form';
+
+const defaultState = {
+  editEmail: false,
+  editPhone: false,
+  editUser: false,
+  editPhoto: false,
+};
 
 class Settings extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      editEmail: false,
-      editPhone: false,
-      editUser: false,
-      editPhoto: false,
-    };
+    this.state = defaultState;
   }
   componentDidMount() {
-    this.setState({
-      editEmail: false,
-      editPhone: false,
-      editUser: false,
-      editPhoto: false,
-    });
+    this.setState({...defaultState});
     this.props.fetchInfo();
   }
   // handle hide/show clicks
@@ -30,17 +26,11 @@ class Settings extends Component {
     }
   }
 
-  handleFormSubmit(type, e) { //called with props from submit form
+  handleFormSubmit(type, e) {
     e.preventDefault();
-    console.log(type, this.props.userInfo._id)
 
     this.props.editUser(this.state[type], type, this.props.userInfo._id);
-    this.setState({
-      editEmail: false,
-      editPhone: false,
-      editUser: false,
-      editPhoto: false,
-    });
+    this.setState({...defaultState, [type]: this.state[type]});
     this.props.fetchInfo();
   }
 
@@ -137,7 +127,6 @@ class Settings extends Component {
             </ul>
           </div>
         }
-        {!userInfo && <div>adsfasfd</div>}
       </div>
     );
   };
@@ -149,8 +138,4 @@ function mapStateToProps(state) {
   };
 }
 
-// export default reduxForm({
-//   form: 'Settings',
-//   fields: ['email', 'phoneNumber', 'photo'],
-// }, mapStateToProps, actions)(Settings);
 export default connect(mapStateToProps, actions)(Settings);
