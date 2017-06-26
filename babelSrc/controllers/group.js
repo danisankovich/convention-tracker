@@ -28,9 +28,9 @@ const groupCreatorController = (req, res, data) => {
           const updated = await User.updateAsync({ "_id": u._id}, { "$push": { "invitedToGroups": group._id } });
           if (!updated) res.send('User Update Failed');
         }));
-        console.log(data.creatorId)
+
         const creator = await User.findByIdAndUpdateAsync(data.creatorId, { "$push": { "groups": group._id } });
-        console.log(creator)
+
         if (!creator) res.send('User Update Failed');
 
         group.save();
@@ -155,7 +155,7 @@ exports.joinGroupTwo = async (req, res) => {
   const groupId = req.body.groupId;
 
   const token = req.headers.authorization;
-  console.log('asdasdf')
+
   if(token) {
     try {
       let decoded = jwt.decode(token, config.secret);

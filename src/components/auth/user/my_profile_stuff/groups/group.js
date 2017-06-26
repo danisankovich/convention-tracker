@@ -66,7 +66,6 @@ class SingleGroup extends Component {
           type: 'POST',
           data: {_id: response.id}
         }).done((res) => {
-          console.log(res)
           this.setState({group: res });
         })
       } else if (!response) {

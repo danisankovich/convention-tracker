@@ -69,7 +69,6 @@ exports.getUserProfile = async (req, res) => {
   }
 }
 exports.checkUser = async (req, res) => {
-  console.log(req.query)
   try {
     const user = await User.findOneAsync({$or: [
       {email: req.query.user},
@@ -85,7 +84,6 @@ exports.checkUser = async (req, res) => {
 exports.editInfo = async (req, res, next) => {
   const data = JSON.parse(req.body.data);
   const { value, type } = data;
-  console.log(value, type)
 
   try {
     const user = await User.findByIdAsync(data.user);
