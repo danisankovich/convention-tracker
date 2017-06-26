@@ -30,11 +30,11 @@ class Settings extends Component {
     }
   }
 
-  handleFormSubmit(a, e) { //called with props from submit form
+  handleFormSubmit(type, e) { //called with props from submit form
     e.preventDefault();
-    console.log(a, this.props.userInfo._id)
+    console.log(type, this.props.userInfo._id)
 
-    this.props.editUser(this.state[a], a, this.props.userInfo._id);
+    this.props.editUser(this.state[type], type, this.props.userInfo._id);
     this.setState({
       editEmail: false,
       editPhone: false,
@@ -44,15 +44,10 @@ class Settings extends Component {
     this.props.fetchInfo();
   }
 
-  onPhoneInputChange(e) {
-    this.setState({phoneNumber: e.target.value});
+  onInputChange(type, e) {
+    this.setState({[type]: e.target.value});
   }
-  onEmailInputChange(e) {
-    this.setState({email: e.target.value});
-  }
-  onPhotoInputChange(e) {
-    this.setState({photo: e.target.value});
-  }
+
   render() {
     // const { handleSubmit, fields: {phoneNumber, email, photo }, userInfo} = this.props;
     const {userInfo} = this.props;
@@ -84,7 +79,7 @@ class Settings extends Component {
                 <form>
                   <fieldset className="form-group">
                     <label>Phone Number: {userInfo.phoneNumber}</label>
-                    <input className="form-control" type="tel" value={this.state.phoneNumber} onChange={this.onPhoneInputChange.bind(this)} />
+                    <input className="form-control" type="tel" value={this.state.phoneNumber} onChange={this.onInputChange.bind(this, 'phoneNumber')} />
                   </fieldset>
                   <button type='button' className="btn btn-danger"
                     onClick={function(){
@@ -106,7 +101,7 @@ class Settings extends Component {
                 <form>
                   <fieldset className="form-group">
                     <label>Email: {userInfo.email}</label>
-                    <input type="text" className="form-control" value={this.state.email} onChange={this.onEmailInputChange.bind(this)}/>
+                    <input type="text" className="form-control" value={this.state.email} onChange={this.onInputChange.bind(this, 'email')}/>
                   </fieldset>
                   <button type='button' className="btn btn-danger"
                     onClick={function(){
@@ -128,7 +123,7 @@ class Settings extends Component {
                 <form>
                   <fieldset className="form-group">
                     <label>Photo: {userInfo.photo}</label>
-                    <input type="text" className="form-control" value={this.state.photo} onChange={this.onPhotoInputChange.bind(this)}/>
+                    <input type="text" className="form-control" value={this.state.photo} onChange={this.onInputChange.bind(this, 'photo')}/>
                   </fieldset>
                   <button type='button' className="btn btn-danger"
                     onClick={function(){
