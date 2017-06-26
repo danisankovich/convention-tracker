@@ -21,7 +21,7 @@ var userSchema = new Schema({
   groups: Array,
   invitedToGroups: Array,
   myConventions: { type: Array, default: [] },
-  photo: { type: String, default: '' }
+  photo: { type: String, default: 'http://s3.amazonaws.com/cdn.roosterteeth.com/default/original/user_profile_female.jpg' }
 });
 
 userSchema.methods.comparePassword = function (candidatePassword, cb) {

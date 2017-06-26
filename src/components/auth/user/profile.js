@@ -39,7 +39,7 @@ class Profile extends Component {
         {userInfo && <div>
           <div className='row'>
             <div className='col-sm-3 col-sm-offset-2'>
-              <h1>{userInfo.username + "'s"} Profile</h1>
+              <div><img className='profilePhoto' src={userInfo.photo} alt='profile photo' /><h1>{userInfo.username + "'s"} Profile</h1></div>
             </div>
           </div>
           <div className='row'>

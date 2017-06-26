@@ -262,48 +262,43 @@ exports.editInfo = function () {
           case 0:
             data = JSON.parse(req.body.data);
             newPhone = data.phoneNumber, newEmail = data.email, newPhoto = data.photo;
-
-            console.log(data);
-            _context5.prev = 3;
-            _context5.next = 6;
+            _context5.prev = 2;
+            _context5.next = 5;
             return _user2.default.findByIdAsync(data.user);
 
-          case 6:
+          case 5:
             user = _context5.sent;
 
-            console.log(user);
-
             if (user) {
-              _context5.next = 10;
+              _context5.next = 8;
               break;
             }
 
             return _context5.abrupt('return', res.send('No User'));
 
-          case 10:
-            console.log(newPhone, newEmail, newPhoto);
+          case 8:
+
             user.phoneNumber = newPhone || user.phoneNumber;
             user.email = newEmail || user.email;
             user.photo = newPhoto || user.photo;
 
-            console.log(user);
             user.save();
             res.send(user);
-            _context5.next = 22;
+            _context5.next = 18;
             break;
 
-          case 19:
-            _context5.prev = 19;
-            _context5.t0 = _context5['catch'](3);
+          case 15:
+            _context5.prev = 15;
+            _context5.t0 = _context5['catch'](2);
 
             res.send(_context5.t0);
 
-          case 22:
+          case 18:
           case 'end':
             return _context5.stop();
         }
       }
-    }, _callee5, undefined, [[3, 19]]);
+    }, _callee5, undefined, [[2, 15]]);
   }));
 
   return function (_x10, _x11, _x12) {

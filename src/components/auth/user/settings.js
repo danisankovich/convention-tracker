@@ -112,7 +112,7 @@ class Settings extends Component {
                 onClick={function(){
                   this.handleClick({editPhoto: true})
                 }.bind(this)}>
-                Photo: {userInfo.photo}
+                Photo: <img className='profilePhoto' src={userInfo.photo} alt='Profile Photo' />
               </li>
               <li className={this.state.editPhoto ? '' : 'hidden'}>
                 <form>
