@@ -30521,6 +30521,11 @@
 	  }
 	
 	  _createClass(Header, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.props.fetchInfo();
+	    }
+	  }, {
 	    key: 'signout',
 	    value: function signout() {
 	      localStorage.removeItem('token');
@@ -30530,11 +30535,10 @@
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props,
-	          _props$userInfo = _props.userInfo,
-	          userInfo = _props$userInfo === undefined ? {} : _props$userInfo,
+	          userInfo = _props.userInfo,
 	          authenticated = _props.authenticated;
 	
-	      return _react2.default.createElement('nav', { className: 'navbar navbar-inverse' }, _react2.default.createElement('div', { className: 'container-fluid' }, _react2.default.createElement('div', { className: 'navbar-header' }, _react2.default.createElement(_reactRouter.Link, { to: '/', className: 'navbar-logo-ct' }, 'CT'), _react2.default.createElement('button', { type: 'button', className: 'navbar-toggle', 'data-toggle': 'collapse', 'data-target': '#myNavbar' }, _react2.default.createElement('span', { className: 'icon-bar' }), _react2.default.createElement('span', { className: 'icon-bar' }), _react2.default.createElement('span', { className: 'icon-bar' }))), _react2.default.createElement('div', { className: 'collapse navbar-collapse', id: 'myNavbar' }, _react2.default.createElement('ul', { className: 'nav navbar-nav navbar-right navbar-links-ct' }, _react2.default.createElement('li', { className: 'nav-item', key: 0 }, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/conventions' }, 'Conventions')), '}', !authenticated && _react2.default.createElement('li', { className: 'nav-item', key: 1 }, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/signin' }, 'Sign In')), !authenticated && _react2.default.createElement('li', { className: 'nav-item', key: 2 }, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/signup' }, 'Sign Up')), authenticated && _react2.default.createElement('li', { className: 'dropdown', key: 3 }, _react2.default.createElement('a', { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false' }, userInfo.username, _react2.default.createElement('span', { className: 'caret' })), _react2.default.createElement('ul', { className: 'dropdown-menu' }, _react2.default.createElement('li', null, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/profile' }, 'Profile')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/settings' }, 'Settings')), _react2.default.createElement('li', { role: 'separator', className: 'divider' }), _react2.default.createElement('li', { onClick: this.signout.bind(this) }, _react2.default.createElement('a', { className: 'nav-link' }, 'Sign Out'))))))));
+	      return _react2.default.createElement('nav', { className: 'navbar navbar-inverse' }, _react2.default.createElement('div', { className: 'container-fluid' }, _react2.default.createElement('div', { className: 'navbar-header' }, _react2.default.createElement(_reactRouter.Link, { to: '/', className: 'navbar-logo-ct' }, 'CT'), _react2.default.createElement('button', { type: 'button', className: 'navbar-toggle', 'data-toggle': 'collapse', 'data-target': '#myNavbar' }, _react2.default.createElement('span', { className: 'icon-bar' }), _react2.default.createElement('span', { className: 'icon-bar' }), _react2.default.createElement('span', { className: 'icon-bar' }))), _react2.default.createElement('div', { className: 'collapse navbar-collapse', id: 'myNavbar' }, _react2.default.createElement('ul', { className: 'nav navbar-nav navbar-right navbar-links-ct' }, _react2.default.createElement('li', { className: 'nav-item', key: 0 }, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/conventions' }, 'Conventions')), !authenticated && _react2.default.createElement('li', { className: 'nav-item', key: 1 }, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/signin' }, 'Sign In')), !authenticated && _react2.default.createElement('li', { className: 'nav-item', key: 2 }, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/signup' }, 'Sign Up')), authenticated && userInfo && _react2.default.createElement('li', { className: 'dropdown', key: 3 }, _react2.default.createElement('a', { href: '#', className: 'dropdown-toggle', 'data-toggle': 'dropdown', role: 'button', 'aria-haspopup': 'true', 'aria-expanded': 'false' }, userInfo.username, _react2.default.createElement('span', { className: 'caret' })), _react2.default.createElement('ul', { className: 'dropdown-menu' }, _react2.default.createElement('li', null, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/profile' }, 'Profile')), _react2.default.createElement('li', null, _react2.default.createElement(_reactRouter.Link, { className: 'nav-link', to: '/settings' }, 'Settings')), _react2.default.createElement('li', { role: 'separator', className: 'divider' }), _react2.default.createElement('li', { onClick: this.signout.bind(this) }, _react2.default.createElement('a', { className: 'nav-link' }, 'Sign Out'))))))));
 	    }
 	  }]);
 	
@@ -30582,6 +30586,8 @@
 	exports.leavingGroup = leavingGroup;
 	exports.joiningGroup = joiningGroup;
 	
+	var _reactRouter = __webpack_require__(/*! react-router */ 208);
+	
 	var _user = __webpack_require__(/*! ./funcs/user */ 280);
 	
 	var _convention = __webpack_require__(/*! ./funcs/convention */ 283);
@@ -30591,6 +30597,8 @@
 	var _types = __webpack_require__(/*! ./types */ 282);
 	
 	//USER FUNCTIONS
+	// commits info about url to react router, and to make changes to url
+	
 	function signinUser(_ref) {
 	  var email = _ref.email,
 	      password = _ref.password;
@@ -30627,6 +30635,8 @@
 	
 	function signoutUser() {
 	  localStorage.removeItem('token');
+	  _reactRouter.browserHistory.push('/signin');
+	
 	  return { type: _types.UNAUTH_USER };
 	}
 	function authError(error) {
@@ -40342,8 +40352,7 @@
 	      payload: response
 	    });
 	  });
-	}; // commits info about url to react router, and to make changes to url
-	
+	};
 	exports.getAllConventions = function (term, otherParams, dispatch) {
 	  _jquery2.default.ajax({
 	    url: '/api/conventions/all/' + (term ? term : ''),
@@ -40608,7 +40617,7 @@
 	          email = _props$fields.email,
 	          password = _props$fields.password;
 	
-	      return _react2.default.createElement('form', { onSubmit: handleSubmit(this.handleFormSubmit.bind(this)) }, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Email: '), _react2.default.createElement('input', _extends({}, email, { className: 'form-control' }))), _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Password: '), _react2.default.createElement('input', _extends({}, password, { className: 'form-control', type: 'password' }))), this.renderAlert(), _react2.default.createElement('button', { action: 'submit', className: 'btn btn-primary' }, 'Sign In'));
+	      return _react2.default.createElement('div', { className: 'container' }, _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('div', { className: 'col-sm-6 col-sm-offset-3' }, _react2.default.createElement('div', { className: 'signUpInContainer' }, _react2.default.createElement('h2', null, 'Login: '), _react2.default.createElement('form', { onSubmit: handleSubmit(this.handleFormSubmit.bind(this)) }, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Email: '), _react2.default.createElement('input', _extends({}, email, { className: 'form-control' }))), _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Password: '), _react2.default.createElement('input', _extends({}, password, { className: 'form-control', type: 'password' }))), this.renderAlert(), _react2.default.createElement('button', { action: 'submit', className: 'btn btn-primary' }, 'Sign In')))))));
 	    }
 	  }]);
 	
@@ -44269,7 +44278,7 @@
 	          password = _props$fields.password,
 	          passwordConfirm = _props$fields.passwordConfirm;
 	
-	      return _react2.default.createElement('form', { onSubmit: handleSubmit(this.handleFormSubmit.bind(this)) }, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Email: '), _react2.default.createElement('input', _extends({ className: 'form-control' }, email)), email.touched && email.error && _react2.default.createElement('div', { className: 'error' }, email.error)), _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Username: '), _react2.default.createElement('input', _extends({ className: 'form-control', maxLength: '12' }, username)), username.touched && username.error && _react2.default.createElement('div', { className: 'error' }, username.error)), _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Password: '), _react2.default.createElement('input', _extends({ className: 'form-control', type: 'password' }, password)), password.touched && password.error && _react2.default.createElement('div', { className: 'error' }, password.error)), _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Confirm Password: '), _react2.default.createElement('input', _extends({ className: 'form-control', type: 'password' }, passwordConfirm)), passwordConfirm.touched && passwordConfirm.error && _react2.default.createElement('div', { className: 'error' }, passwordConfirm.error)), this.renderAlert(), _react2.default.createElement('button', { action: 'submit', className: 'btn btn-primary' }, 'Sign Up'));
+	      return _react2.default.createElement('div', { className: 'container' }, _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('div', { className: 'col-sm-6 col-sm-offset-3' }, _react2.default.createElement('div', { className: 'signUpInContainer' }, _react2.default.createElement('h2', null, 'Sign Up: '), _react2.default.createElement('form', { onSubmit: handleSubmit(this.handleFormSubmit.bind(this)) }, _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Email: '), _react2.default.createElement('input', _extends({ className: 'form-control' }, email)), email.touched && email.error && _react2.default.createElement('div', { className: 'error' }, email.error)), _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Username: '), _react2.default.createElement('input', _extends({ className: 'form-control', maxLength: '12' }, username)), username.touched && username.error && _react2.default.createElement('div', { className: 'error' }, username.error)), _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Password: '), _react2.default.createElement('input', _extends({ className: 'form-control', type: 'password' }, password)), password.touched && password.error && _react2.default.createElement('div', { className: 'error' }, password.error)), _react2.default.createElement('fieldset', { className: 'form-group' }, _react2.default.createElement('label', null, 'Confirm Password: '), _react2.default.createElement('input', _extends({ className: 'form-control', type: 'password' }, passwordConfirm)), passwordConfirm.touched && passwordConfirm.error && _react2.default.createElement('div', { className: 'error' }, passwordConfirm.error)), this.renderAlert(), _react2.default.createElement('button', { action: 'submit', className: 'btn btn-primary' }, 'Sign Up')))))));
 	    }
 	  }]);
 	
@@ -44343,9 +44352,9 @@
 	
 	var actions = _interopRequireWildcard(_actions);
 	
-	var _myConventions = __webpack_require__(/*! ./my_profile_stuff/myConventions */ 334);
+	var _myConventionsContainer = __webpack_require__(/*! ./my_profile_stuff/myConventions/myConventionsContainer */ 490);
 	
-	var _myConventions2 = _interopRequireDefault(_myConventions);
+	var _myConventionsContainer2 = _interopRequireDefault(_myConventionsContainer);
 	
 	var _groups_container = __webpack_require__(/*! ./my_profile_stuff/groups/groups_container */ 338);
 	
@@ -44410,10 +44419,8 @@
 	    }
 	  }, {
 	    key: 'show',
-	    value: function show() {
-	      var self = this[0];
-	      var type = this[1];
-	      var hide = self.state[type] === true ? true : false;
+	    value: function show(type) {
+	      var hide = this.state[type] === true ? true : false;
 	      var resetObj = {
 	        showConventions: false,
 	        showGroups: false,
@@ -44425,14 +44432,14 @@
 	      } else {
 	        resetObj.showInfo = true;
 	      }
-	      self.setState(resetObj);
+	      this.setState(resetObj);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var userInfo = this.props.userInfo;
 	
-	      return _react2.default.createElement('div', { className: 'toppush container' }, userInfo && _react2.default.createElement('div', null, _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-3 col-sm-offset-2' }, _react2.default.createElement('div', null, _react2.default.createElement('img', { className: 'profilePhoto', src: userInfo.photo, alt: 'profile photo' }), _react2.default.createElement('h1', null, userInfo.username + "'s", ' Profile')))), _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-2 col-sm-offset-1' }, _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.show.bind([this, 'showInfo']) }, 'Show Info'), _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.show.bind([this, 'showConventions']) }, 'Show Conventions (', this.props.userInfo.myConventions.length, ')'), _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.show.bind([this, 'showGroups']) }, 'Show Groups (', this.props.userInfo.groups.length, ')'), _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.show.bind([this, 'showInvites']) }, 'Show Pending Invites (', this.props.userInfo.invitedToGroups.length, ')')), _react2.default.createElement('div', { className: 'col-sm-8 col-sm-offset-1' }, this.state.showInfo && _react2.default.createElement('div', { className: 'col-sm-offset-1' }, _react2.default.createElement('h3', null, 'Email: ', userInfo.email), _react2.default.createElement('h3', null, 'Phone Number: ', userInfo.phoneNumber)), this.state.showConventions && _react2.default.createElement(_myConventions2.default, { userInfo: this.props.userInfo }), this.state.showGroups && _react2.default.createElement(_groups_container2.default, { userInfo: this.props.userInfo }), this.state.showInvites && _react2.default.createElement(_groups_container2.default, { userInfo: this.props.userInfo, groupType: 'invites' })))));
+	      return _react2.default.createElement('div', { className: 'toppush container' }, userInfo && _react2.default.createElement('div', null, _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-3 col-sm-offset-2' }, _react2.default.createElement('div', null, _react2.default.createElement('img', { className: 'profilePhoto', src: userInfo.photo, alt: 'profile photo' }), _react2.default.createElement('h1', null, userInfo.username + "'s", ' Profile')))), _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-2 col-sm-offset-1' }, _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.show.bind(this, 'showInfo') }, 'Show Info'), _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.show.bind(this, 'showConventions') }, 'Show Conventions (', this.props.userInfo.myConventions.length, ')'), _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.show.bind(this, 'showGroups') }, 'Show Groups (', this.props.userInfo.groups.length, ')'), _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.show.bind(this, 'showInvites') }, 'Show Pending Invites (', this.props.userInfo.invitedToGroups.length, ')')), _react2.default.createElement('div', { className: 'col-sm-8 col-sm-offset-1' }, this.state.showInfo && _react2.default.createElement('div', { className: 'col-sm-offset-1' }, _react2.default.createElement('h3', null, 'Email: ', userInfo.email), _react2.default.createElement('h3', null, 'Phone Number: ', userInfo.phoneNumber)), this.state.showConventions && _react2.default.createElement(_myConventionsContainer2.default, { userInfo: this.props.userInfo }), this.state.showGroups && _react2.default.createElement(_groups_container2.default, { userInfo: this.props.userInfo }), this.state.showInvites && _react2.default.createElement(_groups_container2.default, { userInfo: this.props.userInfo, groupType: 'invites' })))));
 	    }
 	  }]);
 	
@@ -44445,157 +44452,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, actions)(Profile);
 
 /***/ }),
-/* 334 */
-/*!********************************************************************!*\
-  !*** ./src/components/auth/user/my_profile_stuff/myConventions.js ***!
-  \********************************************************************/
-/***/ (function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
-	
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	
-	var _createClass = function () {
-	  function defineProperties(target, props) {
-	    for (var i = 0; i < props.length; i++) {
-	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
-	    }
-	  }return function (Constructor, protoProps, staticProps) {
-	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
-	  };
-	}();
-	
-	var _react = __webpack_require__(/*! react */ 2);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _reactRedux = __webpack_require__(/*! react-redux */ 160);
-	
-	var _actions = __webpack_require__(/*! ../../../../actions */ 279);
-	
-	var actions = _interopRequireWildcard(_actions);
-	
-	var _reactRouter = __webpack_require__(/*! react-router */ 208);
-	
-	var _utils = __webpack_require__(/*! ../../../../utils.js */ 335);
-	
-	var _utils2 = _interopRequireDefault(_utils);
-	
-	var _lodash = __webpack_require__(/*! lodash */ 336);
-	
-	var _lodash2 = _interopRequireDefault(_lodash);
-	
-	function _interopRequireWildcard(obj) {
-	  if (obj && obj.__esModule) {
-	    return obj;
-	  } else {
-	    var newObj = {};if (obj != null) {
-	      for (var key in obj) {
-	        if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
-	      }
-	    }newObj.default = obj;return newObj;
-	  }
-	}
-	
-	function _interopRequireDefault(obj) {
-	  return obj && obj.__esModule ? obj : { default: obj };
-	}
-	
-	function _classCallCheck(instance, Constructor) {
-	  if (!(instance instanceof Constructor)) {
-	    throw new TypeError("Cannot call a class as a function");
-	  }
-	}
-	
-	function _possibleConstructorReturn(self, call) {
-	  if (!self) {
-	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
-	  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
-	}
-	
-	function _inherits(subClass, superClass) {
-	  if (typeof superClass !== "function" && superClass !== null) {
-	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
-	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
-	}
-	
-	var MyConventions = function (_Component) {
-	  _inherits(MyConventions, _Component);
-	
-	  function MyConventions(props) {
-	    _classCallCheck(this, MyConventions);
-	
-	    var _this = _possibleConstructorReturn(this, (MyConventions.__proto__ || Object.getPrototypeOf(MyConventions)).call(this, props));
-	
-	    _this.state = { conventions: [] };
-	    return _this;
-	  }
-	
-	  _createClass(MyConventions, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var conventions = [];
-	
-	      if (this.props.userInfo) {
-	        conventions = this.props.userInfo.myConventions;
-	      }
-	
-	      this.props.fetchMyConventions(conventions);
-	    }
-	  }, {
-	    key: 'handleClick',
-	    value: function handleClick() {
-	      var clickResult = this._id;
-	      _reactRouter.browserHistory.push('/conventions/' + clickResult);
-	    }
-	  }, {
-	    key: 'deleteClickHandle',
-	    value: function deleteClickHandle(e) {
-	      var _this2 = this;
-	
-	      e.preventDefault();
-	      var clickResult = this[1]._id;
-	      var array = this[2].state.conventions;
-	      var index = void 0;
-	      this[2].state.conventions.forEach(function (con, i) {
-	        if (clickResult === con._id) {
-	          _this2[2].state.conventions.splice(i, 1);
-	          _this2[0].removeConvention(clickResult);
-	        }
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props,
-	          _props$myconventions = _props.myconventions,
-	          myconventions = _props$myconventions === undefined ? [] : _props$myconventions,
-	          isDashboard = _props.pathInfo;
-	
-	      return _react2.default.createElement('div', null, myconventions && myconventions.length > 0 && _react2.default.createElement('table', { className: 'table table-hover table-bordered' }, _react2.default.createElement('thead', null, _react2.default.createElement('tr', null, _react2.default.createElement('th', null, 'Convention Name'), isDashboard && _react2.default.createElement('th', null, 'Price Details'), _react2.default.createElement('th', null, 'Dates'), _react2.default.createElement('th', null, 'Address'), !isDashboard && _react2.default.createElement('th', null, 'Delete'))), _react2.default.createElement('tbody', null, myconventions.map(function (result) {
-	        var location = _utils2.default.locationFormatter(result.location);
-	
-	        return _react2.default.createElement('tr', { key: result._id, className: 'table-row' }, _react2.default.createElement('td', { onClick: this.handleClick.bind(result) }, result.name), isDashboard && _react2.default.createElement('td', { onClick: this.handleClick.bind(result) }, '$', result.price), _react2.default.createElement('td', null, result.startdate, ' -- ', result.enddate), _react2.default.createElement('td', { onClick: this.handleClick.bind(result) }, _react2.default.createElement('ul', { className: 'removeListBullet' }, _react2.default.createElement('li', null, location.locationName), _react2.default.createElement('li', null, location.address), _react2.default.createElement('li', null, location.city, ', ', location.state.toUpperCase(), ' ', location.zipcode))), !isDashboard && _react2.default.createElement('td', { onClick: this.deleteClickHandle.bind([this.props, result, this]) }, _react2.default.createElement('button', { type: 'button', className: 'btn btn-default' }, 'Remove ', _react2.default.createElement('span', {
-	          className: 'glyphicon glyphicon-remove-circle', 'aria-hidden': 'true',
-	          onClick: this.deleteClickHandle.bind([this.props, result, this])
-	        }))));
-	      }.bind(this)))), myconventions.length === 0 && _react2.default.createElement('p', null, 'No Conventions Found'));
-	    }
-	  }]);
-	
-	  return MyConventions;
-	}(_react.Component);
-	
-	function mapStateToProps(state) {
-	  return { userInfo: state.auth.userInfo, myconventions: state.convention.myconventions, userStuff: state.auth };
-	}
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, actions)(MyConventions);
-
-/***/ }),
+/* 334 */,
 /* 335 */
 /*!**********************!*\
   !*** ./src/utils.js ***!
@@ -57669,9 +57526,9 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
-	var _myConventions = __webpack_require__(/*! ../auth/user/my_profile_stuff/myConventions */ 334);
+	var _myConventionsContainer = __webpack_require__(/*! ../auth/user/my_profile_stuff/myConventions/myConventionsContainer */ 490);
 	
-	var _myConventions2 = _interopRequireDefault(_myConventions);
+	var _myConventionsContainer2 = _interopRequireDefault(_myConventionsContainer);
 	
 	function _interopRequireWildcard(obj) {
 	  if (obj && obj.__esModule) {
@@ -57719,7 +57576,7 @@
 	  _createClass(ConventionContainer, [{
 	    key: 'render',
 	    value: function render() {
-	      return _react2.default.createElement('div', { className: 'container' }, _react2.default.createElement('h3', null, 'My Conventions'), this.props.userInfo && _react2.default.createElement('div', null, _react2.default.createElement(_myConventions2.default, { userInfo: this.props.userInfo, pathInfo: this.props.pathInfo })));
+	      return _react2.default.createElement('div', { className: 'container' }, _react2.default.createElement('h3', null, 'My Conventions'), this.props.userInfo && _react2.default.createElement('div', null, _react2.default.createElement(_myConventionsContainer2.default, { userInfo: this.props.userInfo, pathInfo: this.props.pathInfo })));
 	    }
 	  }]);
 	
@@ -77328,6 +77185,244 @@
 	};
 	
 	var _types = __webpack_require__(/*! ../actions/types */ 282);
+
+/***/ }),
+/* 488 */,
+/* 489 */,
+/* 490 */
+/*!*******************************************************************************************!*\
+  !*** ./src/components/auth/user/my_profile_stuff/myConventions/myConventionsContainer.js ***!
+  \*******************************************************************************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	}();
+	
+	var _react = __webpack_require__(/*! react */ 2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 160);
+	
+	var _actions = __webpack_require__(/*! ../../../../../actions */ 279);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 208);
+	
+	var _oneConvention = __webpack_require__(/*! ./oneConvention */ 491);
+	
+	var _oneConvention2 = _interopRequireDefault(_oneConvention);
+	
+	function _interopRequireWildcard(obj) {
+	  if (obj && obj.__esModule) {
+	    return obj;
+	  } else {
+	    var newObj = {};if (obj != null) {
+	      for (var key in obj) {
+	        if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	      }
+	    }newObj.default = obj;return newObj;
+	  }
+	}
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+	
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	}
+	
+	function _possibleConstructorReturn(self, call) {
+	  if (!self) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+	}
+	
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	}
+	
+	var MyConventions = function (_Component) {
+	  _inherits(MyConventions, _Component);
+	
+	  function MyConventions(props) {
+	    _classCallCheck(this, MyConventions);
+	
+	    return _possibleConstructorReturn(this, (MyConventions.__proto__ || Object.getPrototypeOf(MyConventions)).call(this, props));
+	  }
+	
+	  _createClass(MyConventions, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var conventions = [];
+	
+	      if (this.props.userInfo) {
+	        conventions = this.props.userInfo.myConventions;
+	      }
+	
+	      this.props.fetchMyConventions(conventions);
+	    }
+	  }, {
+	    key: 'handleClick',
+	    value: function handleClick() {
+	      var clickResult = this._id;
+	      _reactRouter.browserHistory.push('/conventions/' + clickResult);
+	    }
+	  }, {
+	    key: 'deleteClickHandle',
+	    value: function deleteClickHandle(clicked) {
+	      var _this2 = this;
+	
+	      var clickResult = clicked._id;
+	
+	      this.props.myconventions.forEach(function (con, i) {
+	        if (clickResult === con._id) {
+	          _this2.props.myconventions.splice(i, 1);
+	          _this2.props.removeConvention(clickResult);
+	        }
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          _props$myconventions = _props.myconventions,
+	          myconventions = _props$myconventions === undefined ? [] : _props$myconventions,
+	          isDashboard = _props.pathInfo;
+	
+	      return _react2.default.createElement('div', null, myconventions && myconventions.length > 0 && _react2.default.createElement('table', { className: 'table table-hover table-bordered' }, _react2.default.createElement('thead', null, _react2.default.createElement('tr', null, _react2.default.createElement('th', null, 'Convention Name'), isDashboard && _react2.default.createElement('th', null, 'Price Details'), _react2.default.createElement('th', null, 'Dates'), _react2.default.createElement('th', null, 'Address'), !isDashboard && _react2.default.createElement('th', null, 'Delete'))), _react2.default.createElement('tbody', null, myconventions.map(function (result) {
+	        return _react2.default.createElement(_oneConvention2.default, {
+	          result: result,
+	          myconventions: myconventions,
+	          handleClick: this.handleClick,
+	          deleteClickHandle: this.deleteClickHandle,
+	          removeConvention: this.props.removeConvention,
+	          isDashboard: isDashboard,
+	          key: result._id
+	        });
+	      }.bind(this)))), myconventions.length === 0 && _react2.default.createElement('p', null, 'No Conventions Found'));
+	    }
+	  }]);
+	
+	  return MyConventions;
+	}(_react.Component);
+	
+	function mapStateToProps(state) {
+	  return { userInfo: state.auth.userInfo, myconventions: state.convention.myconventions, userStuff: state.auth };
+	}
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, actions)(MyConventions);
+
+/***/ }),
+/* 491 */
+/*!**********************************************************************************!*\
+  !*** ./src/components/auth/user/my_profile_stuff/myConventions/oneConvention.js ***!
+  \**********************************************************************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	}();
+	
+	var _react = __webpack_require__(/*! react */ 2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 208);
+	
+	var _utils = __webpack_require__(/*! ../../../../../utils.js */ 335);
+	
+	var _utils2 = _interopRequireDefault(_utils);
+	
+	var _lodash = __webpack_require__(/*! lodash */ 336);
+	
+	var _lodash2 = _interopRequireDefault(_lodash);
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+	
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	}
+	
+	function _possibleConstructorReturn(self, call) {
+	  if (!self) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+	}
+	
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	}
+	
+	var OneConvention = function (_Component) {
+	  _inherits(OneConvention, _Component);
+	
+	  function OneConvention(props) {
+	    _classCallCheck(this, OneConvention);
+	
+	    return _possibleConstructorReturn(this, (OneConvention.__proto__ || Object.getPrototypeOf(OneConvention)).call(this, props));
+	  }
+	
+	  _createClass(OneConvention, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          isDashboard = _props.isDashboard,
+	          result = _props.result;
+	
+	      var location = _utils2.default.locationFormatter(result.location);
+	
+	      return _react2.default.createElement('tr', { className: 'table-row' }, _react2.default.createElement('td', { onClick: this.props.handleClick.bind(result) }, result.name), isDashboard && _react2.default.createElement('td', { onClick: this.props.handleClick.bind(result) }, '$', result.price), _react2.default.createElement('td', null, result.startdate, ' -- ', result.enddate), _react2.default.createElement('td', { onClick: this.props.handleClick.bind(result) }, _react2.default.createElement('ul', { className: 'removeListBullet' }, _react2.default.createElement('li', null, location.locationName), _react2.default.createElement('li', null, location.address), _react2.default.createElement('li', null, location.city, ', ', location.state.toUpperCase(), ' ', location.zipcode))), !isDashboard && _react2.default.createElement('td', { onClick: this.props.deleteClickHandle.bind(this, result) }, _react2.default.createElement('button', { type: 'button', className: 'btn btn-default' }, 'Remove ', _react2.default.createElement('span', {
+	        className: 'glyphicon glyphicon-remove-circle', 'aria-hidden': 'true',
+	        onClick: this.props.deleteClickHandle.bind(this, result)
+	      }))));
+	    }
+	  }]);
+	
+	  return OneConvention;
+	}(_react.Component);
+	
+	exports.default = OneConvention;
 
 /***/ })
 /******/ ]);

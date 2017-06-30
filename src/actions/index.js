@@ -1,3 +1,5 @@
+import { browserHistory } from 'react-router'; // commits info about url to react router, and to make changes to url
+
 import {signIn, signUp, userEdit, getUser, getUserProfile, deleteConvention, joinConvention} from './funcs/user';
 import {getConvention, getAllConventions, getMyConventions, createConvention, edit} from './funcs/convention';
 import {getGroup, getAllGroups, createGroup, editGroup, leaveGroup, joinGroup, getGroupMembers} from './funcs/group';
@@ -51,6 +53,8 @@ export function addConventionToMyList(id) {
 
 export function signoutUser() {
   localStorage.removeItem('token');
+  browserHistory.push('/signin')
+
   return { type: UNAUTH_USER};
 }
 export function authError(error) {

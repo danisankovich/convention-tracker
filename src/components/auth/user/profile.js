@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../actions';
-import MyConventions from './my_profile_stuff/myConventions';
+import MyConventions from './my_profile_stuff/myConventions/myConventionsContainer';
 import Groups from './my_profile_stuff/groups/groups_container';
 
 class Profile extends Component {
@@ -15,10 +15,8 @@ class Profile extends Component {
   componentDidMount() {
     this.props.fetchInfo();
   }
-  show() {
-    const self = this[0];
-    const type = this[1];
-    const hide = self.state[type] === true ? true : false
+  show(type) {
+    const hide = this.state[type] === true ? true : false
     const resetObj = {
       showConventions: false,
       showGroups: false,
@@ -30,7 +28,7 @@ class Profile extends Component {
     } else {
       resetObj.showInfo = true;
     }
-    self.setState(resetObj);
+    this.setState(resetObj);
   }
   render() {
     let {userInfo} = this.props;
@@ -44,10 +42,10 @@ class Profile extends Component {
           </div>
           <div className='row'>
             <div className="col-sm-2 col-sm-offset-1">
-              <button className='btn btn-primary' onClick={this.show.bind([this, 'showInfo'])}>Show Info</button>
-              <button className='btn btn-primary' onClick={this.show.bind([this, 'showConventions'])}>Show Conventions ({this.props.userInfo.myConventions.length})</button>
-              <button className='btn btn-primary' onClick={this.show.bind([this, 'showGroups'])}>Show Groups ({this.props.userInfo.groups.length})</button>
-              <button className='btn btn-primary' onClick={this.show.bind([this, 'showInvites'])}>Show Pending Invites ({this.props.userInfo.invitedToGroups.length})</button>
+              <button className='btn btn-primary' onClick={this.show.bind(this, 'showInfo')}>Show Info</button>
+              <button className='btn btn-primary' onClick={this.show.bind(this, 'showConventions')}>Show Conventions ({this.props.userInfo.myConventions.length})</button>
+              <button className='btn btn-primary' onClick={this.show.bind(this, 'showGroups')}>Show Groups ({this.props.userInfo.groups.length})</button>
+              <button className='btn btn-primary' onClick={this.show.bind(this, 'showInvites')}>Show Pending Invites ({this.props.userInfo.invitedToGroups.length})</button>
             </div>
             <div className="col-sm-8 col-sm-offset-1">
               {this.state.showInfo && <div className="col-sm-offset-1">

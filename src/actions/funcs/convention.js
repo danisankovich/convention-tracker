@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { browserHistory } from 'react-router'; // commits info about url to react router, and to make changes to url
+import { browserHistory } from 'react-router';
 import {
   FETCH_CONVENTIONS,
   FETCH_MY_CONVENTIONS,

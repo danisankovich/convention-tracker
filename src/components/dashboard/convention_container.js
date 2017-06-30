@@ -3,7 +3,7 @@ import {connect} from 'react-redux';
 import * as actions from '../../actions';
 import { browserHistory } from 'react-router'
 import $ from 'jquery';
-import MyConventions from '../auth/user/my_profile_stuff/myConventions';
+import MyConventions from '../auth/user/my_profile_stuff/myConventions/myConventionsContainer';
 
 class ConventionContainer extends Component {
   constructor(props) {

@@ -371,3 +371,11 @@ td.rdtYear:hover {
   max-height: 200px;
   width: 200px;
 }
+
+
+.signUpInContainer {
+  border: 1px black solid;
+  border-radius: 15px;
+  padding: 0px 25px 25px 25px;
+  margin-top: 50px;
+}
