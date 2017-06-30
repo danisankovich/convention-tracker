@@ -17,7 +17,7 @@ class OneConvention extends Component {
       <tr className='table-row'>
         <td onClick={this.props.handleClick.bind(result)}>{result.name}</td>
         {isDashboard && <td onClick={this.props.handleClick.bind(result)}>${result.price}</td>}
-        <td>{result.startdate} -- {result.enddate}</td>
+        <td onClick={this.props.handleClick.bind(result)}>{result.startdate} -- {result.enddate}</td>
         <td onClick={this.props.handleClick.bind(result)}>
           <ul className='removeListBullet'>
             <li>{location.locationName}</li>
@@ -29,8 +29,8 @@ class OneConvention extends Component {
           <td onClick={this.props.deleteClickHandle.bind(this, result)}>
             <button type="button" className="btn btn-default">
               Remove <span
-              className="glyphicon glyphicon-remove-circle" aria-hidden="true"
-              onClick={this.props.deleteClickHandle.bind(this, result)}
+                className="glyphicon glyphicon-remove-circle" aria-hidden="true"
+                onClick={this.props.deleteClickHandle.bind(this, result)}
               ></span>
           </button>
         </td>}
