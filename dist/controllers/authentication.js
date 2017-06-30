@@ -214,38 +214,37 @@ exports.checkUser = function () {
       while (1) {
         switch (_context4.prev = _context4.next) {
           case 0:
-            console.log(req.query);
-            _context4.prev = 1;
-            _context4.next = 4;
+            _context4.prev = 0;
+            _context4.next = 3;
             return _user2.default.findOneAsync({ $or: [{ email: req.query.user }, { username: req.query.user }] });
 
-          case 4:
+          case 3:
             user = _context4.sent;
 
             if (user) {
-              _context4.next = 7;
+              _context4.next = 6;
               break;
             }
 
             return _context4.abrupt('return', res.send(false));
 
-          case 7:
+          case 6:
             res.send({ id: user._id, user: user.username });
-            _context4.next = 13;
+            _context4.next = 12;
             break;
 
-          case 10:
-            _context4.prev = 10;
-            _context4.t0 = _context4['catch'](1);
+          case 9:
+            _context4.prev = 9;
+            _context4.t0 = _context4['catch'](0);
 
             res.send(_context4.t0);
 
-          case 13:
+          case 12:
           case 'end':
             return _context4.stop();
         }
       }
-    }, _callee4, undefined, [[1, 10]]);
+    }, _callee4, undefined, [[0, 9]]);
   }));
 
   return function (_x8, _x9) {
@@ -262,44 +261,41 @@ exports.editInfo = function () {
           case 0:
             data = JSON.parse(req.body.data);
             value = data.value, type = data.type;
-
-            console.log(value, type);
-
-            _context5.prev = 3;
-            _context5.next = 6;
+            _context5.prev = 2;
+            _context5.next = 5;
             return _user2.default.findByIdAsync(data.user);
 
-          case 6:
+          case 5:
             user = _context5.sent;
 
             if (user) {
-              _context5.next = 9;
+              _context5.next = 8;
               break;
             }
 
             return _context5.abrupt('return', res.send('No User'));
 
-          case 9:
+          case 8:
 
             user[type] = value || user[type];
 
             user.save();
             res.send(user);
-            _context5.next = 17;
+            _context5.next = 16;
             break;
 
-          case 14:
-            _context5.prev = 14;
-            _context5.t0 = _context5['catch'](3);
+          case 13:
+            _context5.prev = 13;
+            _context5.t0 = _context5['catch'](2);
 
             res.send(_context5.t0);
 
-          case 17:
+          case 16:
           case 'end':
             return _context5.stop();
         }
       }
-    }, _callee5, undefined, [[3, 14]]);
+    }, _callee5, undefined, [[2, 13]]);
   }));
 
   return function (_x10, _x11, _x12) {

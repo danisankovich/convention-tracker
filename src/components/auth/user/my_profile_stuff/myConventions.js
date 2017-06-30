@@ -35,12 +35,11 @@ class MyConventions extends Component {
     });
   }
   render() {
-    const isDashboard = this.props.pathInfo;
-    this.state.conventions = this.props.myconventions || []
-    // if(this.state.conventions && this.props.userInfo) {
+    const { myconventions = [], pathInfo: isDashboard } = this.props;
+
     return (
       <div>
-        {this.state.conventions && this.state.conventions.length > 0 &&
+        {myconventions && myconventions.length > 0 &&
           <table className="table table-hover table-bordered">
             <thead>
               <tr>
@@ -52,7 +51,7 @@ class MyConventions extends Component {
               </tr>
             </thead>
             <tbody>
-              {this.state.conventions.map(function(result) {
+              {myconventions.map(function(result) {
                 const location = utils.locationFormatter(result.location);
 
                 return (
@@ -82,7 +81,7 @@ class MyConventions extends Component {
             </tbody>
           </table>
         }
-        {this.state.conventions.length === 0 && <p>No Conventions Found</p>}
+        {myconventions.length === 0 && <p>No Conventions Found</p>}
       </div>
     )
   }

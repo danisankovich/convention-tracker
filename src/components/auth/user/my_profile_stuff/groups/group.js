@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import * as actions from '../../../../../actions';
 import utils from '../../../../../utils'
@@ -7,13 +7,13 @@ import $ from 'jquery';
 
 class SingleGroup extends Component {
   componentWillMount() {
-    this.setState({group: '', inputValue: ''})
+    this.setState({ inputValue: ''});
   }
   componentDidMount() {
     let id = this.props.location.pathname.split('groups/')[1]
 
     this.props.fetchGroup(id);
-
+    this.props.fetchInfo();
   }
   handleClick(type) {
     if(this.props.userInfo._id = this.props.data.group.creatorId) {
@@ -21,9 +21,9 @@ class SingleGroup extends Component {
     }
   }
 
-  handleFormSubmit(e) { //called with props from submit form
+  handleFormSubmit(e) {
     e.preventDefault();
-    let group = this.state.group
+    let group = this.props.data.group
     group.type = this.state.type
 
     this.props.editGroup({group}, this.props.userInfo._id)
@@ -54,7 +54,7 @@ class SingleGroup extends Component {
   inviteUser(e) {
     e.preventDefault();
 
-    const group = this.state.group;
+    const group = this.props.data.group;
     $.ajax({
       url: `/api/checkUser`,
       type: "GET",
@@ -76,22 +76,24 @@ class SingleGroup extends Component {
     });
   }
   render() {
-    let {userInfo } = this.props;
-    let data = this.props.data || {}
-    let { group, members, conventions, conMemberTracker } = data
+    const { userInfo, data = {} } = this.props;
+    const { group, members, conventions, conMemberTracker } = data
 
-    this.state.group = group
-
-    let incrementKey = 0
     return (
       <div>
         {group && userInfo && members &&
           <div className="col-sm-10 col-sm-offset-1">
-            <button onClick={this.joinGroup.bind(this)}>Join Group</button>
+            <button className="btn btn-primary" onClick={this.joinGroup.bind(this)}>Join Group</button>
             <form onSubmit={this.inviteUser.bind(this)}>
               <fieldset>
-                <input type='text' onChange={this.inputChange.bind(this)} />
-                <button type='submit'>Invite User</button>
+                <div>
+                  <div className='col-sm-4'>
+                    <input type='text' className='form-control' onChange={this.inputChange.bind(this)} />
+                  </div>
+                  <div className='col-sm-2'>
+                    <button className="btn btn-info" type='submit'>Invite User</button>
+                  </div>
+                </div>
               </fieldset>
             </form>
             <div className="row">
@@ -150,7 +152,6 @@ class SingleGroup extends Component {
             </div>
           </div>
         }
-        {!group || !userInfo || !members && <p>Loading</p>}
       </div>
     )
   };

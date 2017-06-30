@@ -48,7 +48,7 @@ var groupCreatorController = function groupCreatorController(req, res, data) {
               if (error) res.send(error);
 
               if (checkGroup) {
-                _context2.next = 28;
+                _context2.next = 26;
                 break;
               }
 
@@ -98,40 +98,39 @@ var groupCreatorController = function groupCreatorController(req, res, data) {
               }()));
 
             case 13:
-              console.log(data.creatorId);
-              _context2.next = 16;
+              _context2.next = 15;
               return User.findByIdAndUpdateAsync(data.creatorId, { "$push": { "groups": group._id } });
 
-            case 16:
+            case 15:
               creator = _context2.sent;
 
-              console.log(creator);
+
               if (!creator) res.send('User Update Failed');
 
               group.save();
               res.json(group);
-              _context2.next = 26;
+              _context2.next = 24;
               break;
 
-            case 23:
-              _context2.prev = 23;
+            case 21:
+              _context2.prev = 21;
               _context2.t0 = _context2['catch'](3);
 
               res.send(_context2.t0);
 
-            case 26:
-              _context2.next = 29;
+            case 24:
+              _context2.next = 27;
               break;
 
-            case 28:
+            case 26:
               groupCreatorController(req, res, data);
 
-            case 29:
+            case 27:
             case 'end':
               return _context2.stop();
           }
         }
-      }, _callee2, undefined, [[3, 23]]);
+      }, _callee2, undefined, [[3, 21]]);
     }));
 
     return function (_x, _x2) {
@@ -404,43 +403,41 @@ exports.joinGroupTwo = function () {
             groupId = req.body.groupId;
             token = req.headers.authorization;
 
-            console.log('asdasdf');
-
             if (!token) {
-              _context8.next = 37;
+              _context8.next = 36;
               break;
             }
 
-            _context8.prev = 4;
+            _context8.prev = 3;
             decoded = _jwtSimple2.default.decode(token, _config2.default.secret);
-            _context8.next = 8;
+            _context8.next = 7;
             return User.findByIdAsync(decoded.sub);
 
-          case 8:
+          case 7:
             userToUpdate = _context8.sent;
 
             if (userToUpdate) {
-              _context8.next = 11;
+              _context8.next = 10;
               break;
             }
 
             return _context8.abrupt('return', res.send('No User'));
 
-          case 11:
-            _context8.next = 13;
+          case 10:
+            _context8.next = 12;
             return Group.findByIdAsync(groupId);
 
-          case 13:
+          case 12:
             groupToUpdate = _context8.sent;
 
             if (groupToUpdate) {
-              _context8.next = 16;
+              _context8.next = 15;
               break;
             }
 
             return _context8.abrupt('return', res.send('No Group'));
 
-          case 16:
+          case 15:
             groupIndex = userToUpdate.invitedToGroups.indexOf(groupToUpdate._id);
 
             if (groupIndex > -1) {
@@ -459,10 +456,10 @@ exports.joinGroupTwo = function () {
             userToUpdate.save();
             groupToUpdate.save();
 
-            _context8.next = 24;
+            _context8.next = 23;
             return findOneGroupHelper(groupId);
 
-          case 24:
+          case 23:
             _ref10 = _context8.sent;
             group = _ref10.group;
             members = _ref10.members;
@@ -472,27 +469,27 @@ exports.joinGroupTwo = function () {
 
             res.send({ group: group, members: members, conventions: conventions, conMemberTracker: conMemberTracker });
 
-            _context8.next = 35;
+            _context8.next = 34;
             break;
 
-          case 32:
-            _context8.prev = 32;
-            _context8.t0 = _context8['catch'](4);
+          case 31:
+            _context8.prev = 31;
+            _context8.t0 = _context8['catch'](3);
             return _context8.abrupt('return', res.status(401).send('authorization required'));
 
-          case 35:
-            _context8.next = 38;
+          case 34:
+            _context8.next = 37;
             break;
 
-          case 37:
+          case 36:
             res.send({ user: "NO_USER" });
 
-          case 38:
+          case 37:
           case 'end':
             return _context8.stop();
         }
       }
-    }, _callee8, undefined, [[4, 32]]);
+    }, _callee8, undefined, [[3, 31]]);
   }));
 
   return function (_x11, _x12) {

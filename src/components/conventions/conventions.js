@@ -70,7 +70,7 @@ class Convention extends Component {
           </table>
 
         </div>}
-        {!conventions && <h1>Loading</h1>}
+        {!conventions && <h1>No Conventions Found With Your Filters</h1>}
       </div>
     );
   };

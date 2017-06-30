@@ -20,7 +20,7 @@ class SingleConvention extends Component {
 
   handleFormSubmit(e) { //called with props from submit form
     e.preventDefault();
-    let convention = this.state.convention
+    let convention = this.props.convention
     convention.type = this.state.type
 
     this.props.editConvention({convention}, this.props.userInfo._id)
@@ -42,14 +42,13 @@ class SingleConvention extends Component {
   render() {
     let {convention, userInfo} = this.props;
     let usCities = []
-    this.state.convention = convention;
-    let incrementKey = 0
+
     return (
       <div>
         {
           convention &&
             <div className="col-sm-10 col-sm-offset-1">
-              {userInfo && <button onClick={this.goingToConvention.bind(this)}>Going</button>}
+              {userInfo && (userInfo.myConventions.indexOf(convention._id) === -1) && <button onClick={this.goingToConvention.bind(this)}>Going</button>}
               <hr />
               <div className="row">
                 <div className="col-sm-12">
