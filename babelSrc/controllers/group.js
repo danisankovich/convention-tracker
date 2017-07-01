@@ -202,3 +202,27 @@ exports.joinGroupTwo = async (req, res) => {
     res.send({user: "NO_USER"})
   }
 }
+
+exports.leaveGroup = async (req, res) => {
+  const { groupId, userId } = req.body;
+  console.log(req.body)
+
+  try {
+    const group = await Group.findByIdAsync(groupId);
+    if (!group) res.send('No Group Found');
+
+    const user = await User.findByIdAsync(userId);
+    if (!user) res.send('No User Found');
+
+    const groupIndex = group.memberList.indexOf(userId);
+    const userIndex = user.groups.indexOf(groupId);
+    group.memberList.splice(groupIndex, 1);
+    user.groups.splice(userIndex, 1);
+
+    user.save()
+    group.save();
+  } catch (err) {
+    res.send(end);
+  }
+  res.send();
+}

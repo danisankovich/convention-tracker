@@ -18,5 +18,5 @@ router.get('/group/:id', _group2.default.findOneGroup);
 router.post('/inviteToGroup/:id', _group2.default.inviteToGroup);
 router.post('/new', _group2.default.createGroup);
 router.post('/join', _group2.default.joinGroupTwo);
-
+router.post('/leave', _group2.default.leaveGroup);
 module.exports = router;

@@ -607,3 +607,65 @@ exports.joinGroupTwo = function () {
     return _ref12.apply(this, arguments);
   };
 }();
+
+exports.leaveGroup = function () {
+  var _ref14 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee12(req, res) {
+    var _req$body, groupId, userId, group, user, groupIndex, userIndex;
+
+    return _regenerator2.default.wrap(function _callee12$(_context12) {
+      while (1) {
+        switch (_context12.prev = _context12.next) {
+          case 0:
+            _req$body = req.body, groupId = _req$body.groupId, userId = _req$body.userId;
+
+            console.log(req.body);
+
+            _context12.prev = 2;
+            _context12.next = 5;
+            return _group2.default.findByIdAsync(groupId);
+
+          case 5:
+            group = _context12.sent;
+
+            if (!group) res.send('No Group Found');
+
+            _context12.next = 9;
+            return _user2.default.findByIdAsync(userId);
+
+          case 9:
+            user = _context12.sent;
+
+            if (!user) res.send('No User Found');
+
+            groupIndex = group.memberList.indexOf(userId);
+            userIndex = user.groups.indexOf(groupId);
+
+            group.memberList.splice(groupIndex, 1);
+            user.groups.splice(userIndex, 1);
+
+            user.save();
+            group.save();
+            _context12.next = 22;
+            break;
+
+          case 19:
+            _context12.prev = 19;
+            _context12.t0 = _context12['catch'](2);
+
+            res.send(end);
+
+          case 22:
+            res.send();
+
+          case 23:
+          case 'end':
+            return _context12.stop();
+        }
+      }
+    }, _callee12, undefined, [[2, 19]]);
+  }));
+
+  return function (_x20, _x21) {
+    return _ref14.apply(this, arguments);
+  };
+}();
