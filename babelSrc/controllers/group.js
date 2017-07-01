@@ -9,38 +9,37 @@ import config from '../../config';
 
 import randomKeyGen from '../services/randomkeygen';
 
-const groupCreatorController = (req, res, data) => {
+const groupCreatorController = async (req, res, data) => {
   const shareId = randomKeyGen(6);
 
-  Group.findOne({shareId: shareId}, async (error, checkGroup) => {
-    if (error) res.send(error)
-    if (!checkGroup) {
-      data.shareId = shareId;
+  const checkGroup = await Group.findOneAsync({ shareId })
 
-      try {
-        const group = await Group.createAsync(data);
-        if (!group) res.send('No Group Found');
+  if (!checkGroup) {
+    data.shareId = shareId;
 
-        const users = await User.findAsync({'_id': { $in: data.invitedList}});
+    try {
+      const group = await Group.createAsync(data);
+      if (!group) res.send('No Group Found');
 
-        await Promise.all(users.map(async (u) => {
-          const updated = await User.updateAsync({ "_id": u._id}, { "$push": { "invitedToGroups": group._id } });
-          if (!updated) res.send('User Update Failed');
-        }));
+      const users = await User.findAsync({'_id': { $in: data.invitedList}});
 
-        const creator = await User.findByIdAndUpdateAsync(data.creatorId, { "$push": { "groups": group._id } });
+      await Promise.all(users.map(async (u) => {
+        const updated = await User.updateAsync({ "_id": u._id}, { "$push": { "invitedToGroups": group._id } });
+        if (!updated) res.send('User Update Failed');
+      }));
 
-        if (!creator) res.send('User Update Failed');
+      const creator = await User.findByIdAndUpdateAsync(data.creatorId, { "$push": { "groups": group._id } });
 
-        group.save();
-        res.json(group);
-      } catch (err) {
-        res.send(err);
-      }
-    } else {
-      groupCreatorController(req, res, data)
+      if (!creator) res.send('User Update Failed');
+
+      group.save();
+      res.json(group);
+    } catch (err) {
+      res.send(err);
     }
-  })
+  } else {
+    groupCreatorController(req, res, data)
+  }
 }
 exports.createGroup = (req, res) => {
   var data = {
@@ -57,37 +56,47 @@ exports.createGroup = (req, res) => {
   groupCreatorController(req, res, data);
 }
 
-exports.findByShareId = (req, res) => {
-  Group.findOne({shareId: req.params.id}, (err, group) => {
-    if (err) res.send(err)
+exports.findByShareId = async (req, res) => {
+  try {
+    const group = await Group.findOneAsync({shareId: req.params.id});
+
     if (!group) {
       res.send(`No Group Found With Id ${shareId}`)
     }
     res.send(group);
-  })
+  } catch (err) {
+    res.send(err);
+  }
 }
 
-exports.findById = (req, res) => {
-  Group.findById(req.params.id, (err, group) => {
-    if (err) res.send(err)
+exports.findById = async (req, res) => {
+  try {
+    const group = await Group.findByIdAsync(req.params.id);
+    if (!group) res.send('No Group Found');
     res.send(group);
-  })
+  } catch (err) {
+    res.send(err);
+  }
 }
 
-exports.inviteToGroup = (req, res) => {
-  Group.findById(req.params.id, (err, group) => {
-    if (err) res.send(err)
-    User.findById(req.body._id, (err, user) => {
-      if (user.groups.indexOf(group._id) === -1 && user.invitedToGroups.indexOf(group._id) === -1) {
-        user.invitedToGroups.push(group._id);
-        user.save();
-      } if (group.memberList.indexOf(req.body._id) === -1 && group.invitedList.indexOf(req.body._id) === -1) {
-        group.invitedList.push(req.body._id);
-        group.save();
-      }
-      res.send(group);
-    })
-  })
+exports.inviteToGroup = async (req, res) => {
+  try {
+    const group = await Group.findByIdAsync(req.params.id);
+    if (!group) res.send('no group found');
+    const user = await User.findByIdAsync(req.body._id);
+    if (!user) res.send('no user found');
+
+    if (user.groups.indexOf(group._id) === -1 && user.invitedToGroups.indexOf(group._id) === -1) {
+      user.invitedToGroups.push(group._id);
+      user.save();
+    } if (group.memberList.indexOf(req.body._id) === -1 && group.invitedList.indexOf(req.body._id) === -1) {
+      group.invitedList.push(req.body._id);
+      group.save();
+    }
+    res.send(group);
+  } catch (err) {
+    res.send(err);
+  }
 }
 
 exports.findMyGroups = async (req, res) => {
