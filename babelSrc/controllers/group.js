@@ -204,25 +204,31 @@ exports.joinGroupTwo = async (req, res) => {
 }
 
 exports.leaveGroup = async (req, res) => {
-  const { groupId, userId } = req.body;
-  console.log(req.body)
+  const groupId = req.params.groupId;
+  const token = req.headers.authorization;
 
-  try {
-    const group = await Group.findByIdAsync(groupId);
-    if (!group) res.send('No Group Found');
+  if (token) {
+    const decoded = jwt.decode(token, config.secret);
 
-    const user = await User.findByIdAsync(userId);
-    if (!user) res.send('No User Found');
+    try {
+      console.log(decoded, groupId);
+      const group = await Group.findByIdAsync(groupId);
+      if (!group) res.send('No Group Found');
 
-    const groupIndex = group.memberList.indexOf(userId);
-    const userIndex = user.groups.indexOf(groupId);
-    group.memberList.splice(groupIndex, 1);
-    user.groups.splice(userIndex, 1);
+      const user = await User.findByIdAsync(decoded.sub);
+      if (!user) res.send('No User Found');
 
-    user.save()
-    group.save();
-  } catch (err) {
-    res.send(end);
+      const groupIndex = group.memberList.indexOf(decoded.sub);
+      const userIndex = user.groups.indexOf(groupId);
+      group.memberList.splice(groupIndex, 1);
+      user.groups.splice(userIndex, 1);
+
+      user.save()
+      group.save();
+      return res.send(group);
+    } catch (err) {
+      return res.send(end);
+    }
   }
-  res.send();
+  return res.send('Operation Failed');
 }

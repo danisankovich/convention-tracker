@@ -125,8 +125,10 @@ export function fetchGroup(id) {
   }
 }
 
-export function leavingGroup(data) {
-  return 'leaving group now'
+export function leavingGroup(groupId) {
+  return function(dispatch) {
+    leaveGroup(groupId, dispatch)
+  }
 }
 
 export function joiningGroup(data) {

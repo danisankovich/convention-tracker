@@ -48,6 +48,11 @@ class SingleGroup extends Component {
       this.props.joiningGroup(group._id);
     }
   }
+  leaveGroup() {
+    const groupId = this.props.data.group._id;
+    this.props.leavingGroup(groupId);
+    this.props.fetchGroup(groupId);
+  }
   inputChange(e) {
     this.state.invitedUser = e.target.value;
   }
@@ -96,6 +101,7 @@ class SingleGroup extends Component {
                 </div>
               </fieldset>
             </form>
+            <button onClick={this.leaveGroup.bind(this)}>LEAVE GROUP</button>
             <div className="row">
               <div className="col-sm-12">
                 <div className="col-sm-5 col-sm-offset-1">

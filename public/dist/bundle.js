@@ -30709,8 +30709,10 @@
 	  };
 	}
 	
-	function leavingGroup(data) {
-	  return 'leaving group now';
+	function leavingGroup(groupId) {
+	  return function (dispatch) {
+	    (0, _group.leaveGroup)(groupId, dispatch);
+	  };
 	}
 	
 	function joiningGroup(data) {
@@ -40497,6 +40499,23 @@
 	      "authorization": token
 	    },
 	    data: { groupId: data }
+	  }).done(function (response) {
+	    dispatch({
+	      type: _types.FETCH_SINGLE_GROUP,
+	      payload: response
+	    });
+	  });
+	};
+	
+	exports.leaveGroup = function (groupId, dispatch) {
+	  var token = localStorage.getItem('token');
+	
+	  _jquery2.default.ajax({
+	    url: '/api/groups/leave/' + groupId,
+	    type: "PUT",
+	    headers: {
+	      "authorization": token
+	    }
 	  }).done(function (response) {
 	    dispatch({
 	      type: _types.FETCH_SINGLE_GROUP,
@@ -76842,6 +76861,13 @@
 	      }
 	    }
 	  }, {
+	    key: 'leaveGroup',
+	    value: function leaveGroup() {
+	      var groupId = this.props.data.group._id;
+	      this.props.leavingGroup(groupId);
+	      this.props.fetchGroup(groupId);
+	    }
+	  }, {
 	    key: 'inputChange',
 	    value: function inputChange(e) {
 	      this.state.invitedUser = e.target.value;
@@ -76886,7 +76912,7 @@
 	          conventions = data.conventions,
 	          conMemberTracker = data.conMemberTracker;
 	
-	      return _react2.default.createElement('div', null, group && userInfo && members && _react2.default.createElement('div', { className: 'col-sm-10 col-sm-offset-1' }, _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.joinGroup.bind(this) }, 'Join Group'), _react2.default.createElement('form', { onSubmit: this.inviteUser.bind(this) }, _react2.default.createElement('fieldset', null, _react2.default.createElement('div', null, _react2.default.createElement('div', { className: 'col-sm-4' }, _react2.default.createElement('input', { type: 'text', className: 'form-control', onChange: this.inputChange.bind(this) })), _react2.default.createElement('div', { className: 'col-sm-2' }, _react2.default.createElement('button', { className: 'btn btn-info', type: 'submit' }, 'Invite User'))))), _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('div', { className: 'col-sm-5 col-sm-offset-1' }, _react2.default.createElement('h3', null, 'Group Details: '), _react2.default.createElement('ul', null, _react2.default.createElement('li', null, 'Name: ', group.name), _react2.default.createElement('li', null, 'Affiliation: ', group.affiliation), _react2.default.createElement('li', null, 'Group Creator: ', group.creatorName)), _react2.default.createElement('h3', null, 'Notes: '), _react2.default.createElement('p', null, group.notes, ' '), _react2.default.createElement('h3', null, 'Members:'), _react2.default.createElement('ul', null, members.map(function (member) {
+	      return _react2.default.createElement('div', null, group && userInfo && members && _react2.default.createElement('div', { className: 'col-sm-10 col-sm-offset-1' }, _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.joinGroup.bind(this) }, 'Join Group'), _react2.default.createElement('form', { onSubmit: this.inviteUser.bind(this) }, _react2.default.createElement('fieldset', null, _react2.default.createElement('div', null, _react2.default.createElement('div', { className: 'col-sm-4' }, _react2.default.createElement('input', { type: 'text', className: 'form-control', onChange: this.inputChange.bind(this) })), _react2.default.createElement('div', { className: 'col-sm-2' }, _react2.default.createElement('button', { className: 'btn btn-info', type: 'submit' }, 'Invite User'))))), _react2.default.createElement('button', { onClick: this.leaveGroup.bind(this) }, 'LEAVE GROUP'), _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('div', { className: 'col-sm-5 col-sm-offset-1' }, _react2.default.createElement('h3', null, 'Group Details: '), _react2.default.createElement('ul', null, _react2.default.createElement('li', null, 'Name: ', group.name), _react2.default.createElement('li', null, 'Affiliation: ', group.affiliation), _react2.default.createElement('li', null, 'Group Creator: ', group.creatorName)), _react2.default.createElement('h3', null, 'Notes: '), _react2.default.createElement('p', null, group.notes, ' '), _react2.default.createElement('h3', null, 'Members:'), _react2.default.createElement('ul', null, members.map(function (member) {
 	        return _react2.default.createElement('li', { key: member._id }, member.username);
 	      })), _react2.default.createElement('h3', null, 'Conventions:'), _react2.default.createElement('table', { className: 'table table-hover table-bordered' }, _react2.default.createElement('thead', null, _react2.default.createElement('tr', null, _react2.default.createElement('th', null, 'Convention Name'), _react2.default.createElement('th', null, 'Price Details'), _react2.default.createElement('th', null, 'Address'), _react2.default.createElement('th', null, 'Attendees'))), _react2.default.createElement('tbody', null, conventions.map(function (result) {
 	        var location = _utils2.default.locationFormatter(result.location);

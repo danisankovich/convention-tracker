@@ -610,34 +610,40 @@ exports.joinGroupTwo = function () {
 
 exports.leaveGroup = function () {
   var _ref14 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee12(req, res) {
-    var _req$body, groupId, userId, group, user, groupIndex, userIndex;
-
+    var groupId, token, decoded, group, user, groupIndex, userIndex;
     return _regenerator2.default.wrap(function _callee12$(_context12) {
       while (1) {
         switch (_context12.prev = _context12.next) {
           case 0:
-            _req$body = req.body, groupId = _req$body.groupId, userId = _req$body.userId;
+            groupId = req.params.groupId;
+            token = req.headers.authorization;
 
-            console.log(req.body);
+            if (!token) {
+              _context12.next = 26;
+              break;
+            }
 
-            _context12.prev = 2;
-            _context12.next = 5;
+            decoded = _jwtSimple2.default.decode(token, _config2.default.secret);
+            _context12.prev = 4;
+
+            console.log(decoded, groupId);
+            _context12.next = 8;
             return _group2.default.findByIdAsync(groupId);
 
-          case 5:
+          case 8:
             group = _context12.sent;
 
             if (!group) res.send('No Group Found');
 
-            _context12.next = 9;
-            return _user2.default.findByIdAsync(userId);
+            _context12.next = 12;
+            return _user2.default.findByIdAsync(decoded.sub);
 
-          case 9:
+          case 12:
             user = _context12.sent;
 
             if (!user) res.send('No User Found');
 
-            groupIndex = group.memberList.indexOf(userId);
+            groupIndex = group.memberList.indexOf(decoded.sub);
             userIndex = user.groups.indexOf(groupId);
 
             group.memberList.splice(groupIndex, 1);
@@ -645,24 +651,22 @@ exports.leaveGroup = function () {
 
             user.save();
             group.save();
-            _context12.next = 22;
-            break;
-
-          case 19:
-            _context12.prev = 19;
-            _context12.t0 = _context12['catch'](2);
-
-            res.send(end);
-
-          case 22:
-            res.send();
+            return _context12.abrupt('return', res.send(group));
 
           case 23:
+            _context12.prev = 23;
+            _context12.t0 = _context12['catch'](4);
+            return _context12.abrupt('return', res.send(end));
+
+          case 26:
+            return _context12.abrupt('return', res.send('Operation Failed'));
+
+          case 27:
           case 'end':
             return _context12.stop();
         }
       }
-    }, _callee12, undefined, [[2, 19]]);
+    }, _callee12, undefined, [[4, 23]]);
   }));
 
   return function (_x20, _x21) {
