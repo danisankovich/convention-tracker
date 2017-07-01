@@ -57333,7 +57333,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      // const { handleSubmit, fields: {phoneNumber, email, photo }, userInfo} = this.props;
 	      var userInfo = this.props.userInfo;
 	
 	      if (userInfo) {

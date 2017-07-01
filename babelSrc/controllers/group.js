@@ -1,14 +1,13 @@
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user');
-var Group = require('../models/group');
-var Convention = require('../models/convention');
-import config from '../../config';
+import express, { Router } from 'express';
 import jwt from 'jwt-simple';
-
 import _ from 'lodash';
 
-const randomKeyGen = require('../services/randomkeygen')
+import User from '../models/user';
+import Group from '../models/group';
+import Convention from '../models/convention';
+import config from '../../config';
+
+import randomKeyGen from '../services/randomkeygen';
 
 const groupCreatorController = (req, res, data) => {
   const shareId = randomKeyGen(6);

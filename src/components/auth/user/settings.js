@@ -39,7 +39,6 @@ class Settings extends Component {
   }
 
   render() {
-    // const { handleSubmit, fields: {phoneNumber, email, photo }, userInfo} = this.props;
     const {userInfo} = this.props;
     if (userInfo) {
       if (!this.state.phoneNumber) this.state.phoneNumber = userInfo.phoneNumber;

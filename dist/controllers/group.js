@@ -12,9 +12,9 @@ var _asyncToGenerator2 = require('babel-runtime/helpers/asyncToGenerator');
 
 var _asyncToGenerator3 = _interopRequireDefault(_asyncToGenerator2);
 
-var _config = require('../../config');
+var _express = require('express');
 
-var _config2 = _interopRequireDefault(_config);
+var _express2 = _interopRequireDefault(_express);
 
 var _jwtSimple = require('jwt-simple');
 
@@ -24,21 +24,32 @@ var _lodash = require('lodash');
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
+var _user = require('../models/user');
+
+var _user2 = _interopRequireDefault(_user);
+
+var _group = require('../models/group');
+
+var _group2 = _interopRequireDefault(_group);
+
+var _convention = require('../models/convention');
+
+var _convention2 = _interopRequireDefault(_convention);
+
+var _config = require('../../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+var _randomkeygen = require('../services/randomkeygen');
+
+var _randomkeygen2 = _interopRequireDefault(_randomkeygen);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-var express = require('express');
-var router = express.Router();
-var User = require('../models/user');
-var Group = require('../models/group');
-var Convention = require('../models/convention');
-
-
-var randomKeyGen = require('../services/randomkeygen');
-
 var groupCreatorController = function groupCreatorController(req, res, data) {
-  var shareId = randomKeyGen(6);
+  var shareId = (0, _randomkeygen2.default)(6);
 
-  Group.findOne({ shareId: shareId }, function () {
+  _group2.default.findOne({ shareId: shareId }, function () {
     var _ref = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee2(error, checkGroup) {
       var group, users, creator;
       return _regenerator2.default.wrap(function _callee2$(_context2) {
@@ -56,7 +67,7 @@ var groupCreatorController = function groupCreatorController(req, res, data) {
 
               _context2.prev = 3;
               _context2.next = 6;
-              return Group.createAsync(data);
+              return _group2.default.createAsync(data);
 
             case 6:
               group = _context2.sent;
@@ -64,7 +75,7 @@ var groupCreatorController = function groupCreatorController(req, res, data) {
               if (!group) res.send('No Group Found');
 
               _context2.next = 10;
-              return User.findAsync({ '_id': { $in: data.invitedList } });
+              return _user2.default.findAsync({ '_id': { $in: data.invitedList } });
 
             case 10:
               users = _context2.sent;
@@ -77,7 +88,7 @@ var groupCreatorController = function groupCreatorController(req, res, data) {
                       switch (_context.prev = _context.next) {
                         case 0:
                           _context.next = 2;
-                          return User.updateAsync({ "_id": u._id }, { "$push": { "invitedToGroups": group._id } });
+                          return _user2.default.updateAsync({ "_id": u._id }, { "$push": { "invitedToGroups": group._id } });
 
                         case 2:
                           updated = _context.sent;
@@ -99,7 +110,7 @@ var groupCreatorController = function groupCreatorController(req, res, data) {
 
             case 13:
               _context2.next = 15;
-              return User.findByIdAndUpdateAsync(data.creatorId, { "$push": { "groups": group._id } });
+              return _user2.default.findByIdAndUpdateAsync(data.creatorId, { "$push": { "groups": group._id } });
 
             case 15:
               creator = _context2.sent;
@@ -156,7 +167,7 @@ exports.createGroup = function (req, res) {
 };
 
 exports.findByShareId = function (req, res) {
-  Group.findOne({ shareId: req.params.id }, function (err, group) {
+  _group2.default.findOne({ shareId: req.params.id }, function (err, group) {
     if (err) res.send(err);
     if (!group) {
       res.send('No Group Found With Id ' + shareId);
@@ -166,16 +177,16 @@ exports.findByShareId = function (req, res) {
 };
 
 exports.findById = function (req, res) {
-  Group.findById(req.params.id, function (err, group) {
+  _group2.default.findById(req.params.id, function (err, group) {
     if (err) res.send(err);
     res.send(group);
   });
 };
 
 exports.inviteToGroup = function (req, res) {
-  Group.findById(req.params.id, function (err, group) {
+  _group2.default.findById(req.params.id, function (err, group) {
     if (err) res.send(err);
-    User.findById(req.body._id, function (err, user) {
+    _user2.default.findById(req.body._id, function (err, user) {
       if (user.groups.indexOf(group._id) === -1 && user.invitedToGroups.indexOf(group._id) === -1) {
         user.invitedToGroups.push(group._id);
         user.save();
@@ -205,13 +216,13 @@ exports.findMyGroups = function () {
             _context3.prev = 2;
             decoded = _jwtSimple2.default.decode(token, _config2.default.secret);
             _context3.next = 6;
-            return User.findByIdAsync(decoded.sub);
+            return _user2.default.findByIdAsync(decoded.sub);
 
           case 6:
             user = _context3.sent;
             groupIds = req.query.type === 'invites' ? user.invitedToGroups : user.groups;
             _context3.next = 10;
-            return Group.findAsync({ '_id': { $in: groupIds } });
+            return _group2.default.findAsync({ '_id': { $in: groupIds } });
 
           case 10:
             groups = _context3.sent;
@@ -264,7 +275,7 @@ var findOneGroupHelper = function () {
             conventionIds = [];
             conMemberTracker = {};
             _context6.next = 4;
-            return Group.findByIdAsync(groupId);
+            return _group2.default.findByIdAsync(groupId);
 
           case 4:
             group = _context6.sent;
@@ -277,7 +288,7 @@ var findOneGroupHelper = function () {
                     switch (_context4.prev = _context4.next) {
                       case 0:
                         _context4.next = 2;
-                        return User.findByIdAsync(memberId);
+                        return _user2.default.findByIdAsync(memberId);
 
                       case 2:
                         member = _context4.sent;
@@ -315,7 +326,7 @@ var findOneGroupHelper = function () {
                     switch (_context5.prev = _context5.next) {
                       case 0:
                         _context5.next = 2;
-                        return Convention.findByIdAsync(conId);
+                        return _convention2.default.findByIdAsync(conId);
 
                       case 2:
                         return _context5.abrupt('return', _context5.sent);
@@ -411,7 +422,7 @@ exports.joinGroupTwo = function () {
             _context8.prev = 3;
             decoded = _jwtSimple2.default.decode(token, _config2.default.secret);
             _context8.next = 7;
-            return User.findByIdAsync(decoded.sub);
+            return _user2.default.findByIdAsync(decoded.sub);
 
           case 7:
             userToUpdate = _context8.sent;
@@ -425,7 +436,7 @@ exports.joinGroupTwo = function () {
 
           case 10:
             _context8.next = 12;
-            return Group.findByIdAsync(groupId);
+            return _group2.default.findByIdAsync(groupId);
 
           case 12:
             groupToUpdate = _context8.sent;
