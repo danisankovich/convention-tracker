@@ -366,8 +366,8 @@ exports.findMyGroups = function () {
 }();
 
 var findOneGroupHelper = function () {
-  var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9(groupId) {
-    var conventionIds, conMemberTracker, group, members, conventions;
+  var _ref7 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee9(groupId, userId) {
+    var conventionIds, conMemberTracker, group, members, conventions, isMember;
     return _regenerator2.default.wrap(function _callee9$(_context9) {
       while (1) {
         switch (_context9.prev = _context9.next) {
@@ -411,7 +411,7 @@ var findOneGroupHelper = function () {
                 }, _callee7, undefined);
               }));
 
-              return function (_x14) {
+              return function (_x15) {
                 return _ref8.apply(this, arguments);
               };
             }()));
@@ -439,16 +439,17 @@ var findOneGroupHelper = function () {
                 }, _callee8, undefined);
               }));
 
-              return function (_x15) {
+              return function (_x16) {
                 return _ref9.apply(this, arguments);
               };
             }()));
 
           case 10:
             conventions = _context9.sent;
-            return _context9.abrupt('return', { group: group, members: members, conventions: conventions, conMemberTracker: conMemberTracker });
+            isMember = group.memberList.indexOf(userId) > -1;
+            return _context9.abrupt('return', { group: group, members: members, conventions: conventions, conMemberTracker: conMemberTracker, isMember: isMember });
 
-          case 12:
+          case 13:
           case 'end':
             return _context9.stop();
         }
@@ -456,56 +457,59 @@ var findOneGroupHelper = function () {
     }, _callee9, undefined);
   }));
 
-  return function findOneGroupHelper(_x13) {
+  return function findOneGroupHelper(_x13, _x14) {
     return _ref7.apply(this, arguments);
   };
 }();
 
 exports.findOneGroup = function () {
   var _ref10 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee10(req, res) {
-    var _ref11, group, members, conventions, conMemberTracker;
+    var token, decoded, _ref11, group, members, conventions, conMemberTracker, isMember;
 
     return _regenerator2.default.wrap(function _callee10$(_context10) {
       while (1) {
         switch (_context10.prev = _context10.next) {
           case 0:
-            _context10.prev = 0;
-            _context10.next = 3;
-            return findOneGroupHelper(req.params.id);
+            token = req.headers.authorization;
+            _context10.prev = 1;
+            decoded = _jwtSimple2.default.decode(token, _config2.default.secret);
+            _context10.next = 5;
+            return findOneGroupHelper(req.params.id, decoded.sub);
 
-          case 3:
+          case 5:
             _ref11 = _context10.sent;
             group = _ref11.group;
             members = _ref11.members;
             conventions = _ref11.conventions;
             conMemberTracker = _ref11.conMemberTracker;
+            isMember = _ref11.isMember;
 
-            res.send({ group: group, members: members.filter(Boolean), conventions: conventions, conMemberTracker: conMemberTracker });
-            _context10.next = 14;
+            res.send({ group: group, members: members.filter(Boolean), conventions: conventions, conMemberTracker: conMemberTracker, isMember: isMember });
+            _context10.next = 17;
             break;
 
-          case 11:
-            _context10.prev = 11;
-            _context10.t0 = _context10['catch'](0);
+          case 14:
+            _context10.prev = 14;
+            _context10.t0 = _context10['catch'](1);
 
             res.send(_context10.t0);
 
-          case 14:
+          case 17:
           case 'end':
             return _context10.stop();
         }
       }
-    }, _callee10, undefined, [[0, 11]]);
+    }, _callee10, undefined, [[1, 14]]);
   }));
 
-  return function (_x16, _x17) {
+  return function (_x17, _x18) {
     return _ref10.apply(this, arguments);
   };
 }();
 
 exports.joinGroupTwo = function () {
   var _ref12 = (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee11(req, res) {
-    var groupId, token, decoded, userToUpdate, groupToUpdate, groupIndex, userIndex, _ref13, group, members, conventions, conMemberTracker;
+    var groupId, token, decoded, userToUpdate, groupToUpdate, groupIndex, userIndex, _ref13, group, members, conventions, conMemberTracker, isMember;
 
     return _regenerator2.default.wrap(function _callee11$(_context11) {
       while (1) {
@@ -515,7 +519,7 @@ exports.joinGroupTwo = function () {
             token = req.headers.authorization;
 
             if (!token) {
-              _context11.next = 36;
+              _context11.next = 37;
               break;
             }
 
@@ -568,7 +572,7 @@ exports.joinGroupTwo = function () {
             groupToUpdate.save();
 
             _context11.next = 23;
-            return findOneGroupHelper(groupId);
+            return findOneGroupHelper(groupId, decoded.sub);
 
           case 23:
             _ref13 = _context11.sent;
@@ -576,34 +580,35 @@ exports.joinGroupTwo = function () {
             members = _ref13.members;
             conventions = _ref13.conventions;
             conMemberTracker = _ref13.conMemberTracker;
+            isMember = _ref13.isMember;
 
 
-            res.send({ group: group, members: members, conventions: conventions, conMemberTracker: conMemberTracker });
+            res.send({ group: group, members: members, conventions: conventions, conMemberTracker: conMemberTracker, isMember: isMember });
 
-            _context11.next = 34;
+            _context11.next = 35;
             break;
 
-          case 31:
-            _context11.prev = 31;
+          case 32:
+            _context11.prev = 32;
             _context11.t0 = _context11['catch'](3);
             return _context11.abrupt('return', res.status(401).send('authorization required'));
 
-          case 34:
-            _context11.next = 37;
+          case 35:
+            _context11.next = 38;
             break;
 
-          case 36:
+          case 37:
             res.send({ user: "NO_USER" });
 
-          case 37:
+          case 38:
           case 'end':
             return _context11.stop();
         }
       }
-    }, _callee11, undefined, [[3, 31]]);
+    }, _callee11, undefined, [[3, 32]]);
   }));
 
-  return function (_x18, _x19) {
+  return function (_x19, _x20) {
     return _ref12.apply(this, arguments);
   };
 }();
@@ -619,26 +624,24 @@ exports.leaveGroup = function () {
             token = req.headers.authorization;
 
             if (!token) {
-              _context12.next = 26;
+              _context12.next = 25;
               break;
             }
 
             decoded = _jwtSimple2.default.decode(token, _config2.default.secret);
             _context12.prev = 4;
-
-            console.log(decoded, groupId);
-            _context12.next = 8;
+            _context12.next = 7;
             return _group2.default.findByIdAsync(groupId);
 
-          case 8:
+          case 7:
             group = _context12.sent;
 
             if (!group) res.send('No Group Found');
 
-            _context12.next = 12;
+            _context12.next = 11;
             return _user2.default.findByIdAsync(decoded.sub);
 
-          case 12:
+          case 11:
             user = _context12.sent;
 
             if (!user) res.send('No User Found');
@@ -653,23 +656,23 @@ exports.leaveGroup = function () {
             group.save();
             return _context12.abrupt('return', res.send(group));
 
-          case 23:
-            _context12.prev = 23;
+          case 22:
+            _context12.prev = 22;
             _context12.t0 = _context12['catch'](4);
             return _context12.abrupt('return', res.send(end));
 
-          case 26:
+          case 25:
             return _context12.abrupt('return', res.send('Operation Failed'));
 
-          case 27:
+          case 26:
           case 'end':
             return _context12.stop();
         }
       }
-    }, _callee12, undefined, [[4, 23]]);
+    }, _callee12, undefined, [[4, 22]]);
   }));
 
-  return function (_x20, _x21) {
+  return function (_x21, _x22) {
     return _ref14.apply(this, arguments);
   };
 }();

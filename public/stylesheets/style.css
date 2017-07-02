@@ -379,3 +379,10 @@ td.rdtYear:hover {
   padding: 0px 25px 25px 25px;
   margin-top: 50px;
 }
+
+.floatLeft {
+  float: left;
+}
+.floatRight {
+  float: right;
+}

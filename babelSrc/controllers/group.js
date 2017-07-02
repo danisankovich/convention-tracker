@@ -124,7 +124,7 @@ exports.findMyGroups = async (req, res) => {
 }
 
 
-const findOneGroupHelper = async (groupId) => {
+const findOneGroupHelper = async (groupId, userId) => {
   const conventionIds = [];
   const conMemberTracker = {};
   const group = await Group.findByIdAsync(groupId);
@@ -146,14 +146,19 @@ const findOneGroupHelper = async (groupId) => {
     return await Convention.findByIdAsync(conId);
   }))
 
-  return {group, members, conventions, conMemberTracker}
+  const isMember = group.memberList.indexOf(userId) > -1;
+
+  return {group, members, conventions, conMemberTracker, isMember}
 }
 
 
 exports.findOneGroup = async (req, res) => {
+  const token = req.headers.authorization;
   try {
-    const {group, members, conventions, conMemberTracker} = await findOneGroupHelper(req.params.id);
-    res.send({group, members: members.filter(Boolean), conventions, conMemberTracker})
+    let decoded = jwt.decode(token, config.secret);
+
+    const {group, members, conventions, conMemberTracker, isMember} = await findOneGroupHelper(req.params.id, decoded.sub);
+    res.send({group, members: members.filter(Boolean), conventions, conMemberTracker, isMember})
   } catch (e) {
     res.send(e)
   }
@@ -190,9 +195,9 @@ exports.joinGroupTwo = async (req, res) => {
       userToUpdate.save();
       groupToUpdate.save();
 
-      const {group, members, conventions, conMemberTracker} = await findOneGroupHelper(groupId);
+      const {group, members, conventions, conMemberTracker, isMember} = await findOneGroupHelper(groupId, decoded.sub);
 
-      res.send({group, members, conventions, conMemberTracker});
+      res.send({group, members, conventions, conMemberTracker, isMember});
 
     } catch (e) {
       return res.status(401).send('authorization required');
@@ -211,7 +216,6 @@ exports.leaveGroup = async (req, res) => {
     const decoded = jwt.decode(token, config.secret);
 
     try {
-      console.log(decoded, groupId);
       const group = await Group.findByIdAsync(groupId);
       if (!group) res.send('No Group Found');
 

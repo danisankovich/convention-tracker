@@ -5,7 +5,13 @@ import utils from '../../../../../utils'
 import { browserHistory } from 'react-router'
 import $ from 'jquery';
 
+import GroupConventions from './group_conventions'
+
 class SingleGroup extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { isMember: false };
+  }
   componentWillMount() {
     this.setState({ inputValue: ''});
   }
@@ -14,6 +20,7 @@ class SingleGroup extends Component {
 
     this.props.fetchGroup(id);
     this.props.fetchInfo();
+
   }
   handleClick(type) {
     if(this.props.userInfo._id = this.props.data.group.creatorId) {
@@ -45,13 +52,24 @@ class SingleGroup extends Component {
 
     if (user.groups.indexOf(group._id) === -1) {
       this.props.userInfo.groups.push(group._id);
+
       this.props.joiningGroup(group._id);
     }
+    this.props.fetchGroup(group._id)
+    this.state.memberList.push(user._id);
+
+    this.setState({isMember: this.state.memberList.indexOf(user._id) > -1})
   }
   leaveGroup() {
     const groupId = this.props.data.group._id;
+
     this.props.leavingGroup(groupId);
     this.props.fetchGroup(groupId);
+    const userIndex = this.state.memberList.indexOf(this.props.userInfo._id);
+    this.state.memberList.splice(userIndex, 1);
+
+    this.setState({isMember: this.state.memberList.indexOf(this.props.userInfo._id) > -1})
+
   }
   inputChange(e) {
     this.state.invitedUser = e.target.value;
@@ -84,79 +102,58 @@ class SingleGroup extends Component {
     const { userInfo, data = {} } = this.props;
     const { group, members, conventions, conMemberTracker } = data
 
+    if (group && !this.state.memberList) {
+      this.state.memberList = group.memberList;
+      this.state.isMember = this.state.memberList.indexOf(userInfo._id) > -1;
+    }
+    if (group && userInfo) {
+      this.state.isInvited = userInfo.invitedToGroups.indexOf(group._id) > -1;
+    }
+
     return (
-      <div>
-        {group && userInfo && members &&
-          <div className="col-sm-10 col-sm-offset-1">
-            <button className="btn btn-primary" onClick={this.joinGroup.bind(this)}>Join Group</button>
-            <form onSubmit={this.inviteUser.bind(this)}>
-              <fieldset>
-                <div>
-                  <div className='col-sm-4'>
+      <div> {group && userInfo && members &&
+        <div className="row">
+          <div className="col-sm-8 col-sm-offset-2">
+            <div className="col-sm-12">
+              <div className='floatRight'>
+                {!this.state.isMember && this.state.isInvited &&
+                  <button className="btn btn-primary" onClick={this.joinGroup.bind(this)}>Join Group</button>
+                }
+                {this.state.isMember &&
+                  <button className="btn btn-danger" onClick={this.leaveGroup.bind(this)}>LEAVE GROUP</button>
+                }
+              </div>
+              <div className='floatLeft'>
+                <form className="form-group" onSubmit={this.inviteUser.bind(this)}>
+                  <fieldset>
                     <input type='text' className='form-control' onChange={this.inputChange.bind(this)} />
-                  </div>
-                  <div className='col-sm-2'>
                     <button className="btn btn-info" type='submit'>Invite User</button>
-                  </div>
-                </div>
-              </fieldset>
-            </form>
-            <button onClick={this.leaveGroup.bind(this)}>LEAVE GROUP</button>
-            <div className="row">
-              <div className="col-sm-12">
-                <div className="col-sm-5 col-sm-offset-1">
-                  <h3>Group Details: </h3>
-                  <ul>
-                    <li>Name: {group.name}</li>
-                    <li>Affiliation: {group.affiliation}</li>
-                    <li>Group Creator: {group.creatorName}</li>
-                  </ul>
-                  <h3>Notes: </h3>
-                  <p>{group.notes} </p>
-                  <h3>Members:</h3>
-                  <ul>
-                    {members.map(member => (<li key={member._id}>{member.username}</li>))}
-                  </ul>
-                  <h3>Conventions:</h3>
-                  <table className="table table-hover table-bordered">
-                    <thead>
-                      <tr>
-                        <th>Convention Name</th>
-                        <th>Price Details</th>
-                        <th>Address</th>
-                        <th>Attendees</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {conventions.map(function(result) {
-                        const location = utils.locationFormatter(result.location);
-
-                        return (
-                          <tr key={result._id} className='table-row'>
-                            <td onClick={this.handleClick.bind(result)}>{result.name}</td>
-                            <td onClick={this.handleClick.bind(result)}>${result.price}</td>
-                            <td onClick={this.handleClick.bind(result)}>
-                              <ul className='removeListBullet'>
-                                <li>{location.locationName}</li>
-                                <li>{location.address}</li>
-                                <li>{location.city}, {location.state.toUpperCase()} {location.zipcode}</li>
-                              </ul>
-                            </td>
-                            <td>
-                              <ul>
-                                {conMemberTracker[result._id].map(mem => <li key={mem}>{mem}</li>)}
-                              </ul>
-                            </td>
-                          </tr>
-                        )
-                      }.bind(this))}
-                    </tbody>
-                  </table>
-
-                </div>
+                  </fieldset>
+                </form>
               </div>
             </div>
+            <div className="col-sm-12">
+              <h3>Group Details: </h3>
+              <ul>
+                <li>Name: {group.name}</li>
+                <li>Affiliation: {group.affiliation}</li>
+                <li>Group Creator: {group.creatorName}</li>
+              </ul>
+              <h3>Notes: </h3>
+              <p>{group.notes} </p>
+              <h3>Members:</h3>
+              <ul>{members.map(member => (<li key={member._id}>{member.username}</li>))}</ul>
+            </div>
           </div>
+          <div className="col-sm-8 col-sm-offset-2">
+            <h3>Conventions:</h3>
+            <GroupConventions
+              handleClick={this.handleClick}
+              conventions={conventions}
+              conMemberTracker={conMemberTracker}
+            />
+          </div>
+        </div>
         }
       </div>
     )

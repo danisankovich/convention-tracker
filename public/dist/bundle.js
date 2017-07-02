@@ -76762,6 +76762,10 @@
 	
 	var _jquery2 = _interopRequireDefault(_jquery);
 	
+	var _group_conventions = __webpack_require__(/*! ./group_conventions */ 493);
+	
+	var _group_conventions2 = _interopRequireDefault(_group_conventions);
+	
 	function _interopRequireWildcard(obj) {
 	  if (obj && obj.__esModule) {
 	    return obj;
@@ -76799,10 +76803,13 @@
 	var SingleGroup = function (_Component) {
 	  _inherits(SingleGroup, _Component);
 	
-	  function SingleGroup() {
+	  function SingleGroup(props) {
 	    _classCallCheck(this, SingleGroup);
 	
-	    return _possibleConstructorReturn(this, (SingleGroup.__proto__ || Object.getPrototypeOf(SingleGroup)).apply(this, arguments));
+	    var _this = _possibleConstructorReturn(this, (SingleGroup.__proto__ || Object.getPrototypeOf(SingleGroup)).call(this, props));
+	
+	    _this.state = { isMember: false };
+	    return _this;
 	  }
 	
 	  _createClass(SingleGroup, [{
@@ -76857,15 +76864,25 @@
 	
 	      if (user.groups.indexOf(group._id) === -1) {
 	        this.props.userInfo.groups.push(group._id);
+	
 	        this.props.joiningGroup(group._id);
 	      }
+	      this.props.fetchGroup(group._id);
+	      this.state.memberList.push(user._id);
+	
+	      this.setState({ isMember: this.state.memberList.indexOf(user._id) > -1 });
 	    }
 	  }, {
 	    key: 'leaveGroup',
 	    value: function leaveGroup() {
 	      var groupId = this.props.data.group._id;
+	
 	      this.props.leavingGroup(groupId);
 	      this.props.fetchGroup(groupId);
+	      var userIndex = this.state.memberList.indexOf(this.props.userInfo._id);
+	      this.state.memberList.splice(userIndex, 1);
+	
+	      this.setState({ isMember: this.state.memberList.indexOf(this.props.userInfo._id) > -1 });
 	    }
 	  }, {
 	    key: 'inputChange',
@@ -76912,15 +76929,21 @@
 	          conventions = data.conventions,
 	          conMemberTracker = data.conMemberTracker;
 	
-	      return _react2.default.createElement('div', null, group && userInfo && members && _react2.default.createElement('div', { className: 'col-sm-10 col-sm-offset-1' }, _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.joinGroup.bind(this) }, 'Join Group'), _react2.default.createElement('form', { onSubmit: this.inviteUser.bind(this) }, _react2.default.createElement('fieldset', null, _react2.default.createElement('div', null, _react2.default.createElement('div', { className: 'col-sm-4' }, _react2.default.createElement('input', { type: 'text', className: 'form-control', onChange: this.inputChange.bind(this) })), _react2.default.createElement('div', { className: 'col-sm-2' }, _react2.default.createElement('button', { className: 'btn btn-info', type: 'submit' }, 'Invite User'))))), _react2.default.createElement('button', { onClick: this.leaveGroup.bind(this) }, 'LEAVE GROUP'), _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('div', { className: 'col-sm-5 col-sm-offset-1' }, _react2.default.createElement('h3', null, 'Group Details: '), _react2.default.createElement('ul', null, _react2.default.createElement('li', null, 'Name: ', group.name), _react2.default.createElement('li', null, 'Affiliation: ', group.affiliation), _react2.default.createElement('li', null, 'Group Creator: ', group.creatorName)), _react2.default.createElement('h3', null, 'Notes: '), _react2.default.createElement('p', null, group.notes, ' '), _react2.default.createElement('h3', null, 'Members:'), _react2.default.createElement('ul', null, members.map(function (member) {
-	        return _react2.default.createElement('li', { key: member._id }, member.username);
-	      })), _react2.default.createElement('h3', null, 'Conventions:'), _react2.default.createElement('table', { className: 'table table-hover table-bordered' }, _react2.default.createElement('thead', null, _react2.default.createElement('tr', null, _react2.default.createElement('th', null, 'Convention Name'), _react2.default.createElement('th', null, 'Price Details'), _react2.default.createElement('th', null, 'Address'), _react2.default.createElement('th', null, 'Attendees'))), _react2.default.createElement('tbody', null, conventions.map(function (result) {
-	        var location = _utils2.default.locationFormatter(result.location);
+	      if (group && !this.state.memberList) {
+	        this.state.memberList = group.memberList;
+	        this.state.isMember = this.state.memberList.indexOf(userInfo._id) > -1;
+	      }
+	      if (group && userInfo) {
+	        this.state.isInvited = userInfo.invitedToGroups.indexOf(group._id) > -1;
+	      }
 	
-	        return _react2.default.createElement('tr', { key: result._id, className: 'table-row' }, _react2.default.createElement('td', { onClick: this.handleClick.bind(result) }, result.name), _react2.default.createElement('td', { onClick: this.handleClick.bind(result) }, '$', result.price), _react2.default.createElement('td', { onClick: this.handleClick.bind(result) }, _react2.default.createElement('ul', { className: 'removeListBullet' }, _react2.default.createElement('li', null, location.locationName), _react2.default.createElement('li', null, location.address), _react2.default.createElement('li', null, location.city, ', ', location.state.toUpperCase(), ' ', location.zipcode))), _react2.default.createElement('td', null, _react2.default.createElement('ul', null, conMemberTracker[result._id].map(function (mem) {
-	          return _react2.default.createElement('li', { key: mem }, mem);
-	        }))));
-	      }.bind(this)))))))));
+	      return _react2.default.createElement('div', null, ' ', group && userInfo && members && _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-8 col-sm-offset-2' }, _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('div', { className: 'floatRight' }, !this.state.isMember && this.state.isInvited && _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.joinGroup.bind(this) }, 'Join Group'), this.state.isMember && _react2.default.createElement('button', { className: 'btn btn-danger', onClick: this.leaveGroup.bind(this) }, 'LEAVE GROUP')), _react2.default.createElement('div', { className: 'floatLeft' }, _react2.default.createElement('form', { className: 'form-group', onSubmit: this.inviteUser.bind(this) }, _react2.default.createElement('fieldset', null, _react2.default.createElement('input', { type: 'text', className: 'form-control', onChange: this.inputChange.bind(this) }), _react2.default.createElement('button', { className: 'btn btn-info', type: 'submit' }, 'Invite User'))))), _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('h3', null, 'Group Details: '), _react2.default.createElement('ul', null, _react2.default.createElement('li', null, 'Name: ', group.name), _react2.default.createElement('li', null, 'Affiliation: ', group.affiliation), _react2.default.createElement('li', null, 'Group Creator: ', group.creatorName)), _react2.default.createElement('h3', null, 'Notes: '), _react2.default.createElement('p', null, group.notes, ' '), _react2.default.createElement('h3', null, 'Members:'), _react2.default.createElement('ul', null, members.map(function (member) {
+	        return _react2.default.createElement('li', { key: member._id }, member.username);
+	      })))), _react2.default.createElement('div', { className: 'col-sm-8 col-sm-offset-2' }, _react2.default.createElement('h3', null, 'Conventions:'), _react2.default.createElement(_group_conventions2.default, {
+	        handleClick: this.handleClick,
+	        conventions: conventions,
+	        conMemberTracker: conMemberTracker
+	      }))));
 	    }
 	  }]);
 	
@@ -77448,6 +77471,117 @@
 	}(_react.Component);
 	
 	exports.default = OneConvention;
+
+/***/ }),
+/* 492 */,
+/* 493 */
+/*!*******************************************************************************!*\
+  !*** ./src/components/auth/user/my_profile_stuff/groups/group_conventions.js ***!
+  \*******************************************************************************/
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _createClass = function () {
+	  function defineProperties(target, props) {
+	    for (var i = 0; i < props.length; i++) {
+	      var descriptor = props[i];descriptor.enumerable = descriptor.enumerable || false;descriptor.configurable = true;if ("value" in descriptor) descriptor.writable = true;Object.defineProperty(target, descriptor.key, descriptor);
+	    }
+	  }return function (Constructor, protoProps, staticProps) {
+	    if (protoProps) defineProperties(Constructor.prototype, protoProps);if (staticProps) defineProperties(Constructor, staticProps);return Constructor;
+	  };
+	}();
+	
+	var _react = __webpack_require__(/*! react */ 2);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _reactRedux = __webpack_require__(/*! react-redux */ 160);
+	
+	var _actions = __webpack_require__(/*! ../../../../../actions */ 279);
+	
+	var actions = _interopRequireWildcard(_actions);
+	
+	var _utils = __webpack_require__(/*! ../../../../../utils */ 335);
+	
+	var _utils2 = _interopRequireDefault(_utils);
+	
+	var _reactRouter = __webpack_require__(/*! react-router */ 208);
+	
+	var _jquery = __webpack_require__(/*! jquery */ 281);
+	
+	var _jquery2 = _interopRequireDefault(_jquery);
+	
+	function _interopRequireWildcard(obj) {
+	  if (obj && obj.__esModule) {
+	    return obj;
+	  } else {
+	    var newObj = {};if (obj != null) {
+	      for (var key in obj) {
+	        if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key];
+	      }
+	    }newObj.default = obj;return newObj;
+	  }
+	}
+	
+	function _interopRequireDefault(obj) {
+	  return obj && obj.__esModule ? obj : { default: obj };
+	}
+	
+	function _classCallCheck(instance, Constructor) {
+	  if (!(instance instanceof Constructor)) {
+	    throw new TypeError("Cannot call a class as a function");
+	  }
+	}
+	
+	function _possibleConstructorReturn(self, call) {
+	  if (!self) {
+	    throw new ReferenceError("this hasn't been initialised - super() hasn't been called");
+	  }return call && ((typeof call === "undefined" ? "undefined" : _typeof(call)) === "object" || typeof call === "function") ? call : self;
+	}
+	
+	function _inherits(subClass, superClass) {
+	  if (typeof superClass !== "function" && superClass !== null) {
+	    throw new TypeError("Super expression must either be null or a function, not " + (typeof superClass === "undefined" ? "undefined" : _typeof(superClass)));
+	  }subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } });if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass;
+	}
+	
+	var GroupConventions = function (_Component) {
+	  _inherits(GroupConventions, _Component);
+	
+	  function GroupConventions(props) {
+	    _classCallCheck(this, GroupConventions);
+	
+	    return _possibleConstructorReturn(this, (GroupConventions.__proto__ || Object.getPrototypeOf(GroupConventions)).call(this, props));
+	  }
+	
+	  _createClass(GroupConventions, [{
+	    key: 'render',
+	    value: function render() {
+	      var _props = this.props,
+	          conventions = _props.conventions,
+	          conMemberTracker = _props.conMemberTracker;
+	
+	      return _react2.default.createElement('table', { className: 'table table-hover table-bordered' }, _react2.default.createElement('thead', null, _react2.default.createElement('tr', null, _react2.default.createElement('th', null, 'Convention Name'), _react2.default.createElement('th', null, 'Price Details'), _react2.default.createElement('th', null, 'Address'), _react2.default.createElement('th', null, 'Attendees'))), _react2.default.createElement('tbody', null, conventions.map(function (result) {
+	        var location = _utils2.default.locationFormatter(result.location);
+	
+	        return _react2.default.createElement('tr', { key: result._id, className: 'table-row' }, _react2.default.createElement('td', { onClick: this.props.handleClick.bind(result) }, result.name), _react2.default.createElement('td', { onClick: this.props.handleClick.bind(result) }, '$', result.price), _react2.default.createElement('td', { onClick: this.props.handleClick.bind(result) }, _react2.default.createElement('ul', { className: 'removeListBullet' }, _react2.default.createElement('li', null, location.locationName), _react2.default.createElement('li', null, location.address), _react2.default.createElement('li', null, location.city, ', ', location.state.toUpperCase(), ' ', location.zipcode))), _react2.default.createElement('td', { onClick: this.props.handleClick.bind(result) }, _react2.default.createElement('ul', null, conMemberTracker[result._id].map(function (mem) {
+	          return _react2.default.createElement('li', { key: mem }, mem);
+	        }))));
+	      }.bind(this))));
+	    }
+	  }]);
+	
+	  return GroupConventions;
+	}(_react.Component);
+	
+	exports.default = GroupConventions;
 
 /***/ })
 /******/ ]);
