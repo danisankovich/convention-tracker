@@ -76864,21 +76864,27 @@
 	        this.props.joiningGroup(group._id);
 	        this.props.fetchGroup(group._id);
 	        this.state.memberList.push(user._id);
+	        this.state.members.push({ _id: user._id, username: user.username });
 	
-	        this.setState({ isMember: this.state.memberList.indexOf(user._id) > -1 });
+	        this.state.isMember = true;
 	      }
 	    }
 	  }, {
 	    key: 'leaveGroup',
 	    value: function leaveGroup() {
 	      var groupId = this.props.data.group._id;
-	
+	      var userId = this.props.userInfo._id;
 	      this.props.leavingGroup(groupId);
 	      this.props.fetchGroup(groupId);
-	      var userIndex = this.state.memberList.indexOf(this.props.userInfo._id);
+	      var userIndex = this.state.memberList.indexOf(userId);
 	      this.state.memberList.splice(userIndex, 1);
 	
-	      this.setState({ isMember: this.state.memberList.indexOf(this.props.userInfo._id) > -1 });
+	      var toDeleteIndex = this.state.members.findIndex(function (member, i) {
+	        return member._id === userId;
+	      });
+	      this.state.members.splice(toDeleteIndex, 1);
+	
+	      this.state.isMember = false;
 	    }
 	  }, {
 	    key: 'inputChange',
@@ -76930,8 +76936,9 @@
 	        this.state.isMember = this.state.memberList.indexOf(userInfo._id) > -1;
 	
 	        this.state.isInvited = userInfo.invitedToGroups.indexOf(group._id) > -1;
+	        this.state.members = members;
 	      }
-	      return _react2.default.createElement('div', null, ' ', group && userInfo && members && _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-8 col-sm-offset-2' }, _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('div', { className: 'floatRight' }, !this.state.isMember && this.state.isInvited && _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.joinGroup.bind(this) }, 'Join Group'), this.state.isMember && _react2.default.createElement('button', { className: 'btn btn-danger', onClick: this.leaveGroup.bind(this) }, 'LEAVE GROUP')), _react2.default.createElement('div', { className: 'floatLeft' }, _react2.default.createElement('form', { className: 'form-group', onSubmit: this.inviteUser.bind(this) }, _react2.default.createElement('fieldset', null, _react2.default.createElement('input', { type: 'text', className: 'form-control', onChange: this.inputChange.bind(this) }), _react2.default.createElement('button', { className: 'btn btn-info', type: 'submit' }, 'Invite User'))))), _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('h3', null, 'Group Details: '), _react2.default.createElement('ul', null, _react2.default.createElement('li', null, 'Name: ', group.name), _react2.default.createElement('li', null, 'Affiliation: ', group.affiliation), _react2.default.createElement('li', null, 'Group Creator: ', group.creatorName)), _react2.default.createElement('h3', null, 'Notes: '), _react2.default.createElement('p', null, group.notes, ' '), _react2.default.createElement('h3', null, 'Members:'), _react2.default.createElement('ul', null, members.map(function (member) {
+	      return _react2.default.createElement('div', null, ' ', group && userInfo && members && _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-8 col-sm-offset-2' }, _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('div', { className: 'floatRight' }, !this.state.isMember && this.state.isInvited && _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.joinGroup.bind(this) }, 'Join Group'), this.state.isMember && _react2.default.createElement('button', { className: 'btn btn-danger', onClick: this.leaveGroup.bind(this) }, 'LEAVE GROUP')), this.state.isMember && _react2.default.createElement('div', { className: 'floatLeft' }, _react2.default.createElement('form', { className: 'form-group', onSubmit: this.inviteUser.bind(this) }, _react2.default.createElement('fieldset', null, _react2.default.createElement('input', { type: 'text', className: 'form-control', onChange: this.inputChange.bind(this) }), _react2.default.createElement('button', { className: 'btn btn-info', type: 'submit' }, 'Invite User'))))), _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('h3', null, 'Group Details: '), _react2.default.createElement('ul', null, _react2.default.createElement('li', null, 'Name: ', group.name), _react2.default.createElement('li', null, 'Affiliation: ', group.affiliation), _react2.default.createElement('li', null, 'Group Creator: ', group.creatorName)), _react2.default.createElement('h3', null, 'Notes: '), _react2.default.createElement('p', null, group.notes, ' '), _react2.default.createElement('h3', null, 'Members:'), _react2.default.createElement('ul', null, this.state.members.map(function (member) {
 	        return _react2.default.createElement('li', { key: member._id }, member.username);
 	      })))), _react2.default.createElement('div', { className: 'col-sm-8 col-sm-offset-2' }, _react2.default.createElement('h3', null, 'Conventions:'), _react2.default.createElement(_group_conventions2.default, {
 	        handleClick: this.handleClick,

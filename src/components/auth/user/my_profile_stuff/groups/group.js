@@ -52,21 +52,27 @@ class SingleGroup extends Component {
       this.props.userInfo.groups.push(group._id);
 
       this.props.joiningGroup(group._id);
-      this.props.fetchGroup(group._id)
+      this.props.fetchGroup(group._id);
       this.state.memberList.push(user._id);
+      this.state.members.push({_id: user._id, username: user.username});
 
-      this.setState({isMember: this.state.memberList.indexOf(user._id) > -1})
+      this.state.isMember = true;
     }
   }
   leaveGroup() {
     const groupId = this.props.data.group._id;
-
+    const userId = this.props.userInfo._id;
     this.props.leavingGroup(groupId);
     this.props.fetchGroup(groupId);
-    const userIndex = this.state.memberList.indexOf(this.props.userInfo._id);
+    const userIndex = this.state.memberList.indexOf(userId);
     this.state.memberList.splice(userIndex, 1);
 
-    this.setState({isMember: this.state.memberList.indexOf(this.props.userInfo._id) > -1})
+    const toDeleteIndex = this.state.members.findIndex((member, i) => {
+      return member._id === userId;
+    })
+    this.state.members.splice(toDeleteIndex, 1);
+
+    this.state.isMember = false;
 
   }
   inputChange(e) {
@@ -105,6 +111,7 @@ class SingleGroup extends Component {
       this.state.isMember = this.state.memberList.indexOf(userInfo._id) > -1;
 
       this.state.isInvited = userInfo.invitedToGroups.indexOf(group._id) > -1;
+      this.state.members = members;
     }
     return (
       <div> {group && userInfo && members &&
@@ -119,14 +126,14 @@ class SingleGroup extends Component {
                   <button className="btn btn-danger" onClick={this.leaveGroup.bind(this)}>LEAVE GROUP</button>
                 }
               </div>
-              <div className='floatLeft'>
+              {this.state.isMember && <div className='floatLeft'>
                 <form className="form-group" onSubmit={this.inviteUser.bind(this)}>
                   <fieldset>
                     <input type='text' className='form-control' onChange={this.inputChange.bind(this)} />
                     <button className="btn btn-info" type='submit'>Invite User</button>
                   </fieldset>
                 </form>
-              </div>
+              </div>}
             </div>
             <div className="col-sm-12">
               <h3>Group Details: </h3>
@@ -138,7 +145,7 @@ class SingleGroup extends Component {
               <h3>Notes: </h3>
               <p>{group.notes} </p>
               <h3>Members:</h3>
-              <ul>{members.map(member => (<li key={member._id}>{member.username}</li>))}</ul>
+              <ul>{this.state.members.map(member => (<li key={member._id}>{member.username}</li>))}</ul>
             </div>
           </div>
           <div className="col-sm-8 col-sm-offset-2">
