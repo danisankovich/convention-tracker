@@ -76806,10 +76806,7 @@
 	  function SingleGroup(props) {
 	    _classCallCheck(this, SingleGroup);
 	
-	    var _this = _possibleConstructorReturn(this, (SingleGroup.__proto__ || Object.getPrototypeOf(SingleGroup)).call(this, props));
-	
-	    _this.state = { isMember: false };
-	    return _this;
+	    return _possibleConstructorReturn(this, (SingleGroup.__proto__ || Object.getPrototypeOf(SingleGroup)).call(this, props));
 	  }
 	
 	  _createClass(SingleGroup, [{
@@ -76857,8 +76854,7 @@
 	    }
 	  }, {
 	    key: 'joinGroup',
-	    value: function joinGroup(e) {
-	      e.preventDefault();
+	    value: function joinGroup() {
 	      var user = this.props.userInfo;
 	      var group = this.props.data.group;
 	
@@ -76866,11 +76862,11 @@
 	        this.props.userInfo.groups.push(group._id);
 	
 	        this.props.joiningGroup(group._id);
-	      }
-	      this.props.fetchGroup(group._id);
-	      this.state.memberList.push(user._id);
+	        this.props.fetchGroup(group._id);
+	        this.state.memberList.push(user._id);
 	
-	      this.setState({ isMember: this.state.memberList.indexOf(user._id) > -1 });
+	        this.setState({ isMember: this.state.memberList.indexOf(user._id) > -1 });
+	      }
 	    }
 	  }, {
 	    key: 'leaveGroup',
@@ -76929,14 +76925,12 @@
 	          conventions = data.conventions,
 	          conMemberTracker = data.conMemberTracker;
 	
-	      if (group && !this.state.memberList) {
+	      if (group && !this.state.memberList && userInfo) {
 	        this.state.memberList = group.memberList;
 	        this.state.isMember = this.state.memberList.indexOf(userInfo._id) > -1;
-	      }
-	      if (group && userInfo) {
+	
 	        this.state.isInvited = userInfo.invitedToGroups.indexOf(group._id) > -1;
 	      }
-	
 	      return _react2.default.createElement('div', null, ' ', group && userInfo && members && _react2.default.createElement('div', { className: 'row' }, _react2.default.createElement('div', { className: 'col-sm-8 col-sm-offset-2' }, _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('div', { className: 'floatRight' }, !this.state.isMember && this.state.isInvited && _react2.default.createElement('button', { className: 'btn btn-primary', onClick: this.joinGroup.bind(this) }, 'Join Group'), this.state.isMember && _react2.default.createElement('button', { className: 'btn btn-danger', onClick: this.leaveGroup.bind(this) }, 'LEAVE GROUP')), _react2.default.createElement('div', { className: 'floatLeft' }, _react2.default.createElement('form', { className: 'form-group', onSubmit: this.inviteUser.bind(this) }, _react2.default.createElement('fieldset', null, _react2.default.createElement('input', { type: 'text', className: 'form-control', onChange: this.inputChange.bind(this) }), _react2.default.createElement('button', { className: 'btn btn-info', type: 'submit' }, 'Invite User'))))), _react2.default.createElement('div', { className: 'col-sm-12' }, _react2.default.createElement('h3', null, 'Group Details: '), _react2.default.createElement('ul', null, _react2.default.createElement('li', null, 'Name: ', group.name), _react2.default.createElement('li', null, 'Affiliation: ', group.affiliation), _react2.default.createElement('li', null, 'Group Creator: ', group.creatorName)), _react2.default.createElement('h3', null, 'Notes: '), _react2.default.createElement('p', null, group.notes, ' '), _react2.default.createElement('h3', null, 'Members:'), _react2.default.createElement('ul', null, members.map(function (member) {
 	        return _react2.default.createElement('li', { key: member._id }, member.username);
 	      })))), _react2.default.createElement('div', { className: 'col-sm-8 col-sm-offset-2' }, _react2.default.createElement('h3', null, 'Conventions:'), _react2.default.createElement(_group_conventions2.default, {
@@ -77359,7 +77353,7 @@
 	          myconventions = _props$myconventions === undefined ? [] : _props$myconventions,
 	          isDashboard = _props.pathInfo;
 	
-	      return _react2.default.createElement('div', null, myconventions && myconventions.length > 0 && _react2.default.createElement('table', { className: 'table table-hover table-bordered' }, _react2.default.createElement('thead', null, _react2.default.createElement('tr', null, _react2.default.createElement('th', null, 'Convention Name'), isDashboard && _react2.default.createElement('th', null, 'Price Details'), _react2.default.createElement('th', null, 'Dates'), _react2.default.createElement('th', null, 'Address'), !isDashboard && _react2.default.createElement('th', null, 'Delete'))), _react2.default.createElement('tbody', null, myconventions.map(function (result) {
+	      return _react2.default.createElement('div', null, myconventions && myconventions.length > 0 && _react2.default.createElement('table', { className: 'table table-hover table-bordered' }, _react2.default.createElement('thead', null, _react2.default.createElement('tr', null, _react2.default.createElement('th', null, 'Convention Name'), isDashboard && _react2.default.createElement('th', null, 'Price Details'), _react2.default.createElement('th', null, 'Dates'), _react2.default.createElement('th', null, 'Address'), !isDashboard && _react2.default.createElement('th', null, 'Remove'))), _react2.default.createElement('tbody', null, myconventions.map(function (result) {
 	        return _react2.default.createElement(_oneConvention2.default, {
 	          result: result,
 	          myconventions: myconventions,

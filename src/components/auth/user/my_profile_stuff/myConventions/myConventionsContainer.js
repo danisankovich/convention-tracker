@@ -44,7 +44,7 @@ class MyConventions extends Component {
                 {isDashboard && <th>Price Details</th>}
                 <th>Dates</th>
                 <th>Address</th>
-                {!isDashboard && <th>Delete</th>}
+                {!isDashboard && <th>Remove</th>}
               </tr>
             </thead>
             <tbody>

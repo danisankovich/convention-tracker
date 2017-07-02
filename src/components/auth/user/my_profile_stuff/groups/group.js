@@ -10,7 +10,6 @@ import GroupConventions from './group_conventions'
 class SingleGroup extends Component {
   constructor(props) {
     super(props);
-    this.state = { isMember: false };
   }
   componentWillMount() {
     this.setState({ inputValue: ''});
@@ -45,8 +44,7 @@ class SingleGroup extends Component {
     let clickResult = this._id;
     browserHistory.push(`/conventions/${clickResult}`);
   }
-  joinGroup(e) {
-    e.preventDefault();
+  joinGroup() {
     const user = this.props.userInfo;
     const group = this.props.data.group;
 
@@ -54,11 +52,11 @@ class SingleGroup extends Component {
       this.props.userInfo.groups.push(group._id);
 
       this.props.joiningGroup(group._id);
-    }
-    this.props.fetchGroup(group._id)
-    this.state.memberList.push(user._id);
+      this.props.fetchGroup(group._id)
+      this.state.memberList.push(user._id);
 
-    this.setState({isMember: this.state.memberList.indexOf(user._id) > -1})
+      this.setState({isMember: this.state.memberList.indexOf(user._id) > -1})
+    }
   }
   leaveGroup() {
     const groupId = this.props.data.group._id;
@@ -102,14 +100,12 @@ class SingleGroup extends Component {
     const { userInfo, data = {} } = this.props;
     const { group, members, conventions, conMemberTracker } = data
 
-    if (group && !this.state.memberList) {
+    if (group && !this.state.memberList && userInfo) {
       this.state.memberList = group.memberList;
       this.state.isMember = this.state.memberList.indexOf(userInfo._id) > -1;
-    }
-    if (group && userInfo) {
+
       this.state.isInvited = userInfo.invitedToGroups.indexOf(group._id) > -1;
     }
-
     return (
       <div> {group && userInfo && members &&
         <div className="row">
